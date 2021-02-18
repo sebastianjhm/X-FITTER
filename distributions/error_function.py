@@ -1,29 +1,27 @@
-import scipy.integrate
+import scipy.stats
 import math
 
-class GAMMA:
+class ERROR_FUNCTION:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    Error Function distribution
+    https://www.vosesoftware.com/riskwiki/Erfdistribution.php
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.h = self.parameters["h"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
-        return result
+        return scipy.stats.norm.cdf((2**0.5) * self.h * x)
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        return self.h * math.exp(-(self.h*x)**2) / math.sqrt(math.pi)
     
     def get_num_parameters(self):
         """
@@ -44,12 +42,23 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"h": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
-        
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        h = math.sqrt(1/(2*measurements["variance"]))
+       
+        ## Results
+        parameters = {"h": h}
+
         return parameters
+    
+# def getData(direction):
+#     file  = open(direction,'r')
+#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+#     return data
+
+# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_error_function.txt"
+# data = getData(path) 
+# measurements = get_measurements(data)
+# distribution = ERROR_FUNCTION(measurements)
+# print(distribution.get_parameters(measurements))
+# print(distribution.cdf(-0.12))

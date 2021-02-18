@@ -78,9 +78,17 @@ if __name__ == "__main__":
     from utilities.data_measurements import get_measurements
     from distributions.beta import BETA
     from distributions.burr import BURR
+    from distributions.cauchy import CAUCHY
     from distributions.chi_square import CHI_SQUARE
+    from distributions.dagum import DAGUM
+    from distributions.erlang import ERLANG
+    from distributions.error_function import ERROR_FUNCTION
     from distributions.exponencial import EXPONENCIAL
+    from distributions.f import F
+    from distributions.fatigue_life import FATIGUE_LIFE
+    from distributions.frechet import FRECHET
     from distributions.gamma import GAMMA
+    from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
     from distributions.lognormal import LOGNORMAL
@@ -95,7 +103,7 @@ if __name__ == "__main__":
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    _all_distributions = [BETA, BURR, CHI_SQUARE, EXPONENCIAL, GAMMA, JOHNSON_SB, JOHNSON_SU, LOGNORMAL, NORMAL, TRIANGULAR, UNIFORM,  WEIBULL]
+    _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, LOGNORMAL, NORMAL, TRIANGULAR, UNIFORM,  WEIBULL]
     
     for distribution_class in _all_distributions:
         print(distribution_class.__name__)

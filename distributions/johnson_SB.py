@@ -75,3 +75,45 @@ class JOHNSON_SB:
         
         parameters = {"xi": xi_, "lambda": lambda_, "gamma": gamma_, "delta": delta_}
         return parameters
+    
+# def get_measurements(data: list) -> dict:
+#     import scipy.stats
+#     import numpy as np
+#     measurements = {}
+    
+#     miu_3 = scipy.stats.moment(data, 3)
+#     miu_4 = scipy.stats.moment(data, 4)
+#     mean = np.mean(data)
+#     variance = np.var(data, ddof=1)
+#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
+#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
+#     median = np.median(data)
+#     mode = scipy.stats.mode(data)[0][0]
+    
+#     measurements["mean"] = mean
+#     measurements["variance"] =  variance
+#     measurements["skewness"] = skewness
+#     measurements["kurtosis"] = kurtosis
+#     measurements["data"] = data
+#     measurements["median"] = median
+#     measurements["mode"] = mode
+    
+#     return measurements
+    
+# def getData(direction):
+#     file  = open(direction,'r')
+#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+#     return data
+
+# import time
+# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_johnson_sb.txt"
+# data = getData(path) 
+# measurements = get_measurements(data)
+# distribution = JOHNSON_SB(measurements)
+# ti = time.time()
+# print(distribution.get_parameters(measurements))
+# print(time.time() -ti)
+# # import scipy.stats
+# ti = time.time()
+# print(scipy.stats.johnsonsb.fit(data))
+# print(time.time() -ti)

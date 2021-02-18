@@ -1,14 +1,14 @@
 import scipy.integrate
 import math
 
-class GAMMA:
+class ERLANG:
     """
     Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
+        self.m = self.parameters["m"]
         self.beta = self.parameters["beta"]
         
     def cdf(self, x):
@@ -23,7 +23,7 @@ class GAMMA:
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
     
     def get_num_parameters(self):
         """
@@ -44,12 +44,13 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"m": *, "beta": *}
         """
         mean = measurements["mean"]
         variance = measurements["variance"]
         
-        alpha = mean ** 2 / variance
+        m = round(mean ** 2 / variance)
         beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        parameters = {"m": m , "beta": beta}
+
         return parameters

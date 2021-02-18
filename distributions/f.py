@@ -1,29 +1,27 @@
-import scipy.integrate
-import math
+import scipy.stats
 
-class GAMMA:
+class F:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    F distribution
+    https://en.wikipedia.org/wiki/F-distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.df1 = self.parameters["df1"]
+        self.df2 = self.parameters["df2"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
-        return result
+        return scipy.stats.f.cdf(x, self.df1, self.df2)
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        return scipy.stats.f.pdf(x, self.df1, self.df2)
     
     def get_num_parameters(self):
         """
@@ -44,12 +42,12 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"df1": *, "df2": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
-        
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        ## Scipy parameters of distribution
+        scipy_params = scipy.stats.f.fit(measurements["data"])
+       
+        ## Results
+        parameters = {"df1": scipy_params[0], "df2": scipy_params[1]}
+
         return parameters

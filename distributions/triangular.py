@@ -1,31 +1,3 @@
-import scipy.integrate
-import math
-from scipy.optimize import fsolve
-
-def get_measurements(data: list) -> dict:
-    import scipy.stats
-    import numpy as np
-    measurements = {}
-    
-    miu_3 = scipy.stats.moment(data, 3)
-    miu_4 = scipy.stats.moment(data, 4)
-    mean = np.mean(data)
-    variance = np.var(data, ddof=1)
-    skewness = miu_3 / pow(np.std(data, ddof=1),3)
-    kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-    median = np.median(data)
-    mode = scipy.stats.mode(data)[0][0]
-    
-    measurements["mean"] = mean
-    measurements["variance"] =  variance
-    measurements["skewness"] = skewness
-    measurements["kurtosis"] = kurtosis
-    measurements["data"] = data
-    measurements["median"] = median
-    measurements["mode"] = mode
-    
-    return measurements
-
 class TRIANGULAR:
     """
     Triangular distribution
@@ -42,16 +14,14 @@ class TRIANGULAR:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        # if self.a < x and x <= self.c:
-        #     return (x - self.a)**2/((self.b - self.a)*(self.c - self.a))
-        # elif self.c < x and x <= self.b:
-        #     return 1 - ((self.b - x)**2/((self.b - self.a)*(self.b - self.c)))
-        # elif self.a <= x:
-        #     return 0
-        # else:
-        #     return 1
-        result, error = scipy.integrate.quad(self.pdf, self.a, x)
-        return result
+        if x <= self.a:
+            return 0
+        elif self.a < x and x <= self.c:
+            return (x - self.a)**2/((self.b - self.a)*(self.c - self.a))
+        elif self.c < x and x < self.b:
+            return 1 - ((self.b - x)**2/((self.b - self.a)*(self.b - self.c)))
+        elif self.b <= x:
+            return 1
     
     def pdf(self, x):
         """
@@ -103,20 +73,12 @@ class TRIANGULAR:
         
         # solution =  fsolve(equations, (1, 1, 1), measurements)
         
-        a = min(measurements["data"]) - 1e-8
-        b = max(measurements["data"]) + 1e-8
+        a = min(measurements["data"]) - 1e-3
+        b = max(measurements["data"]) + 1e-3
         c = 3 * measurements["mean"] - a - b
+        import scipy.stats
+        print(scipy.stats.triang.fit(measurements["data"]))
         
         parameters = {"a": a, "b": b, "c": c}
-        # print(parameters)
+        print(parameters)
         return parameters
-    
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_triangular.txt"
-# data = getData(path) 
-# measurements = get_measurements(data)
-# distribution = TRIANGULAR(measurements)

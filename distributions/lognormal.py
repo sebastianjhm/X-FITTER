@@ -46,11 +46,10 @@ class LOGNORMAL:
         parameters : dict
             {"mean": *, "desv": *}
         """
-        _mean = measurements["mean"]
-        _variance = measurements["variance"]
+    
         
-        mean_ = math.log(_mean**2/math.sqrt(_mean**2 + _variance))
-        desv_ = math.sqrt(math.log((_mean**2 + _variance)/(_mean**2)))
+        mean_ = math.log(measurements["mean"]**2/math.sqrt(measurements["mean"]**2 + measurements["variance"]))
+        desv_ = math.sqrt(math.log((measurements["mean"]**2 + measurements["variance"])/(measurements["mean"]**2)))
         
         parameters = {"mean": mean_, "desv": desv_}
         return parameters

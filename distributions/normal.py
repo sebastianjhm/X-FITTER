@@ -46,11 +46,9 @@ class NORMAL:
         parameters : dict
             {"mean": *, "desv": *}
         """
-        _mean = measurements["mean"]
-        _variance = measurements["variance"]
         
-        mean_ = _mean
-        desv_ = math.sqrt(_variance)
+        mean = measurements["mean"]
+        desv = math.sqrt(measurements["variance"])
         
-        parameters = {"mean": mean_, "desv": desv_}
+        parameters = {"mean": mean, "desv": desv}
         return parameters
