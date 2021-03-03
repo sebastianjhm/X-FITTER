@@ -15,7 +15,9 @@ class JOHNSON_SU:
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
-        result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
+        z = lambda x: (x-self.xi_)/self.lambda_
+        result = scipy.stats.norm.cdf(self.gamma_ + self.delta_*math.asinh(z(x)))
+        # result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
         return result
     
     def pdf(self, x):
@@ -30,7 +32,15 @@ class JOHNSON_SU:
         Number of parameters of the distribution
         """
         return len(self.parameters.keys())
-        
+    
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.delta_ > 0
+        v2 = self.lambda_ > 0
+        return v1 and v2
+
     def get_parameters(self, measurements):
         def equations(sol_i, measurements):
             ## Variables declaration

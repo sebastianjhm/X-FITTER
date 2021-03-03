@@ -30,6 +30,14 @@ class WEIBULL:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.alpha >= 0
+        v2 = self.beta >= 0
+        return v1 and v2
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

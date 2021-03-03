@@ -100,6 +100,8 @@ if __name__ == "__main__":
     from distributions.fatigue_life import FATIGUE_LIFE
     from distributions.frechet import FRECHET
     from distributions.gamma import GAMMA
+    from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
+    from distributions.generalized_gamma import GENERALIZED_GAMMA
     from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
@@ -115,7 +117,11 @@ if __name__ == "__main__":
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, LOGNORMAL, NORMAL, TRIANGULAR, UNIFORM,  WEIBULL]
+    _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
+                          EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
+                          GENERALIZED_GAMMA, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
+                          LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM,  WEIBULL]
+    _my_distributions = [NORMAL]
     
     for distribution_class in _all_distributions:
         print(distribution_class.__name__)
@@ -124,5 +130,5 @@ if __name__ == "__main__":
                 
         measurements = get_measurements(data)
         distribution = distribution_class(measurements)
-                
+        print(distribution.pa)
         print(test_chi_square(data, distribution))

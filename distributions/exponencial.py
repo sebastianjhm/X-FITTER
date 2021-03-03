@@ -28,6 +28,13 @@ class EXPONENCIAL:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.lambda_ > 0
+        return v1
+    
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

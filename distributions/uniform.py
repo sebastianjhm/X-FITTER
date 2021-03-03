@@ -27,6 +27,13 @@ class UNIFORM:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.max_ > self.min_
+        return v1
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

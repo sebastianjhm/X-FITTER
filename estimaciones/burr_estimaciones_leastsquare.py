@@ -10,7 +10,7 @@ def modificated_beta(x, y, infinite):
     else:
         return beta(x,y)
 
-def equations(sol_i):
+def equations(sol_i, data_mean, data_variance, data_median):
     ## Variables declaration
     A, B, C = sol_i
     
@@ -25,11 +25,11 @@ def equations(sol_i):
     parametric_median = A * ((2**(1/C))-1)**(1/B)
     
     ## System Equations
-    eq1 = parametric_mean - 19.45507362
-    eq2 = parametric_variance - 5.997085691
-    eq3 = parametric_median - 19.66113464
+    eq1 = parametric_mean - data_mean
+    eq2 = parametric_variance - data_variance
+    eq3 = parametric_median - data_median
 
     return (eq1, eq2, eq3)
 
-res = least_squares(equations, (19, 19, 19), bounds = ((1, 1, 1), (np.inf, np.inf, np.inf)))
+res = least_squares(equations, (19, 19, 19), bounds = ((1, 1, 1), (np.inf, np.inf, np.inf)), args=([19.45, 5.99, 19.66]))
 print(res)

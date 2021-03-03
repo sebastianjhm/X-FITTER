@@ -31,6 +31,15 @@ class ERLANG:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restriction
+        """
+        v1 = self.m > 0
+        v2 = self.beta > 0
+        v3 = type(self.m) == int
+        return v1 and v2 and v3
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

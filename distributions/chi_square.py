@@ -30,6 +30,14 @@ class CHI_SQUARE:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.k > 0
+        v2 = type(self.k) == int
+        return v1 and v2
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -45,7 +53,5 @@ class CHI_SQUARE:
         parameters : dict
             {"k": *}
         """
-        _mean = measurements["mean"]
-        k_ = _mean
-        parameters = {"k": k_}
+        parameters = {"k": round(measurements["mean"])}
         return parameters

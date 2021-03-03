@@ -6,7 +6,7 @@ class FATIGUE_LIFE:
     """
     Fatigue life distribution
     https://www.vosesoftware.com/riskwiki/FatigueLifedistribution.php
-    ** NOTE: Variance: beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
+    ** Variance: beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -34,6 +34,14 @@ class FATIGUE_LIFE:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.beta > 0
+        v2 = self.gamma > 0
+        return v1 and v2
+        
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

@@ -27,7 +27,7 @@ class FRECHET:
         """
         Probability density function
         """
-        print(scipy.stats.invweibull.pdf(40.89022608, self.alpha, loc = self.m, scale = self.s))
+        # print(scipy.stats.invweibull.pdf(40.89022608, self.alpha, loc = self.m, scale = self.s))
         return (self.alpha/self.s) * (((x-self.m)/self.s)**(-1-self.alpha)) * math.exp(-((x-self.m)/self.s)**(-self.alpha))
     
     def get_num_parameters(self):
@@ -36,6 +36,14 @@ class FRECHET:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.alpha >= 0
+        v2 = self.s >= 0
+        return v1 and v2
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

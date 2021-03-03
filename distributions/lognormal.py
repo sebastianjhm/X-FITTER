@@ -31,6 +31,14 @@ class LOGNORMAL:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.mean > 0
+        v2 = self.desv > 0
+        return v1 and v2
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.

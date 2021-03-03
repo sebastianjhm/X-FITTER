@@ -24,20 +24,21 @@ def danoes_formula(data):
 def plot_histogram(data, results, n):
     ## n first distribution of the ranking
     N_DISTRIBUTIONS = {k: results[k] for k in list(results)[:n]}
-    
+
     ## Histogram of data
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(8, 4))
     plt.hist(data, density=True, ec='white', color=(63/235, 149/235, 170/235))
     plt.title('HISTOGRAM')
     plt.xlabel('Values')
     plt.ylabel('Frequencies')
 
     ## Plot n distributions
-    for i, distribution in N_DISTRIBUTIONS:
-        sse = results[distribution][0]
-        arg = results[distribution][1]
-        loc = results[distribution][2]
-        scale = results[distribution][3]
+    for distribution, result in N_DISTRIBUTIONS.items():
+        # print(i, distribution)
+        sse = result[0]
+        arg = result[1]
+        loc = result[2]
+        scale = result[3]
         x_plot = np.linspace(min(data), max(data), 1000)
         y_plot = distribution.pdf(x_plot, loc=loc, scale=scale, *arg)
         plt.plot(x_plot, y_plot, label=str(distribution)[32:-34] + ": " + str(sse)[0:6], color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
@@ -48,7 +49,7 @@ def plot_histogram(data, results, n):
 def fit_data(data):
     ## st.frechet_r,st.frechet_l: are disbled in current SciPy version
     ## st.levy_stable: a lot of time of estimation parameters
-    DISTRIBUTIONS = [        
+    ALL_DISTRIBUTIONS = [        
         st.alpha,st.anglit,st.arcsine,st.beta,st.betaprime,st.bradford,st.burr,st.cauchy,st.chi,st.chi2,st.cosine,
         st.dgamma,st.dweibull,st.erlang,st.expon,st.exponnorm,st.exponweib,st.exponpow,st.f,st.fatiguelife,st.fisk,
         st.foldcauchy,st.foldnorm, st.genlogistic,st.genpareto,st.gennorm,st.genexpon,
@@ -61,7 +62,7 @@ def fit_data(data):
         st.uniform,st.vonmises,st.vonmises_line,st.wald,st.weibull_min,st.weibull_max,st.wrapcauchy
     ]
     
-    RD = [st.beta, st.expon, st.norm, st.uniform]
+    MY_DISTRIBUTIONS = [st.beta, st.expon, st.norm, st.uniform, st.johnsonsb, st.gennorm, st.gausshyper, st.gengamma]
 
     ## Calculae Histogram
     num_bins = danoes_formula(data)
@@ -69,7 +70,7 @@ def fit_data(data):
     central_values = [(bin_edges[i] + bin_edges[i+1])/2 for i in range(len(bin_edges)-1)]
 
     results = {}
-    for distribution in RD:
+    for distribution in MY_DISTRIBUTIONS:
         ## Get parameters of distribution
         params = distribution.fit(data)
         
@@ -92,9 +93,17 @@ def fit_data(data):
         
 def main():
     ## Import data
-    data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
+    # data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
+    def getData(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_generalized_gamma.txt"
+    data = getData(path)
+    
     results = fit_data(data)
-    plot_histogram(data, results, 10)
+    plot_histogram(data, results, 3)
 
 if __name__ == "__main__":
     main()

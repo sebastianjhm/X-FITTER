@@ -1,3 +1,6 @@
+import scipy.stats
+import numpy as np
+
 class TRIANGULAR:
     """
     Triangular distribution
@@ -40,6 +43,14 @@ class TRIANGULAR:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.b > self.c
+        v2 = self.c > self.a
+        return v1 and v2
+        
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -55,7 +66,7 @@ class TRIANGULAR:
         parameters : dict
             {"a": * , "b": *, "c": *}
         """
-        
+        ## Solve equations for estimation parameters
         # def equations(sol_i, measurements):
         #     ## Variables declaration
         #     a, b, c = sol_i
@@ -73,12 +84,63 @@ class TRIANGULAR:
         
         # solution =  fsolve(equations, (1, 1, 1), measurements)
         
+        ## Second method estimation
         a = min(measurements["data"]) - 1e-3
         b = max(measurements["data"]) + 1e-3
         c = 3 * measurements["mean"] - a - b
-        import scipy.stats
-        print(scipy.stats.triang.fit(measurements["data"]))
         
+        ## Third method
+        ## https://wernerantweiler.ca/blog.php?item=2019-06-05
+        # q_1_16 = np.quantile(measurements["data"], 1/16)
+        # q_1_4 = np.quantile(measurements["data"], 1/4)
+        # q_3_4 = np.quantile(measurements["data"], 3/4)
+        # q_15_16 = np.quantile(measurements["data"], 15/16)
+        # u = (q_1_4 - q_1_16)**2
+        # v = (q_15_16 - q_3_4)**2
+
+        # a = 2 * q_1_16 - q_1_4
+        # b = 2 * q_15_16 - q_3_4
+        # c = (u*b + v*a)/(u+v)
+        
+        # Scipy parameters of distribution
+        # scipy_params = scipy.stats.triang.fit(measurements["data"])
+        # a = scipy_params[1]
+        # b = scipy_params[1] + scipy_params[2]
+        # c = scipy_params[1] + scipy_params[2] * scipy_params[0]
         parameters = {"a": a, "b": b, "c": c}
         print(parameters)
         return parameters
+    
+# def get_measurements(data: list) -> dict:
+#     import numpy as np
+#     measurements = {}
+    
+#     miu_3 = scipy.stats.moment(data, 3)
+#     miu_4 = scipy.stats.moment(data, 4)
+#     mean = np.mean(data)
+#     variance = np.var(data, ddof=1)
+#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
+#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
+#     median = np.median(data)
+#     mode = scipy.stats.mode(data)[0][0]
+    
+#     measurements["mean"] = mean
+#     measurements["variance"] =  variance
+#     measurements["skewness"] = skewness
+#     measurements["kurtosis"] = kurtosis
+#     measurements["data"] = data
+#     measurements["median"] = median
+#     measurements["mode"] = mode
+    
+#     return measurements
+
+# def getData(direction):
+#     file  = open(direction,'r')
+#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+#     return data
+
+# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_triangular.txt"
+# data = getData(path)
+
+# measurements = get_measurements(data)
+# distribution = TRIANGULAR(measurements)

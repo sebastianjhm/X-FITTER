@@ -5,8 +5,8 @@ from scipy.special import beta
 import numpy as np
 import scipy.stats
 import warnings
-+
--warnings.filterwarnings("ignore")
+
+warnings.filterwarnings("ignore")
 
 class BURR:
     """
@@ -25,7 +25,7 @@ class BURR:
         Calculated with quadrature integration method of scipy.
         """
         return 1 - ((1 + (x/self.A) ** (self.B )) ** (-self.C))
-    
+      
     def pdf(self, x):
         """
         Probability density function
@@ -38,6 +38,15 @@ class BURR:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.A > 0
+        v2 = self.B > 0
+        v3 = self.C > 0
+        return v1 and v2 and v3
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -51,7 +60,7 @@ class BURR:
         Returns
         -------
         parameters : dict
-            {"a": * , "b": *, "c": *}
+            {"A": * , "B": *, "C": *}
         """
         
         # def equations(sol_i, measurements):

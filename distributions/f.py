@@ -29,6 +29,16 @@ class F:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.df1 > 0
+        v2 = self.df2 > 0
+        v3 = type(self.df1) == int
+        v4 = type(self.df2) == int
+        return v1 and v2 and v3 and v4
+        
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -48,6 +58,6 @@ class F:
         scipy_params = scipy.stats.f.fit(measurements["data"])
        
         ## Results
-        parameters = {"df1": scipy_params[0], "df2": scipy_params[1]}
+        parameters = {"df1": round(scipy_params[0]), "df2": round(scipy_params[1])}
 
         return parameters

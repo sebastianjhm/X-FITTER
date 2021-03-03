@@ -15,11 +15,13 @@ class JOHNSON_SB:
         self.delta_ = self.parameters["delta"]
     
     def cdf(self, x):      
-        """
+        """<
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
-        result, error = scipy.integrate.quad(self.pdf, self.xi_, x)
+        z = lambda x: (x-self.xi_)/self.lambda_
+        result = scipy.stats.norm.cdf(self.gamma_ + self.delta_*math.log(z(x)/(1-z(x))))
+        # result, error = scipy.integrate.quad(self.pdf, self.xi_, x)
         return result
     
     def pdf(self, x):
@@ -35,6 +37,14 @@ class JOHNSON_SB:
         """
         return len(self.parameters.keys())
     
+    def parameter_restrictions(self):
+        """
+        Check parameters restrictions
+        """
+        v1 = self.delta_ > 0
+        v2 = self.lambda_ > 0
+        return v1 and v2
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
