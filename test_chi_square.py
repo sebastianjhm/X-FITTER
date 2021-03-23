@@ -1,27 +1,6 @@
 import scipy.stats
-import math
 import numpy as np
-
-def danoes_formula(data):
-    """
-    DANOE'S FORMULA
-    https://en.wikipedia.org/wiki/Histogram#Doane's_formula
-    
-    Parameters
-    ----------
-    data : iterable 
-        data set
-    Returns
-    -------
-    num_bins : int
-        Cumulative distribution function evaluated at `x`
-    """
-    N = len(data)
-    skewness = scipy.stats.skew(data)
-    sigma_g1 = math.sqrt((6*(N-2))/((N+1)*(N+3)))
-    num_bins = 1 + math.log(N,2) + math.log(1+abs(skewness)/sigma_g1,2)
-    num_bins = round(num_bins)
-    return num_bins
+from utilities.danoes import danoes_formula
    
 def test_chi_square(data, distribution):
     """
@@ -102,11 +81,13 @@ if __name__ == "__main__":
     from distributions.gamma import GAMMA
     from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
     from distributions.generalized_gamma import GENERALIZED_GAMMA
+    from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
     from distributions.lognormal import LOGNORMAL
     from distributions.normal import NORMAL
+    from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
     from distributions.weibull import WEIBULL
@@ -119,16 +100,15 @@ if __name__ == "__main__":
     
     _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
-                          GENERALIZED_GAMMA, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
-                          LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM,  WEIBULL]
-    _my_distributions = [NORMAL]
+                          GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
+                          LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM, WEIBULL]
+    _my_distributions = [GENERALIZED_LOGISTIC,TRAPEZOIDAL]
     
-    for distribution_class in _all_distributions:
+    for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_" + distribution_class.__name__.lower() + ".txt"
         data = getData(path)
                 
         measurements = get_measurements(data)
         distribution = distribution_class(measurements)
-        print(distribution.pa)
         print(test_chi_square(data, distribution))

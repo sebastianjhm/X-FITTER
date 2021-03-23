@@ -90,11 +90,13 @@ if __name__ == "__main__":
     from distributions.gamma import GAMMA
     from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
     from distributions.generalized_gamma import GENERALIZED_GAMMA
+    from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
     from distributions.lognormal import LOGNORMAL
     from distributions.normal import NORMAL
+    from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
     from distributions.weibull import WEIBULL
@@ -107,9 +109,9 @@ if __name__ == "__main__":
     
     _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
-                          GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, LOGNORMAL, NORMAL, TRIANGULAR,
-                          UNIFORM,  WEIBULL]
-    _my_distributions = [CAUCHY]
+                          GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
+                          LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM, WEIBULL]
+    _my_distributions = [GENERALIZED_LOGISTIC, TRAPEZOIDAL]
     
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)

@@ -108,7 +108,6 @@ class TRIANGULAR:
         # b = scipy_params[1] + scipy_params[2]
         # c = scipy_params[1] + scipy_params[2] * scipy_params[0]
         parameters = {"a": a, "b": b, "c": c}
-        print(parameters)
         return parameters
     
 # def get_measurements(data: list) -> dict:
