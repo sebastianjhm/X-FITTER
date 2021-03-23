@@ -1,5 +1,6 @@
 import scipy.integrate
 import math
+import scipy.stats
 
 class GAMMA:
     """
@@ -16,8 +17,9 @@ class GAMMA:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
-        return result
+        # result, error = scipy.integrate.quad(self.pdf, 0, x)
+        # return result
+        return scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
     
     def pdf(self, x):
         """

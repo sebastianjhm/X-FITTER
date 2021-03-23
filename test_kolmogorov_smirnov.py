@@ -104,7 +104,7 @@ if __name__ == "__main__":
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
                           GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
                           LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM, WEIBULL]
-    _my_distributions = [GENERALIZED_LOGISTIC, TRAPEZOIDAL]
+    _my_distributions = [GAMMA]
     
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
