@@ -106,7 +106,7 @@ if __name__ == "__main__":
     
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
-        path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_" + distribution_class.__name__.lower() + ".txt"
+        path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_" + distribution_class.__name__.lower() + ".txt"
         data = getData(path)
                 
         measurements = get_measurements(data)
