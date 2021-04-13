@@ -1,6 +1,6 @@
 import scipy.stats
 import numpy as np
-from utilities.danoes import danoes_formula
+from measurements.danoes import danoes_formula
    
 def test_chi_square(data, distribution):
     """
@@ -83,6 +83,10 @@ if __name__ == "__main__":
     from distributions.generalized_gamma import GENERALIZED_GAMMA
     from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
+    from distributions.gumbel_left import GUMBEL_LEFT
+    from distributions.gumbel_right import GUMBEL_RIGHT
+    from distributions.hypernolic_secant import HYPERBOLIC_SECANT
+    from distributions.inverse_gaussian import INVERSE_GAUSSIAN
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
     from distributions.lognormal import LOGNORMAL
@@ -92,22 +96,23 @@ if __name__ == "__main__":
     from distributions.uniform import UNIFORM
     from distributions.weibull import WEIBULL
     
-    
-    def getData(direction):
+    def get_data(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
     _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
-                          GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, JOHNSON_SB, JOHNSON_SU, 
-                          LOGNORMAL, NORMAL, TRIANGULAR,UNIFORM, WEIBULL]
-    _my_distributions = [GAMMA]
+                          GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
+                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN, JOHNSON_SB, 
+                          JOHNSON_SU, LOGNORMAL, NORMAL, TRAPEZOIDAL, TRIANGULAR,UNIFORM, 
+                          WEIBULL]
+    _my_distributions = [GUMBEL_LEFT, GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN]
     
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
-        path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_" + distribution_class.__name__.lower() + ".txt"
-        data = getData(path)
+        path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
+        data = get_data(path)
                 
         measurements = get_measurements(data)
         distribution = distribution_class(measurements)

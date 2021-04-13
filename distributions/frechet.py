@@ -63,44 +63,21 @@ class FRECHET:
         parameters = {"alpha": scipy_params[0], "m": scipy_params[1], "s": scipy_params[2]}
         return parameters
     
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_frechet.txt"
-# data = getData(path) 
-
-# print(scipy.stats.invweibull.fit(data))
-# print(scipy.stats.invweibull.cdf(40.89022608, 5, loc = 10, scale = 20))
-
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
     
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
+    ## Distribution class
+    path = "..\\data\\data_frechet.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = FRECHET(measurements)
     
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
-
-
-
-# measurements = get_measurements(data)
-# distribution = FRECHET(measurements)
-# print(distribution.get_parameters(measurements))
-# print(distribution.cdf(40.89022608))
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

@@ -69,3 +69,22 @@ class WEIBULL:
         solution =  fsolve(equations, (1, 1), measurements)
         parameters = {"alpha": solution[0], "beta": solution[1]}
         return parameters
+    
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
+
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_weibull.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = WEIBULL(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

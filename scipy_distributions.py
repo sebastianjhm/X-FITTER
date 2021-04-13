@@ -99,7 +99,7 @@ def main():
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_generalized_gamma.txt"
+    path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_generalized_gamma.txt"
     data = getData(path)
     
     results = fit_data(data)

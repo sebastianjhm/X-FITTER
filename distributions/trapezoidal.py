@@ -90,23 +90,21 @@ class TRAPEZOIDAL:
         parameters = {"a": a, "b": solution.x[0], "c": solution.x[1], "d": d}
         return parameters
     
-# import sys
-# sys.path.append("C:\\Users\\USUARIO1\\Desktop\\Fitter\\utilities")
-# from data_measurements import get_measurements
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_trapezoidal.txt"
-# data = getData(path)
-
-# measurements = get_measurements(data)
-# distribution = TRAPEZOIDAL(measurements)
-# print(distribution.get_parameters(measurements))
-
-# a, b, c, d = 100, 200, 600, 1000
-# parametric_mean = (1/(3*(d + c - a - b))) * ((d**3-c**3)/(d-c) - (b**3-a**3)/(b-a))
-# parametric_variance = (1/(6*(d + c - a - b))) * ((d**4-c**4)/(d-c) - (b**4-a**4)/(b-a)) - parametric_mean**2
-# print(parametric_mean, parametric_variance)
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_trapezoidal.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = TRAPEZOIDAL(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

@@ -31,5 +31,55 @@ def equations(sol_i, data_mean, data_variance, data_median):
 
     return (eq1, eq2, eq3)
 
-res = least_squares(equations, (19, 19, 19), bounds = ((1, 1, 1), (np.inf, np.inf, np.inf)), args=([19.45, 5.99, 19.66]))
-print(res)
+#############################################################################
+## Import function to get measurements
+import sys
+sys.path.append("C:\\Users\\USUARIO\\Desktop\\Fitter\\utilities")
+from utilities.data_measurements import get_measurements
+
+## Import function to get measurements
+def get_data(direction):
+    file  = open(direction,'r')
+    data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+    return data
+
+## Distribution class
+path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_burr.txt"
+data = get_data(path) 
+measurements = get_measurements(data)
+#############################################################################
+
+solution = least_squares(equations, (8, 8, 8), bounds = ((1, 1, 1), (np.inf, np.inf, np.inf)), args=(measurements["mean"], measurements["variance"], measurements["median"]))
+parameters = {"A": solution.x[0], "B": solution.x[1], "C": solution.x[2]}
+print(parameters)
+
+
+
+
+
+
+
+
+def solution_error(parameters, measurements):
+    A, B, C = parameters["A"], parameters["B"], parameters["C"]
+
+    miu = lambda r: (A**r) * C * beta((B*C-r)/B, (B+r)/B)
+    
+    # Parametric expected expressions
+    parametric_mean = miu(1)
+    parametric_variance = -(miu(1)**2) + miu(2)
+    parametric_kurtosis = -3*miu(1)**4 + 6*miu(1)**2 * miu(2) -4 * miu(1) * miu(3) + miu(4)
+    parametric_skewness = 2*miu(1)**3 - 3*miu(1)*miu(2) + miu(3)
+    parametric_median = A * ((2**(1/C))-1)**(1/B)
+    print(parametric_mean, parametric_variance, parametric_median)
+    print(measurements["mean"], measurements["variance"], measurements["median"])
+    
+    error1 = parametric_mean - measurements["mean"]
+    error2 = parametric_variance - measurements["variance"]
+    error3 = parametric_skewness - measurements["skewness"]
+    error4 = parametric_kurtosis - measurements["kurtosis"]
+    error5 = parametric_median - measurements["median"]
+    
+    total_error = abs(error1) + abs(error2) + abs(error3) + abs(error4) + abs(error5)
+    return total_error
+print(solution_error(parameters, measurements))

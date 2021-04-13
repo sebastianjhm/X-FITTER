@@ -15,7 +15,7 @@ class JOHNSON_SB:
         self.delta_ = self.parameters["delta"]
     
     def cdf(self, x):      
-        """<
+        """
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
@@ -86,44 +86,30 @@ class JOHNSON_SB:
         parameters = {"xi": xi_, "lambda": lambda_, "gamma": gamma_, "delta": delta_}
         return parameters
     
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
-    
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
-    
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
-    
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
 
-# import time
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_johnson_sb.txt"
-# data = getData(path) 
-# measurements = get_measurements(data)
-# distribution = JOHNSON_SB(measurements)
-# ti = time.time()
-# print(distribution.get_parameters(measurements))
-# print(time.time() -ti)
-# # import scipy.stats
-# ti = time.time()
-# print(scipy.stats.johnsonsb.fit(data))
-# print(time.time() -ti)
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
+
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_johnson_sb.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = JOHNSON_SB(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))
+    
+    import time
+    ti = time.time()
+    print(distribution.get_parameters(measurements))
+    print("Solve equations time: ",time.time() -ti)
+    ti = time.time()
+    print(scipy.stats.johnsonsb.fit(data))
+    print("Scipy time get parameters: ",time.time() -ti)

@@ -31,11 +31,8 @@ class GENERALIZED_EXTREME_VALUE:
         Probability density function
         """
         z = lambda x: (x - self.miu) / self.sigma
-        if self.c == 0:
-            return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
-        else:
-            return (1/self.sigma) * math.exp(-(1+self.c*z(x))**(-1/self.c)) * (1+self.c*z(x))**(-1-1/self.c)
-    
+        return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
+       
     def get_num_parameters(self):
         """
         Number of parameters of the distribution
@@ -67,41 +64,22 @@ class GENERALIZED_EXTREME_VALUE:
         scipy_params = scipy.stats.genextreme.fit(measurements["data"])
         parameters = {"c": -scipy_params[0], "miu": scipy_params[1], "sigma": scipy_params[2]}
         return parameters
-    
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
-    
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
-    
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
+        
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
     
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_generalized_extreme_value.txt"
-# data = getData(path)
-
-# measurements = get_measurements(data)
-# distribution = GENERALIZED_EXTREME_VALUE(measurements)
-# print(distribution.get_parameters(measurements))
-# print(distribution.cdf(10.57))
+    ## Distribution class
+    path = "..\\data\\data_generalized_extreme_value.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = GENERALIZED_EXTREME_VALUE(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

@@ -52,7 +52,24 @@ class EXPONENCIAL:
         parameters : dict
             {"lambda": *}
         """
-        _mean = measurements["mean"]
-        lambda_ = 1 / _mean
-        parameters = {"lambda": lambda_}
+        parameters = {"lambda": 1/measurements["mean"]}
         return parameters
+    
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
+
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_exponencial.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = EXPONENCIAL(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

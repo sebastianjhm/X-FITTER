@@ -80,72 +80,21 @@ class FATIGUE_LIFE:
         parameters = {"gamma": scipy_params[0], "alpha": scipy_params[1], "beta": scipy_params[2]}
         return parameters
     
-# print(scipy.stats.gamma.ppf(0.48, 24, scale=2))
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
     
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
+    ## Distribution class
+    path = "..\\data\\data_fatigue_life.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = FATIGUE_LIFE(measurements)
     
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
-
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_fatigue_life.txt"
-# data = getData(path) 
-
-# print(scipy.stats.fatiguelife.fit(data))
-# print(scipy.stats.fatiguelife.cdf(14.783202, 0.2, loc=10, scale=5))
-
-# measurements = get_measurements(data)
-# distribution = FATIGUE_LIFE(measurements)
-# print(distribution.get_parameters(measurements))
-# print(distribution.cdf(5.4455))
-
-
-
-# def equations(sol_i, measurements):
-#     ## Variables declaration
-#     alpha, beta, gamma = sol_i
-    
-#     ## Parametric expected expressions
-#     parametric_mean = alpha + beta * (1 + gamma**2/2)
-#     parametric_variance = beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
-#     parametric_skewness = 4 * gamma**2 * (11*gamma**2 + 6) / ((4+5*gamma**2)*math.sqrt(gamma**2 * (4+5*gamma**2)))
-
-#     ## System Equations
-#     eq1 = parametric_mean - measurements["mean"]
-#     eq2 = parametric_variance - measurements["variance"]
-#     eq3 = parametric_skewness - measurements["skewness"]
-    
-#     return (eq1, eq2, eq3)
-
-# solution =  fsolve(equations, (1, 1, 1), measurements)
-# print(solution)
-
-# alpha, beta, gamma = 10, 5, 3
-# parametric_mean = alpha + beta * (1 + gamma**2/2)
-# parametric_variance = beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
-# parametric_skewness = 4 * gamma**2 * (11*gamma**2 + 6) / ((4+5*gamma**2)*math.sqrt(gamma**2 * (4+5*gamma**2)))
-
-# print(parametric_mean, parametric_variance, parametric_skewness)
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

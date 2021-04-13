@@ -83,44 +83,30 @@ class BETA:
         parameters = {"alpha": solution[0], "beta": solution[1], "min": solution[2], "max": solution[3]}
         return parameters
     
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
-    
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
-    
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# import time
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_beta.txt"
-# data = getData(path) 
-# measurements = get_measurements(data)
-# distribution = BETA(measurements)
-# ti = time.time()
-# print(distribution.get_parameters(measurements))
-# print(time.time() -ti)
-# import scipy.stats
-# ti = time.time()
-# print(scipy.stats.beta.fit(data))
-# print(time.time() -ti)
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_beta.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = BETA(measurements)
+    
+    print(distribution.cdf(800))
+    
+    ## Get parameters of distribution: SCIPY vs EQUATIONS
+    import time
+    ti = time.time()
+    print(distribution.get_parameters(measurements))
+    print("Solve equations time: ", time.time() -ti)
+    import scipy.stats
+    ti = time.time()
+    print(scipy.stats.beta.fit(data))
+    print("Scipy time get parameters: ",time.time() -ti)

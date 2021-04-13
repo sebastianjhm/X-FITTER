@@ -57,3 +57,22 @@ class UNIFORM:
         parameters = {"min": _min , "max": _max}
         
         return parameters
+    
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
+
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_uniform.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = UNIFORM(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

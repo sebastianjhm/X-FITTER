@@ -68,7 +68,7 @@ class GENERALIZED_LOGISTIC:
             ## Parametric expected expressions
             parametric_mean = alpha + beta*(0.57721 + digamma(gamma))
             parametric_variance = beta**2 * (math.pi**2/6+polygamma(1, gamma))
-            parametric_skewness = (-polygamma(2,1)+polygamma(2,gamma))/((math.pi**2/6+polygamma(1, gamma))**1.5)
+            parametric_skewness = (polygamma(2,1)+polygamma(2,gamma))/((math.pi**2/6+polygamma(1, gamma))**1.5)
             parametric_kurtosis = 3+(math.pi**4/15+polygamma(3,gamma))/((math.pi**2/6+polygamma(1, gamma))**2)
 
             ## System Equations
@@ -83,40 +83,21 @@ class GENERALIZED_LOGISTIC:
         parameters = {"alpha": solution[0], "beta": solution[1], "gamma": solution[2]}
         return parameters
 
-# def get_measurements(data: list) -> dict:
-#     import scipy.stats
-#     import numpy as np
-#     measurements = {}
-    
-#     miu_3 = scipy.stats.moment(data, 3)
-#     miu_4 = scipy.stats.moment(data, 4)
-#     mean = np.mean(data)
-#     variance = np.var(data, ddof=1)
-#     skewness = miu_3 / pow(np.std(data, ddof=1),3)
-#     kurtosis = miu_4 / pow(np.std(data, ddof=1),4)
-#     median = np.median(data)
-#     mode = scipy.stats.mode(data)[0][0]
-    
-#     measurements["mean"] = mean
-#     measurements["variance"] =  variance
-#     measurements["skewness"] = skewness
-#     measurements["kurtosis"] = kurtosis
-#     measurements["data"] = data
-#     measurements["median"] = median
-#     measurements["mode"] = mode
-    
-#     return measurements
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
-
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_generalized_logistic.txt"
-# data = getData(path)
-
-# measurements = get_measurements(data)
-# distribution = GENERALIZED_LOGISTIC(measurements)
-# print(distribution.get_parameters(measurements))
-# print(distribution.cdf(15.52))
-# print(distribution.pdf(15.52))
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_generalized_logistic.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = GENERALIZED_LOGISTIC(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

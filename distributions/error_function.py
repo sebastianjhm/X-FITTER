@@ -58,14 +58,21 @@ class ERROR_FUNCTION:
 
         return parameters
     
-# def getData(direction):
-#     file  = open(direction,'r')
-#     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-#     return data
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
 
-# path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_error_function.txt"
-# data = getData(path) 
-# measurements = get_measurements(data)
-# distribution = ERROR_FUNCTION(measurements)
-# print(distribution.get_parameters(measurements))
-# print(distribution.cdf(-0.12))
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_error_function.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = ERROR_FUNCTION(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))

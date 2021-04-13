@@ -61,3 +61,22 @@ class F:
         parameters = {"df1": round(scipy_params[0]), "df2": round(scipy_params[1])}
 
         return parameters
+    
+if __name__ == '__main__':
+    ## Import function to get measurements
+    from measurements.data_measurements import get_measurements
+
+    ## Import function to get measurements
+    def get_data(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    ## Distribution class
+    path = "..\\data\\data_f.txt"
+    data = get_data(path) 
+    measurements = get_measurements(data)
+    distribution = F(measurements)
+    
+    print(distribution.get_parameters(measurements))
+    print(distribution.cdf(measurements["mean"]))
