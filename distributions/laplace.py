@@ -1,40 +1,28 @@
-import scipy.integrate
 import math
-import scipy.stats
-import scipy.special as sc
+import numpy as np
 
-class GAMMA:
+class LAPLACE:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    Laplace distribution
+    https://en.wikipedia.org/wiki/Laplace_distribution 
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.miu = self.parameters["miu"]
+        self.b = self.parameters["b"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        ## Method 1: Integrate PDF function
-        # result, error = scipy.integrate.quad(self.pdf, 0, x)
-        # print(result)
-        
-        ## Method 2: Scipy Gamma Distribution class
-        # result = scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
-        # print(result)
-        
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.alpha, x/self.beta)/math.gamma(self.alpha)
-        return result
+        return 0.5 + 0.5*np.sign(x-self.miu)*(1-math.exp(-abs(x-self.miu)/self.b))
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        return (1/(2*self.b)) * math.exp(-abs(x-self.miu)/self.b)
     
     def get_num_parameters(self):
         """
@@ -46,10 +34,9 @@ class GAMMA:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha > 0
-        v2 = self.beta > 0
-        return v1 and v2
-    
+        v1 = self.b > 0
+        return v1
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -63,14 +50,14 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"miu": *, "b": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
-        
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        miu = measurements["mean"]
+        b = math.sqrt(measurements["variance"]/2)
+    
+        ## Results
+        parameters = {"miu": miu, "b": b}
+
         return parameters
     
 if __name__ == '__main__':
@@ -84,10 +71,11 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_gamma.txt"
+    path = "..\\data\\data_laplace.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = GAMMA(measurements)
+    distribution = LAPLACE(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    

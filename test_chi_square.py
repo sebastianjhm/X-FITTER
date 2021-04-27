@@ -1,6 +1,6 @@
 import scipy.stats
 import numpy as np
-from measurements.danoes import danoes_formula
+from utilities.danoes import danoes_formula
    
 def test_chi_square(data, distribution):
     """
@@ -27,7 +27,7 @@ def test_chi_square(data, distribution):
         2. critical_value(float):
             inverse of the distribution chi square to 0.95 with freedom degrees
             n - 1 minus the number of parameters of the distribution.
-        3. p-value[0,1]:
+        3. p-value([0,1]):
             right-tailed probability of the test statistic for the chi-square distribution
             with the same degrees of freedom as for the critical value calculation.
         4. rejected(bool):
@@ -36,18 +36,18 @@ def test_chi_square(data, distribution):
             distribution. If it's true, no.
     """
     ## Parameters and preparations
-    num_bins = danoes_formula(data)
     N = len(data)
+    num_bins = danoes_formula(data)
     frequencies, bin_edges = np.histogram(data, num_bins)
     freedom_degrees = num_bins - 1 - distribution.get_num_parameters()
     
     ## Calculation of errors
     errors = []
-    for i, obs in enumerate(frequencies):
+    for i, observed in enumerate(frequencies):
         lower = bin_edges[i]
         upper = bin_edges[i+1]
-        exp = N * (distribution.cdf(upper) - distribution.cdf(lower))
-        errors.append(((obs - exp)**2) / exp)
+        expected = N * (distribution.cdf(upper) - distribution.cdf(lower))
+        errors.append(((observed - expected)**2) / expected)
     
     ## Calculation of indicators
     statistic_chi2 = sum(errors)
@@ -86,11 +86,19 @@ if __name__ == "__main__":
     from distributions.gumbel_left import GUMBEL_LEFT
     from distributions.gumbel_right import GUMBEL_RIGHT
     from distributions.hypernolic_secant import HYPERBOLIC_SECANT
+    from distributions.inverse_gamma import INVERSE_GAMMA
     from distributions.inverse_gaussian import INVERSE_GAUSSIAN
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
+    from distributions.kumaraswamy import KUMARASWAMY
+    from distributions.laplace import LAPLACE
+    from distributions.levy import LEVY
+    from distributions.loggamma import LOGGAMMA
+    from distributions.logistic import LOGISTIC
+    from distributions.loglogistic import LOGLOGISTIC
     from distributions.lognormal import LOGNORMAL
     from distributions.normal import NORMAL
+    from distributions.pearson_type_6 import PEARSON_TYPE_6
     from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
@@ -104,11 +112,11 @@ if __name__ == "__main__":
     _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
                           GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
-                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN, JOHNSON_SB, 
-                          JOHNSON_SU, LOGNORMAL, NORMAL, TRAPEZOIDAL, TRIANGULAR,UNIFORM, 
-                          WEIBULL]
-    _my_distributions = [GUMBEL_LEFT, GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN]
-    
+                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
+                          JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGNORMAL, LOGGAMMA, NORMAL, PEARSON_TYPE_6, 
+                          TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL]
+    _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
+    _my_distributions = [LOGISTIC, LOGLOGISTIC]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
@@ -117,3 +125,6 @@ if __name__ == "__main__":
         measurements = get_measurements(data)
         distribution = distribution_class(measurements)
         print(test_chi_square(data, distribution))
+
+
+

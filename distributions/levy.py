@@ -1,40 +1,36 @@
-import scipy.integrate
-import math
-import scipy.stats
 import scipy.special as sc
+import scipy.stats
+import math
 
-class GAMMA:
+class LEVY:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    Levy distribution
+    https://en.wikipedia.org/wiki/L%C3%A9vy_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.miu = self.parameters["miu"]
+        self.c = self.parameters["c"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        ## Method 1: Integrate PDF function
-        # result, error = scipy.integrate.quad(self.pdf, 0, x)
-        # print(result)
-        
-        ## Method 2: Scipy Gamma Distribution class
-        # result = scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
-        # print(result)
-        
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.alpha, x/self.beta)/math.gamma(self.alpha)
+        y = lambda x: math.sqrt(self.c/((x-self.miu)))    
+    
+        # result = sc.erfc(y(x)/math.sqrt(2))
+        # result = scipy.stats.levy.cdf(x, loc=self.miu, scale=self.c)
+        result = 2-2*scipy.stats.norm.cdf(y(x))
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        # result = scipy.stats.levy.pdf(x, loc=self.miu, scale=self.c)
+        result = math.sqrt(self.c/(2*math.pi)) * math.exp(-self.c/(2*(x-self.miu))) / ((x-self.miu)**1.5)
+        return result
     
     def get_num_parameters(self):
         """
@@ -46,10 +42,9 @@ class GAMMA:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha > 0
-        v2 = self.beta > 0
-        return v1 and v2
-    
+        v1 = self.c > 0
+        return v1
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -63,20 +58,19 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"miu": *, "c": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
-        
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
-        return parameters
+        scipy_params = scipy.stats.levy.fit(measurements["data"])
     
-if __name__ == '__main__':
+        ## Results
+        parameters = {"miu": scipy_params[0], "c": scipy_params[1]}
+
+        return parameters
+
+if __name__ == "__main__":   
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
-
+    
     ## Import function to get measurements
     def get_data(direction):
         file  = open(direction,'r')
@@ -84,10 +78,21 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_gamma.txt"
+    path = "..\\data\\data_levy.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = GAMMA(measurements)
+    distribution = LEVY(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(144.14707))
+    print(distribution.pdf(144.14707))
+    
+    def entropy(data, distribution):
+        H = sum([-p * math.log(p,2) for p in [distribution.pdf(d) for d in data]])
+        return H
+    
+    entropy = entropy(data, distribution)
+    
+    print(entropy)

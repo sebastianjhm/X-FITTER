@@ -1,32 +1,36 @@
+import math
+from scipy.optimize import fsolve, least_squares
+import numpy as np
 import scipy.stats
 
 class GENERALIZED_GAMMA:
     """
     Generalized Gamma Distribution
-    https://docs.scipy.org/doc/scipy/reference/tutorial/stats/continuous_gengamma.html
+    https://en.wikipedia.org/wiki/Generalized_gamma_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
         
         self.a = self.parameters["a"]
-        self.c = self.parameters["c"]
-        self.miu = self.parameters["miu"]
-        self.sigma = self.parameters["sigma"]
+        self.d = self.parameters["d"]
+        self.p = self.parameters["p"]
+
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        return scipy.stats.gengamma.cdf(x, self.a, self.c, loc=self.miu, scale=self.sigma)
+        # import scipy.integrate
+        # result, error = scipy.integrate.quad(self.pdf, 0, x)
+        result = scipy.stats.gamma.cdf((x/self.a)**self.p, a=self.d/self.p, scale=1)
+        return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        # z = lambda x: (x - self.miu) /  self.sigma
-        # return abs(self.c) * z(x) ** (self.a*self.c-1) /(self.sigma**(self.a*self.c) * math.gamma(self.a)) * math.exp(-z(x)**self.c)
-        return scipy.stats.gengamma.pdf(x, self.a, self.c, loc=self.miu, scale=self.sigma)
+        return (self.p/(self.a**self.d)) * (x ** (self.d - 1)) * math.exp(-(x/self.a)**self.p) / math.gamma(self.d/self.p)
     
     def get_num_parameters(self):
         """
@@ -38,9 +42,9 @@ class GENERALIZED_GAMMA:
         """
         Check parameters restrictions
         """
-        v1 = self.sigma > 0
-        v2 = self.a > 0
-        v3 = self.c != 0
+        v1 = self.a > 0
+        v2 = self.d > 0
+        v3 = self.p > 0
         return v1 and v2 and v3
 
     def get_parameters(self, measurements):
@@ -58,13 +62,33 @@ class GENERALIZED_GAMMA:
         parameters : dict
             {"a": *, "c": *, "miu": *, "sigma": *}
         """
-        scipy_params = scipy.stats.gengamma.fit(measurements["data"])
-        parameters = {"a": scipy_params[0], "c": scipy_params[1], "miu": scipy_params[2], "sigma": scipy_params[3]}
+        def equations(sol_i, data_mean, data_variance, data_skewness):
+            a, d, p = sol_i
+            
+            E = lambda r: a**r * (math.gamma((d+r)/p)/math.gamma(d/p))
+            
+            parametric_mean = E(1)
+            parametric_variance = E(2) - E(1)**2
+            parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+            # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+        
+            ## System Equations
+            eq1 = parametric_mean - data_mean
+            eq2 = parametric_variance - data_variance
+            eq3 = parametric_skewness - data_skewness
+        
+            return (eq1, eq2, eq3)
+        ## fsolve is 100x faster than least square but sometimes return solutions < 0
+        solution =  fsolve(equations, (1, 1, 1), (measurements["mean"], measurements["variance"], measurements["skewness"]))
+        
+        ## If return a perameter < 0 then use least_square with restriction
+        if all(x > 0 for x in solution) is False or all(x == 1 for x in solution) is True:
+            response = least_squares(equations, (1, 1, 1), bounds = ((0, 0, 0), (np.inf, np.inf, np.inf)), args=(measurements["mean"], measurements["variance"], measurements["skewness"]))
+            solution = response.x
+        parameters = {"a": solution[0], "d": solution[1], "p": solution[2]}
         return parameters
     
 if __name__ == '__main__':
-    ## NOT INVERSE DATA FORMULA
-    
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
 
@@ -82,3 +106,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(62.5))

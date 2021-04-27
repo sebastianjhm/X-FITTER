@@ -1,12 +1,13 @@
-import scipy.integrate
-import math
 import scipy.stats
+import math
 import scipy.special as sc
 
-class GAMMA:
+class INVERSE_GAMMA:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    Inverse Gamma distribution
+    Also known Pearson Type 5 distribution
+    https://en.wikipedia.org/wiki/Inverse-gamma_distribution    
+    https://www.vosesoftware.com/riskwiki/PearsonType5distribution.php
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -23,18 +24,18 @@ class GAMMA:
         # print(result)
         
         ## Method 2: Scipy Gamma Distribution class
-        # result = scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
+        # result = scipy.stats.invgamma.cdf(x, a=self.alpha, scale=self.beta)
         # print(result)
         
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.alpha, x/self.beta)/math.gamma(self.alpha)
+        upper_inc_gamma = lambda a, x: sc.gammaincc(a, x) * math.gamma(a)
+        result = upper_inc_gamma(self.alpha, self.beta/x)/math.gamma(self.alpha)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        return ((self.beta ** self.alpha) * (x**(-self.alpha-1)) * math.e ** (-(self.beta/x))) / math.gamma(self.alpha)
     
     def get_num_parameters(self):
         """
@@ -65,29 +66,51 @@ class GAMMA:
         parameters : dict
             {"alpha": *, "beta": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
+        ## Method 1: Solve system equations with theoric mean and variance
+        ## Note: bad estimation. All test reject
+        # mean = measurements["mean"]
+        # variance = measurements["variance"]
+        # alpha = mean ** 2 / variance + 2
+        # beta = mean ** 3 / variance + mean
+        # parameters = {"alpha": alpha, "beta": beta}
         
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        scipy_params = scipy.stats.invgamma.fit(measurements["data"])
+        parameters = {"alpha": scipy_params[0], "beta": scipy_params[2]}
         return parameters
     
-if __name__ == '__main__':
+
+
+
+if __name__ == "__main__":
+    ## PPF of inverse gamma
+    alpha, beta = 5, 9
+    probability = 0.5
+    print("Scipy method:", scipy.stats.invgamma.ppf(probability, a=alpha, scale=beta))
+    print("Inverse by gamma method", 1/scipy.stats.gamma.ppf((1-probability), a=alpha, scale=1/beta))
+    
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
-
+    
     ## Import function to get measurements
-    def get_data(direction):
+    def getData(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
     ## Distribution class
-    path = "..\\data\\data_gamma.txt"
-    data = get_data(path) 
+    path = "..\\data\\data_inverse_gamma.txt"
+    data = getData(path)
     measurements = get_measurements(data)
-    distribution = GAMMA(measurements)
+    distribution = INVERSE_GAMMA(measurements)
     
     print(distribution.get_parameters(measurements))
+    import time
+    ti = time.time()
+    print(scipy.stats.invgamma.fit(data))
+    print("Time estimation scipy", time.time()-ti)
+    
+    
+    print(distribution.cdf(3.339))
     print(distribution.cdf(measurements["mean"]))
+    
+    

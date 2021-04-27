@@ -15,9 +15,9 @@ def equations(sol_i, p):
     f4 = 3 * (((alpha + beta + 1)*(2*(alpha + beta)**2 +(alpha * beta)*(alpha + beta - 6)))/((alpha * beta)*(alpha + beta + 2)*(alpha + beta + 3))) - _kurtosis
     return (f1, f2, f3, f4)
 
-# sol =  fsolve(equations, (1, 1, 1, 1), [397.3594351, 866.3432464, 0.226723222, 2.985509107])
-# print(sol)
+sol =  fsolve(equations, (1, 1, 1, 1), [397.3594351, 866.3432464, 0.226723222, 2.985509107])
+print(sol)
 
 from scipy.optimize import least_squares
-res = least_squares(equations, (1, 1, 1, 1), bounds = ((0, 0, 0, 0), (1000, 1000, 1000, 1000)))
+res = least_squares(equations, (1, 1, 1, 1), bounds = ((0, 0, 0, 0), (1000, 1000, 1000, 1000)), args=("p"))
 print(res.x)

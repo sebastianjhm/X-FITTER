@@ -1,40 +1,33 @@
-import scipy.integrate
-import math
-import scipy.stats
 import scipy.special as sc
+import scipy.stats
+import math
 
-class GAMMA:
+class LOGISTIC:
     """
-    Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    Logistic distribution
+    https://en.wikipedia.org/wiki/Logistic_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.miu = self.parameters["miu"]
+        self.sigma = self.parameters["sigma"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        ## Method 1: Integrate PDF function
-        # result, error = scipy.integrate.quad(self.pdf, 0, x)
-        # print(result)
-        
-        ## Method 2: Scipy Gamma Distribution class
-        # result = scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
-        # print(result)
-        
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.alpha, x/self.beta)/math.gamma(self.alpha)
+        z = lambda x: math.exp(-(x-self.miu)/self.sigma)
+        result = 1/(1+z(x))
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
+        z = lambda x: math.exp(-(x-self.miu)/self.sigma)
+        result = z(x)/(self.sigma*(1+z(x))**2)
+        return result
     
     def get_num_parameters(self):
         """
@@ -46,10 +39,9 @@ class GAMMA:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha > 0
-        v2 = self.beta > 0
-        return v1 and v2
-    
+        v1 = self.sigma > 0
+        return v1
+
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
@@ -63,20 +55,20 @@ class GAMMA:
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *}
+            {"miu": *, "sigma": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
+        μ = measurements["mean"]
+        σ = math.sqrt(3*measurements["variance"]/(math.pi**2))
         
-        alpha = mean ** 2 / variance
-        beta = variance / mean
-        parameters = {"alpha": alpha , "beta": beta}
+        ## Results
+        parameters = {"miu": μ, "sigma": σ}
+
         return parameters
-    
-if __name__ == '__main__':
+
+if __name__ == "__main__":   
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
-
+    
     ## Import function to get measurements
     def get_data(direction):
         file  = open(direction,'r')
@@ -84,10 +76,11 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_gamma.txt"
+    path = "..\\data\\data_logistic.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = GAMMA(measurements)
+    distribution = LOGISTIC(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.pdf(measurements["mean"]))

@@ -95,11 +95,17 @@ if __name__ == "__main__":
     from distributions.gumbel_left import GUMBEL_LEFT
     from distributions.gumbel_right import GUMBEL_RIGHT
     from distributions.hypernolic_secant import HYPERBOLIC_SECANT
+    from distributions.inverse_gamma import INVERSE_GAMMA
     from distributions.inverse_gaussian import INVERSE_GAUSSIAN
     from distributions.johnson_SB import JOHNSON_SB
     from distributions.johnson_SU import JOHNSON_SU
+    from distributions.kumaraswamy import KUMARASWAMY
+    from distributions.laplace import LAPLACE
+    from distributions.levy import LEVY
+    from distributions.loggamma import LOGGAMMA
     from distributions.lognormal import LOGNORMAL
     from distributions.normal import NORMAL
+    from distributions.pearson_type_6 import PEARSON_TYPE_6
     from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
@@ -113,11 +119,11 @@ if __name__ == "__main__":
     _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
                           EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
                           GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
-                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN, JOHNSON_SB, 
-                          JOHNSON_SU, LOGNORMAL, NORMAL, TRAPEZOIDAL, TRIANGULAR,UNIFORM, 
-                          WEIBULL]
-    _my_distributions = [GUMBEL_LEFT, GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN]
-    
+                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
+                          JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGNORMAL, LOGGAMMA, NORMAL, PEARSON_TYPE_6, 
+                          TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL]
+    _my_distributions = [GENERALIZED_GAMMA, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN, KUMARASWAMY]
+    _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
