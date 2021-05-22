@@ -1,30 +1,33 @@
-import scipy.integrate
+from scipy.optimize import fsolve, least_squares
+import numpy as np
 import math
+import scipy.stats
 
-class ERLANG:
+class RAYLEIGH:
     """
-    Erlang distribution
-    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
+    Rayleigh distribution
+    https://en.wikipedia.org/wiki/Rayleigh_distribution    
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.m = self.parameters["m"]
-        self.beta = self.parameters["beta"]
+        self.gamma= self.parameters["gamma"]
+        self.sigma = self.parameters["sigma"]
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated with quadrature integration method of scipy
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
+        result = 1 - math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
-    
+        result = ((x - self.gamma)/(self.sigma**2)) * math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
+        return result
+
     def get_num_parameters(self):
         """
         Number of parameters of the distribution
@@ -33,17 +36,17 @@ class ERLANG:
     
     def parameter_restrictions(self):
         """
-        Check parameters restriction
+        Check parameters restrictions
         """
-        v1 = self.m > 0
-        v2 = self.beta > 0
-        v3 = type(self.m) == int
-        return v1 and v2 and v3
-
+        v1 = self.sigma >= 0
+        return v1
+    
     def get_parameters(self, measurements):
         """
         Calculate proper parameters of the distribution from sample measurements.
-        The parameters are calculated by formula.
+        The parameters are calculated by solving the equations of the measures expected 
+        for this distribution.The number of equations to consider is equal to the number 
+        of parameters.
         
         Parameters
         ----------
@@ -53,21 +56,20 @@ class ERLANG:
         Returns
         -------
         parameters : dict
-            {"m": *, "beta": *}
+            {"alpha": *, "beta": *, "min": *, "max": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
         
-        m = round(mean ** 2 / variance)
-        beta = variance / mean
-        parameters = {"m": m , "beta": beta}
-
+        σ = math.sqrt(measurements["variance"] * 2 / (4-math.pi))
+        γ = measurements["mean"] - σ*math.sqrt(math.pi/2)
+        
+        parameters = {"gamma": γ, "sigma": σ}
         return parameters
+
 
 if __name__ == '__main__':
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
-
+    
     ## Import function to get measurements
     def get_data(direction):
         file  = open(direction,'r')
@@ -75,10 +77,13 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_erlang.txt"
+    path = "..\\data\\data_rayleigh.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = ERLANG(measurements)
+    distribution = RAYLEIGH(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.pdf(measurements["mean"]))
+        
+    print(scipy.stats.rayleigh.fit(measurements["data"]))

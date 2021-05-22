@@ -1,29 +1,34 @@
 import scipy.integrate
 import math
+from scipy.optimize import fsolve
+import scipy.stats
+import numpy as np
 
-class ERLANG:
+class PARETO_SECOND_KIND:
     """
-    Erlang distribution
-    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
+    Pareto second kind distribution distribution
+    https://www.vosesoftware.com/riskwiki/Pareto(secondkind)distribution.php     
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.m = self.parameters["m"]
-        self.beta = self.parameters["beta"]
+        self.xm = self.parameters["xm"]
+        self.alpha = self.parameters["alpha"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
+        # print(scipy.stats.lomax.cdf(x, self.alpha, scale=self.xm))
+        result = 1 - (self.xm/(x+self.xm)) ** self.alpha
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
+        # print(scipy.stats.lomax.pdf(x, self.alpha, scale=self.xm))
+        return (self.alpha * self.xm ** self.alpha) / ((x+self.xm) ** (self.alpha + 1))
     
     def get_num_parameters(self):
         """
@@ -35,10 +40,9 @@ class ERLANG:
         """
         Check parameters restriction
         """
-        v1 = self.m > 0
-        v2 = self.beta > 0
-        v3 = type(self.m) == int
-        return v1 and v2 and v3
+        v1 = self.xm > 0
+        v2 = self.alpha > 0
+        return v1 and v2
 
     def get_parameters(self, measurements):
         """
@@ -53,14 +57,15 @@ class ERLANG:
         Returns
         -------
         parameters : dict
-            {"m": *, "beta": *}
-        """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
+            {"xm": *, "alpha": *}
+        """       
+        ## Solve system
+        m = measurements["mean"]
+        v = measurements["variance"]
         
-        m = round(mean ** 2 / variance)
-        beta = variance / mean
-        parameters = {"m": m , "beta": beta}
+        xm = -(m * (m**2 + v))/(m**2 - v)
+        alpha = -(2*v)/(m**2 - v)
+        parameters = {"xm": xm , "alpha": alpha}
 
         return parameters
 
@@ -75,10 +80,21 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_erlang.txt"
+    path = "..\\data\\data_pareto_second_kind.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = ERLANG(measurements)
+    distribution = PARETO_SECOND_KIND(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.pdf(13.806))
+    
+    ## Get parameters of distribution: SCIPY vs EQUATIONS
+    import time
+    ti = time.time()
+    print(distribution.get_parameters(measurements))
+    print("Solve equations time: ", time.time() -ti)
+    ti = time.time()
+    print(scipy.stats.lomax.fit(data))
+    print("Scipy time get parameters: ",time.time() - ti)
+

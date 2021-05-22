@@ -67,8 +67,10 @@ class KUMARASWAMY:
             ## Variables declaration
             alpha_, beta_, min_, max_ = sol_i
             
+            ## Generatred moments function (not-centered)
             E = lambda r: beta_ * math.gamma(1+r/alpha_) * math.gamma(beta_) / math.gamma(1+beta_+r/alpha_)
             
+            ## Parametric expected expressions
             parametric_mean = E(1) * (max_ - min_) + min_
             parametric_variance = (E(2) - E(1)**2) * (max_ - min_)**2
             parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5

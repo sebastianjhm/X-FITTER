@@ -1,29 +1,27 @@
-import scipy.integrate
 import math
 
-class ERLANG:
+class RECIPROCAL:
     """
-    Erlang distribution
-    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
+    Reciprocal distribution
+    https://en.wikipedia.org/wiki/Reciprocal_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.m = self.parameters["m"]
-        self.beta = self.parameters["beta"]
+        self.a = self.parameters["a"]
+        self.b = self.parameters["b"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
-        return result
+        return (math.log(x) - math.log(self.a))/(math.log(self.b) -  math.log(self.a))
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
+        return 1/(x*(math.log(self.b) -  math.log(self.a)))
     
     def get_num_parameters(self):
         """
@@ -33,12 +31,10 @@ class ERLANG:
     
     def parameter_restrictions(self):
         """
-        Check parameters restriction
+        Check parameters restrictions
         """
-        v1 = self.m > 0
-        v2 = self.beta > 0
-        v3 = type(self.m) == int
-        return v1 and v2 and v3
+        v1 = self.b > self.a
+        return v1
 
     def get_parameters(self, measurements):
         """
@@ -53,17 +49,17 @@ class ERLANG:
         Returns
         -------
         parameters : dict
-            {"m": *, "beta": *}
+            {"min": *, "max": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
         
-        m = round(mean ** 2 / variance)
-        beta = variance / mean
-        parameters = {"m": m , "beta": beta}
-
+        a = min(measurements["data"]) - 1e-8
+        b = max(measurements["data"]) + 1e-8
+        
+        
+        parameters = {"a": a , "b": b}
+        
         return parameters
-
+    
 if __name__ == '__main__':
     ## Import function to get measurements
     from measurements.data_measurements import get_measurements
@@ -75,10 +71,10 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_erlang.txt"
+    path = "..\\data\\data_reciprocal.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = ERLANG(measurements)
+    distribution = RECIPROCAL(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))

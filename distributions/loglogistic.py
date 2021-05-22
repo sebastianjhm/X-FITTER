@@ -1,4 +1,3 @@
-import scipy.special as sc
 import scipy.stats
 import math
 from scipy.optimize import fsolve, least_squares
@@ -6,7 +5,7 @@ import numpy as np
 
 class LOGLOGISTIC:
     """
-    Logistic distribution
+    Loglogistic distribution
     https://en.wikipedia.org/wiki/Log-logistic_distribution
     """
     def __init__(self, measurements):
@@ -79,7 +78,7 @@ class LOGLOGISTIC:
         args = (measurements["mean"], measurements["variance"], measurements["skewness"])
         solution = least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
-        print(scipy.stats.fisk.fit(measurements["data"]))
+
         return parameters
 
 if __name__ == "__main__":   

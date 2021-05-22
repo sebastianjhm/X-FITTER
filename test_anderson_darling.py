@@ -103,9 +103,20 @@ if __name__ == "__main__":
     from distributions.laplace import LAPLACE
     from distributions.levy import LEVY
     from distributions.loggamma import LOGGAMMA
+    from distributions.logistic import LOGISTIC
+    from distributions.loglogistic import LOGLOGISTIC
     from distributions.lognormal import LOGNORMAL
+    from distributions.nakagami import NAKAGAMI
     from distributions.normal import NORMAL
+    from distributions.pareto_first_kind import PARETO_FIRST_KIND
+    from distributions.pareto_second_kind import PARETO_SECOND_KIND
     from distributions.pearson_type_6 import PEARSON_TYPE_6
+    from distributions.pert import PERT
+    from distributions.power_function import POWER_FUNCTION
+    from distributions.rayleigh import RAYLEIGH
+    from distributions.reciprocal import RECIPROCAL
+    from distributions.rice import RICE
+    from distributions.t import T
     from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
@@ -116,14 +127,18 @@ if __name__ == "__main__":
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    _all_distributions = [BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
-                          EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
-                          GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
-                          GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
-                          JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGNORMAL, LOGGAMMA, NORMAL, PEARSON_TYPE_6, 
-                          TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL]
-    _my_distributions = [GENERALIZED_GAMMA, HYPERBOLIC_SECANT, INVERSE_GAUSSIAN, KUMARASWAMY]
+    _all_distributions = [
+        BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
+        EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
+        GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
+        GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
+        JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGGAMMA, LOGISTIC, LOGLOGISTIC,
+        LOGNORMAL,  NAKAGAMI, NORMAL, PARETO_FIRST_KIND, PARETO_SECOND_KIND, PEARSON_TYPE_6, 
+        PERT, TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL
+    ]
+
     _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
+    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"

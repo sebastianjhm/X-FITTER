@@ -1,29 +1,33 @@
 import scipy.integrate
 import math
+import scipy.special as sc
+import scipy.stats
+import numpy as np
 
-class ERLANG:
+class NAKAGAMI:
     """
-    Erlang distribution
-    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
+    Nakagami distribution
+    https://en.wikipedia.org/wiki/Nakagami_distribution     
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
         self.m = self.parameters["m"]
-        self.beta = self.parameters["beta"]
+        self.omega = self.parameters["omega"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
+        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
+        result = lower_inc_gamma(self.m, (self.m/self.omega) * x**2)/math.gamma(self.m)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
+        return (2 * self.m**self.m)/(math.gamma(self.m) * self.omega**self.m) * (x**(2*self.m-1) * math.exp(-(self.m/self.omega) * x**2))
     
     def get_num_parameters(self):
         """
@@ -35,10 +39,9 @@ class ERLANG:
         """
         Check parameters restriction
         """
-        v1 = self.m > 0
-        v2 = self.beta > 0
-        v3 = type(self.m) == int
-        return v1 and v2 and v3
+        v1 = self.m > 0.5
+        v2 = self.omega > 0
+        return v1 and v2
 
     def get_parameters(self, measurements):
         """
@@ -53,14 +56,16 @@ class ERLANG:
         Returns
         -------
         parameters : dict
-            {"m": *, "beta": *}
+            {"m": *, "omega": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
+        d = np.array(measurements["data"])
         
-        m = round(mean ** 2 / variance)
-        beta = variance / mean
-        parameters = {"m": m , "beta": beta}
+        E_x2 = sum(d*d) / len(d)
+        E_x4 = sum(d*d*d*d) / len(d)
+        
+        omega = E_x2
+        m = E_x2 ** 2 / (E_x4 - E_x2**2)
+        parameters = {"m": m , "omega": omega}
 
         return parameters
 
@@ -75,10 +80,11 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_erlang.txt"
+    path = "..\\data\\data_nakagami.txt"
     data = get_data(path) 
     measurements = get_measurements(data)
-    distribution = ERLANG(measurements)
+    distribution = NAKAGAMI(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(10.98))
