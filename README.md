@@ -1,2 +1,2 @@
 # Fitter
-![alt text](https://github.com/SebastianJHM/Fitter/blob/master/multimedia/test.PNG)
+![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/test.PNG)
