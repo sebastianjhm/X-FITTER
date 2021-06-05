@@ -90,6 +90,7 @@ if __name__ == "__main__":
     from distributions.gamma import GAMMA
     from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
     from distributions.generalized_gamma import GENERALIZED_GAMMA
+    from distributions.generalized_gamma_4P import GENERALIZED_GAMMA_4P
     from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.gumbel_left import GUMBEL_LEFT
@@ -138,8 +139,8 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
-    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T]
-    for distribution_class in _my_distributions:
+    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
+    for distribution_class in _all_distributions:
         print(distribution_class.__name__)
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
         data = get_data(path)

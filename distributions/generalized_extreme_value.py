@@ -31,7 +31,10 @@ class GENERALIZED_EXTREME_VALUE:
         Probability density function
         """
         z = lambda x: (x - self.miu) / self.sigma
-        return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
+        if self.c == 0:
+            return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
+        else:
+            return (1/self.sigma) * math.exp(-(1+self.c*z(x))**(-1/self.c)) * (1+self.c*z(x))**(-1-1/self.c)
        
     def get_num_parameters(self):
         """
@@ -83,3 +86,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
+    print(distribution.pdf(measurements["mean"]))

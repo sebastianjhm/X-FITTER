@@ -1,73 +1,33 @@
-import scipy.stats
+import numpy as np
+import pandas as pd
+import scipy.stats as st
+import statsmodels.api as sm
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import math
+import random
 
-def test_kolmogorov_smirnov(data, distribution):
-    """
-    Kolmogorov Smirnov test to evaluate that a sample is distributed according to a probability 
-    distribution.
+mpl.style.use("ggplot")
+
+def plot_histogram(data, results):
+    ## Histogram of data
+    plt.figure(figsize=(8, 4))
+    plt.hist(data, density=True, ec='white', color=(168/235, 12/235, 12/235))
+    plt.title('HISTOGRAM')
+    plt.xlabel('Values')
+    plt.ylabel('Frequencies')
+
+    ## Plot n distributions
+    for distribution, p_value in results.items():
+        if p_value > 0.05:
+            x_plot = np.linspace(min(data), max(data), 1000)
+            y_plot = [distribution.pdf(x) for x in x_plot]
+            plt.plot(x_plot, y_plot, label=distribution.__class__.__name__ + ": " + str(round(p_value, 4)), color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
     
-    The hypothesis that the sample is distributed following the probability distribution
-    is not rejected if the test statistic is less than the critical value or equivalently
-    if the p-value is less than 0.05
-    
-    Parameters
-    ----------
-    data: iterable
-        data set
-    distribution: class
-        distribution class initialized whit parameters of distribution and methods
-        cdf() and get_num_parameters()
-        
-    Return
-    ------
-    result_test_ks: dict
-        1. test_statistic(float):
-            sum over all data of the value |Sn-Fn|
-        2. critical_value(float):
-            inverse of the kolmogorov-smirnov distribution to 0.95 whit size of 
-            sample N as parameter.
-        3. p-value[0,1]:
-            probability of the test statistic for the kolmogorov-smirnov distribution
-            whit size of sample N as parameter.
-        4. rejected(bool):
-            decision if the null hypothesis is rejected. If it is false, it can be 
-            considered that the sample is distributed according to the probability 
-            distribution. If it's true, no.
-    """
-    ## Parameters and preparations
-    N = len(data)
-    data.sort()
-    
-    ## Calculation of errors
-    errors = []
-    for i in range(N):
-        Sn = (i + 1) / N
-        if i < N - 1:
-            if (data[i] != data[i+1]):
-                Fn = distribution.cdf(data[i])
-                errors.append(abs(Sn - Fn))
-            else:
-                Fn = 0
-        else:
-            Fn = distribution.cdf(data[i])
-            errors.append(abs(Sn - Fn))
-    
-    ## Calculation of indicators
-    statistic_ks = max(errors)
-    critical_value = scipy.stats.kstwo.ppf(0.95, N)
-    p_value = 1 -  scipy.stats.kstwo.cdf(statistic_ks, N)
-    rejected = statistic_ks >= critical_value
-    
-    ## Construction of answer
-    result_test_ks = {
-        "test_statistic": statistic_ks, 
-        "critical_value": critical_value, 
-        "p-value": p_value,
-        "rejected": rejected
-        }
-    
-    return result_test_ks
-    
-if __name__ == "__main__":
+    plt.legend(title='NOT REJECTED DISTRIBUTIONS', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.show()
+
+def fit_data(data):
     from utilities.data_measurements import get_measurements
     from distributions.beta import BETA
     from distributions.burr import BURR
@@ -116,10 +76,9 @@ if __name__ == "__main__":
     from distributions.uniform import UNIFORM
     from distributions.weibull import WEIBULL
     
-    def get_data(direction):
-        file  = open(direction,'r')
-        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-        return data
+    from test_chi_square import test_chi_square
+    from test_kolmogorov_smirnov import test_kolmogorov_smirnov
+    from test_anderson_darling import test_anderson_darling
     
     _all_distributions = [
         BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
@@ -128,17 +87,44 @@ if __name__ == "__main__":
         GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
         JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGGAMMA, LOGISTIC, LOGLOGISTIC,
         LOGNORMAL,  NAKAGAMI, NORMAL, PARETO_FIRST_KIND, PARETO_SECOND_KIND, PEARSON_TYPE_6, 
-        PERT, TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL
+        PERT, POWER_FUNCTION, RAYLEIGH, RECIPROCAL, RICE, T, TRAPEZOIDAL, TRIANGULAR,
+        UNIFORM, WEIBULL
     ]
 
-    _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
-    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
+    _my_distributions = [BETA, LEVY, RICE, INVERSE_GAMMA, GENERALIZED_GAMMA_4P, F]
+    
+    measurements = get_measurements(data)
+    results = {}
     for distribution_class in _all_distributions:
-        print(distribution_class.__name__)
-        path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
-        data = get_data(path)
-                
-        measurements = get_measurements(data)
-        distribution = distribution_class(measurements)
-                
-        print(test_kolmogorov_smirnov(data, distribution))
+        try:
+            distribution = distribution_class(measurements)
+            response = test_kolmogorov_smirnov(data, distribution)
+            p_value = response["p-value"]
+            if not math.isnan(p_value):
+                results[distribution] = p_value
+        except:
+            print(distribution_class.__name__)
+            
+    
+    results = {x:y for x,y in results.items() if y not in [0,1]}
+    results = {k: v for k, v in sorted(results.items(), key=lambda item: item[1], reverse=True)}
+    print(results)
+    return results
+        
+def main():
+    ## Import data
+    # data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
+    def getData(direction):
+        file  = open(direction,'r')
+        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+        return data
+    
+    path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_pareto_first_kind.txt"
+    data = getData(path)
+    
+    results = fit_data(data)
+    plot_histogram(data, results)
+
+if __name__ == "__main__":
+    main()
+    

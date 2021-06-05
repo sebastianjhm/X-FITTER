@@ -22,8 +22,8 @@ class BETA:
         Calculated with quadrature integration method of scipy
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
-        print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
-        print(sc.betainc(self.alpha_, self.beta_, z(x)))
+        # print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
+        # print(sc.betainc(self.alpha_, self.beta_, z(x)))
         result, error = scipy.integrate.quad(self.pdf, self.min_, x)
         return result
     

@@ -1,70 +1,3 @@
-import scipy.stats
-import numpy as np
-from utilities.danoes import danoes_formula
-   
-def test_chi_square(data, distribution):
-    """
-    Chi Square test to evaluate that a sample is distributed according to a probability 
-    distribution.
-    
-    The hypothesis that the sample is distributed following the probability distribution
-    is not rejected if the test statistic is less than the critical value or equivalently
-    if the p-value is less than 0.05
-    
-    Parameters
-    ----------
-    data: iterable
-        data set
-    distribution: class
-        distribution class initialized whit parameters of distribution and methods
-        cdf() and get_num_parameters()
-        
-    Return
-    ------
-    result_test_chi2: dict
-        1. test_statistic(float):
-            sum over all classes of the value (expected - observed) ^ 2 / expected 
-        2. critical_value(float):
-            inverse of the distribution chi square to 0.95 with freedom degrees
-            n - 1 minus the number of parameters of the distribution.
-        3. p-value([0,1]):
-            right-tailed probability of the test statistic for the chi-square distribution
-            with the same degrees of freedom as for the critical value calculation.
-        4. rejected(bool):
-            decision if the null hypothesis is rejected. If it is false, it can be 
-            considered that the sample is distributed according to the probability 
-            distribution. If it's true, no.
-    """
-    ## Parameters and preparations
-    N = len(data)
-    num_bins = danoes_formula(data)
-    frequencies, bin_edges = np.histogram(data, num_bins)
-    freedom_degrees = num_bins - 1 - distribution.get_num_parameters()
-    
-    ## Calculation of errors
-    errors = []
-    for i, observed in enumerate(frequencies):
-        lower = bin_edges[i]
-        upper = bin_edges[i+1]
-        expected = N * (distribution.cdf(upper) - distribution.cdf(lower))
-        errors.append(((observed - expected)**2) / expected)
-    
-    ## Calculation of indicators
-    statistic_chi2 = sum(errors)
-    critical_value = scipy.stats.chi2.ppf(0.95, freedom_degrees)
-    p_value = 1 -  scipy.stats.chi2.cdf(statistic_chi2, freedom_degrees)
-    rejected = statistic_chi2 >= critical_value
-    
-    ## Construction of answer
-    result_test_chi2 = {
-        "test_statistic": statistic_chi2, 
-        "critical_value": critical_value, 
-        "p-value": p_value,
-        "rejected": rejected
-        }
-    
-    return result_test_chi2
-    
 if __name__ == "__main__":
     from utilities.data_measurements import get_measurements
     from distributions.beta import BETA
@@ -114,6 +47,13 @@ if __name__ == "__main__":
     from distributions.uniform import UNIFORM
     from distributions.weibull import WEIBULL
     
+    from test_chi_square import test_chi_square
+    from test_kolmogorov_smirnov import test_kolmogorov_smirnov
+    from test_anderson_darling import test_anderson_darling
+    
+    from colorama import init, Fore, Back, Style
+    init(convert=True)
+    
     def get_data(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
@@ -126,21 +66,32 @@ if __name__ == "__main__":
         GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
         JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGGAMMA, LOGISTIC, LOGLOGISTIC,
         LOGNORMAL,  NAKAGAMI, NORMAL, PARETO_FIRST_KIND, PARETO_SECOND_KIND, PEARSON_TYPE_6, 
-        PERT, POWER_FUNCTION, RAYLEIGH, RECIPROCAL, RICE, T, TRAPEZOIDAL, TRIANGULAR,
-        UNIFORM, WEIBULL
+        PERT, TRAPEZOIDAL, TRIANGULAR,UNIFORM, WEIBULL
     ]
 
     _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
-    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
+    _my_distributions = [BETA, LEVY, RICE, INVERSE_GAMMA, GENERALIZED_GAMMA_4P, F]
     for distribution_class in _my_distributions:
-        print(distribution_class.__name__)
+        print(Fore.YELLOW + distribution_class.__name__)
+        print(Fore.YELLOW + "="*len(distribution_class.__name__))
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
         data = get_data(path)
                 
         measurements = get_measurements(data)
         distribution = distribution_class(measurements)
-        print(test_chi_square(data, distribution))
-
-    
-
-
+        
+        if(test_chi_square(data, distribution)["rejected"] == False):
+            print(Fore.CYAN + str("Test Chi Square: ") + str(test_chi_square(data, distribution)))
+        else:
+            print(Fore.RED + str("Test Chi Square: ") + str(test_chi_square(data, distribution)))
+            
+        if(test_kolmogorov_smirnov(data, distribution)["rejected"] == False):
+            print(Fore.CYAN + str("Test Kolmogorov-Smirnov: ") + str(test_kolmogorov_smirnov(data, distribution)))
+        else:
+            print(Fore.RED + str("Test Kolmogorov-Smirnov: ") + str(test_kolmogorov_smirnov(data, distribution)))
+            
+        if(test_anderson_darling(data, distribution)["rejected"] == False):
+            print(Fore.CYAN + str("Test Anderson-Darling: ") + str(test_anderson_darling(data, distribution)))
+        else:
+            print(Fore.RED + str("Test Anderson-Darling: ") + str(test_anderson_darling(data, distribution)))
+        print(Style.RESET_ALL)

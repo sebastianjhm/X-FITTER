@@ -29,7 +29,7 @@ class KUMARASWAMY:
         Probability density function
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
-        return ( 1 / (self.max_ - self.min_)) * ( math.gamma(self.alpha_ + self.beta_) / (math.gamma(self.alpha_) * math.gamma(self.beta_))) * (z(x)**(self.alpha_-1)) * ((1-z(x))**(self.beta_-1))
+        return (self.alpha_ * self.beta_) * (z(x)**(self.alpha_-1)) * ((1-z(x)**self.alpha_)**(self.beta_-1))/ (self.max_ - self.min_)
 
     def get_num_parameters(self):
         """
@@ -111,4 +111,5 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(18))
+    print(distribution.pdf(18))
     

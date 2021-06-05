@@ -66,7 +66,7 @@ class CAUCHY:
         #     return - sum([math.log(1/(math.pi * gamma * (1 + ((d - x0)/gamma)**2))) for d in measurements["data"]])
         # solution = minimize(objective, [x0_ini, gamma_ini], method="SLSQP", bounds = [(-np.inf, np.inf),(0,np.inf)])
        
-        scipy_params = scipy.stats.cauchy.fit(data)
+        scipy_params = scipy.stats.cauchy.fit(measurements["data"])
     
         ## Results
         parameters = {"x0": scipy_params[0], "gamma": scipy_params[1]}

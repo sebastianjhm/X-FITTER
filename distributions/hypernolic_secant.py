@@ -23,7 +23,7 @@ class HYPERBOLIC_SECANT:
         Probability density function
         """
         z = lambda x: math.pi * (x - self.miu) / (2 * self.sigma)
-        return math.sech(z(x))/ (2 * self.sigma)
+        return (1/math.cosh(z(x)))/ (2 * self.sigma)
     
     def get_num_parameters(self):
         """
@@ -78,4 +78,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements["mean"]))
-    print(distribution.cdf(953.72))
+    print(distribution.pdf(953.72))

@@ -27,7 +27,7 @@ def plot_histogram(data, results, n):
 
     ## Histogram of data
     plt.figure(figsize=(8, 4))
-    plt.hist(data, density=True, ec='white', color=(63/235, 149/235, 170/235))
+    plt.hist(data, density=True, ec='white', color=(192/235, 17/235, 17/235))
     plt.title('HISTOGRAM')
     plt.xlabel('Values')
     plt.ylabel('Frequencies')
@@ -87,23 +87,24 @@ def fit_data(data):
         
         ## Build results and sort by sse
         results[distribution] = [sse, arg, loc, scale]
-        
+    
     results = {k: results[k] for k in sorted(results, key=results.get)}
+    print(results)
     return results
         
 def main():
     ## Import data
-    # data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
+    data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
     def getData(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_generalized_gamma.txt"
-    data = getData(path)
+    # path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_generalized_gamma.txt"
+    # data = getData(path)
     
     results = fit_data(data)
-    plot_histogram(data, results, 3)
+    plot_histogram(data, results, 5)
 
 if __name__ == "__main__":
     main()

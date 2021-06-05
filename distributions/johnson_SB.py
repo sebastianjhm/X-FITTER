@@ -84,6 +84,9 @@ class JOHNSON_SB:
         gamma_ = delta_ * math.asinh((p/n - p/m) * math.sqrt((1+p/m)*(1+p/n)-4) / (2 * (p**2/(m*n)-1)))
         
         parameters = {"xi": xi_, "lambda": lambda_, "gamma": gamma_, "delta": delta_}
+        
+        # scipy_params = scipy.stats.johnsonsb.fit(measurements["data"])
+        # parameters = {"xi": scipy_params[2], "lambda": scipy_params[3], "gamma": scipy_params[0], "delta": scipy_params[1]}
         return parameters
     
 
