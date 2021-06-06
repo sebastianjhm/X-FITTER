@@ -72,8 +72,8 @@ if __name__ == "__main__":
     _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
     _my_distributions = [BETA, LEVY, RICE, INVERSE_GAMMA, GENERALIZED_GAMMA_4P, F]
     for distribution_class in _my_distributions:
-        print(Fore.YELLOW + distribution_class.__name__)
-        print(Fore.YELLOW + "="*len(distribution_class.__name__))
+        print(Fore.BLUE + distribution_class.__name__)
+        print(Fore.BLUE + "="*len(distribution_class.__name__))
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
         data = get_data(path)
                 
