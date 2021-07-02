@@ -66,8 +66,8 @@ class GUMBEL_LEFT:
             parametric_variance = (sigma ** 2) * (math.pi ** 2)/6
             
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
             
             return (eq1, eq2)
         
@@ -77,7 +77,7 @@ class GUMBEL_LEFT:
         
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_gumbel_left.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = GUMBEL_LEFT(measurements)
     
     print(distribution.get_parameters(measurements))

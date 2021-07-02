@@ -52,8 +52,8 @@ class RECIPROCAL:
             {"min": *, "max": *}
         """
         
-        a = min(measurements["data"]) - 1e-8
-        b = max(measurements["data"]) + 1e-8
+        a = measurements.min - 1e-8
+        b = measurements.max + 1e-8
         
         
         parameters = {"a": a , "b": b}
@@ -62,7 +62,7 @@ class RECIPROCAL:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -73,8 +73,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_reciprocal.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = RECIPROCAL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

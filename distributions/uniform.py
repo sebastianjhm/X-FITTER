@@ -50,8 +50,8 @@ class UNIFORM:
             {"min": *, "max": *}
         """
         
-        _min = min(measurements["data"]) - 1e-8
-        _max = max(measurements["data"]) + 1e-8
+        _min = measurements.min - 1e-8
+        _max = measurements.max + 1e-8
         
         
         parameters = {"min": _min , "max": _max}
@@ -60,19 +60,20 @@ class UNIFORM:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
-    
+
+    path = "../data/data_uniform.txt"
+
     ## Distribution class
-    path = "..\\data\\data_uniform.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = UNIFORM(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

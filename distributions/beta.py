@@ -23,8 +23,9 @@ class BETA:
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
         # print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
-        # print(sc.betainc(self.alpha_, self.beta_, z(x)))
-        result, error = scipy.integrate.quad(self.pdf, self.min_, x)
+        # print(result, error = scipy.integrate.quad(self.pdf, self.min_, x))
+        result = sc.betainc(self.alpha_, self.beta_, z(x))
+        
         return result
     
     def pdf(self, x):
@@ -77,10 +78,10 @@ class BETA:
             parametric_kurtosis = 3 * (((alpha_ + beta_ + 1)*(2*(alpha_ + beta_)**2 +(alpha_ * beta_)*(alpha_ + beta_ - 6)))/((alpha_ * beta_)*(alpha_ + beta_ + 2)*(alpha_ + beta_ + 3)))
             
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            eq3 = parametric_skewness - measurements["skewness"]
-            eq4 = parametric_kurtosis  - measurements["kurtosis"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_skewness - measurements.skewness
+            eq4 = parametric_kurtosis  - measurements.kurtosis
             
             return (eq1, eq2, eq3, eq4)
         
@@ -91,13 +92,13 @@ class BETA:
         v2 = parameters["beta"] > 0
         v3 = parameters["min"] < parameters["max"]
         if ((v1 and v2 and v3) == False):
-            scipy_params = scipy.stats.beta.fit(measurements["data"])
+            scipy_params = scipy.stats.beta.fit(measurements.data)
             parameters = {"alpha": scipy_params[0], "beta": scipy_params[1], "min": scipy_params[2], "max": scipy_params[3]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -106,12 +107,12 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_beta.txt"
+    path = "../data/data_beta.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = BETA(measurements)
     
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     
     
     
@@ -126,10 +127,10 @@ if __name__ == '__main__':
         parametric_kurtosis = 3 * (((alpha_ + beta_ + 1)*(2*(alpha_ + beta_)**2 +(alpha_ * beta_)*(alpha_ + beta_ - 6)))/((alpha_ * beta_)*(alpha_ + beta_ + 2)*(alpha_ + beta_ + 3)))
         
         ## System Equations
-        eq1 = parametric_mean - measurements["mean"]
-        eq2 = parametric_variance - measurements["variance"]
-        eq3 = parametric_skewness - measurements["skewness"]
-        eq4 = parametric_kurtosis  - measurements["kurtosis"]
+        eq1 = parametric_mean - measurements.mean
+        eq2 = parametric_variance - measurements.variance
+        eq3 = parametric_skewness - measurements.skewness
+        eq4 = parametric_kurtosis  - measurements.kurtosis
         
         return (eq1, eq2, eq3, eq4)
     
@@ -144,7 +145,7 @@ if __name__ == '__main__':
     
     print("=====")
     ti = time.time()
-    scipy_params = scipy.stats.beta.fit(measurements["data"])
+    scipy_params = scipy.stats.beta.fit(measurements.data)
     parameters = {"alpha": scipy_params[0], "beta": scipy_params[1], "min": scipy_params[2], "max": scipy_params[3]}
     print(parameters)
     print("Scipy time get parameters: ",time.time() - ti)
@@ -153,8 +154,8 @@ if __name__ == '__main__':
     from scipy.optimize import least_squares
     import numpy as np
     ti = time.time()
-    bnds = ((0, 0, -np.inf, measurements["mean"]), (np.inf, np.inf, measurements["mean"], np.inf))
-    x0 = (1, 1, min(measurements["data"]), max(measurements["data"]))
+    bnds = ((0, 0, -np.inf, measurements.mean), (np.inf, np.inf, measurements.mean, np.inf))
+    x0 = (1, 1, measurements.min, measurements.max)
     args = ([measurements])
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     print(solution.x)

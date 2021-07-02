@@ -63,13 +63,13 @@ class GENERALIZED_NORMAL:
         parameters : dict
             {"beta": *, "miu": *, "alpha": *}
         """
-        scipy_params = scipy.stats.gennorm.fit(measurements["data"])
+        scipy_params = scipy.stats.gennorm.fit(measurements.data)
         parameters = {"beta": scipy_params[0], "miu": scipy_params[1], "alpha": scipy_params[2]}
         return parameters
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -80,8 +80,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_generalized_normal.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = GENERALIZED_NORMAL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

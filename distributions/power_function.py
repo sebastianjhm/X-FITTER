@@ -74,26 +74,26 @@ class POWER_FUNCTION:
             # parametric_median = (0.5**(1/α))*(b-a)+a
         
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            eq3 = parametric_skewness - measurements["skewness"]
-            eq4 = parametric_kurtosis  - measurements["kurtosis"]
-            # eq5 = parametric_median - measurements["median"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_skewness - measurements.skewness
+            eq4 = parametric_kurtosis  - measurements.kurtosis
+            # eq5 = parametric_median - measurements.median
             
             return (eq1, eq2, eq3)
 
         bnds = ((0, -np.inf, -np.inf), (np.inf, np.inf, np.inf))
-        x0 = (1, 1, max(measurements["data"]))
+        x0 = (1, 1, measurements.max)
         args = ([measurements])
         solution = least_squares(equations, x0, bounds = bnds, args=args)
-        parameters = {"alpha": solution.x[0], "a": solution.x[1], "b": max(measurements["data"]) + 1e-3}
+        parameters = {"alpha": solution.x[0], "a": solution.x[1], "b": measurements.max + 1e-3}
         
         return parameters
 
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -104,12 +104,12 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_power_function.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = POWER_FUNCTION(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     print(distribution.cdf(139.86))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.pdf(measurements.mean))
         
-    print(scipy.stats.powerlaw.fit(measurements["data"]))
+    print(scipy.stats.powerlaw.fit(measurements.data))

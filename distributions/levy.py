@@ -60,7 +60,7 @@ class LEVY:
         parameters : dict
             {"miu": *, "c": *}
         """
-        scipy_params = scipy.stats.levy.fit(measurements["data"])
+        scipy_params = scipy.stats.levy.fit(measurements.data)
     
         ## Results
         parameters = {"miu": scipy_params[0], "c": scipy_params[1]}
@@ -69,7 +69,7 @@ class LEVY:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -80,12 +80,12 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_levy.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LEVY(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     print(distribution.cdf(144.14707))
     print(distribution.pdf(144.14707))
     

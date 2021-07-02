@@ -68,21 +68,21 @@ class FATIGUE_LIFE:
         #     parametric_skewness = 4 * gamma**2 * (11*gamma**2 + 6) / ((4+5*gamma**2)*math.sqrt(gamma**2 * (4+5*gamma**2)))
         
         #     ## System Equations
-        #     eq1 = parametric_mean - measurements["mean"]
-        #     eq2 = parametric_variance - measurements["variance"]
-        #     eq3 = parametric_skewness - measurements["skewness"]
+        #     eq1 = parametric_mean - measurements.mean
+        #     eq2 = parametric_variance - measurements.variance
+        #     eq3 = parametric_skewness - measurements.skewness
             
         #     return (eq1, eq2, eq3)
         
         # solution =  fsolve(equations, (1, 1, 1), measurements)
         # print(solution)
-        scipy_params = scipy.stats.fatiguelife.fit(measurements["data"])
+        scipy_params = scipy.stats.fatiguelife.fit(measurements.data)
         parameters = {"gamma": scipy_params[0], "alpha": scipy_params[1], "beta": scipy_params[2]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -93,8 +93,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_fatigue_life.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = FATIGUE_LIFE(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

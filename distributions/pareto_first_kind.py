@@ -60,8 +60,8 @@ class PARETO_FIRST_KIND:
             {"xm": *, "alpha": *}
         """       
         ## Solve system
-        m = measurements["mean"]
-        v = measurements["variance"]
+        m = measurements.mean
+        v = measurements.variance
         
         xm = (m**2 + v - math.sqrt(v*(m**2 + v)))/m
         alpha = (v + math.sqrt(v*(m**2 + v)))/v
@@ -71,7 +71,7 @@ class PARETO_FIRST_KIND:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -82,11 +82,11 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_pareto_first_kind.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = PARETO_FIRST_KIND(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     print(distribution.pdf(13.806))
     
     ## Get parameters of distribution: SCIPY vs EQUATIONS

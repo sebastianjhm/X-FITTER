@@ -58,7 +58,7 @@ class NAKAGAMI:
         parameters : dict
             {"m": *, "omega": *}
         """
-        d = np.array(measurements["data"])
+        d = np.array(measurements.data)
         
         E_x2 = sum(d*d) / len(d)
         E_x4 = sum(d*d*d*d) / len(d)
@@ -71,7 +71,7 @@ class NAKAGAMI:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -82,9 +82,9 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_nakagami.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = NAKAGAMI(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     print(distribution.cdf(10.98))

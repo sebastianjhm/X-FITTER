@@ -81,28 +81,28 @@ class PERT:
             parametric_median = (min_ + 6*m + max_)/8
             
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            # eq3 = parametric_skewness - measurements["skewness"]
-            # eq4 = parametric_kurtosis  - measurements["kurtosis"]
-            eq5 = parametric_median  - measurements["median"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            # eq3 = parametric_skewness - measurements.skewness
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
+            eq5 = parametric_median  - measurements.median
             
             return (eq1, eq2, eq5)
         
-        bnds = ((-np.inf, measurements["mean"], min(measurements["data"])), (measurements["mean"], np.inf, max(measurements["data"])))
-        x0 = (min(measurements["data"]), max(measurements["data"]), measurements["mean"])
+        bnds = ((-np.inf, measurements.mean, measurements.min), (measurements.mean, np.inf, measurements.max))
+        x0 = (measurements.min, measurements.max, measurements.mean)
         args = ([measurements])
         solution = least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"min": solution.x[0], "max": solution.x[1], "m": solution.x[2]}
         
-        parameters["min"] = min(min(measurements["data"])-1e-3, parameters["min"])
-        parameters["max"] = max(max(measurements["data"])+1e-3, parameters["max"])
+        parameters["min"] = min(measurements.min-1e-3, parameters["min"])
+        parameters["max"] = max(measurements.max+1e-3, parameters["max"])
         
         return parameters
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -113,12 +113,12 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_pert.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = PERT(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
 
 
@@ -137,19 +137,19 @@ if __name__ == '__main__':
         parametric_median = (min_ + 6*m + max_)/8
         
         ## System Equations
-        eq1 = parametric_mean - measurements["mean"]
-        eq2 = parametric_variance - measurements["variance"]
-        # eq3 = parametric_skewness - measurements["skewness"]
-        eq4 = parametric_kurtosis  - measurements["kurtosis"]
-        eq5 = parametric_median  - measurements["median"]
+        eq1 = parametric_mean - measurements.mean
+        eq2 = parametric_variance - measurements.variance
+        # eq3 = parametric_skewness - measurements.skewness
+        eq4 = parametric_kurtosis  - measurements.kurtosis
+        eq5 = parametric_median  - measurements.median
         
         return (eq1, eq2, eq5)
     
     import time
     print("=====")
     ti = time.time()
-    bnds = ((-np.inf, measurements["mean"], min(measurements["data"])), (measurements["mean"], np.inf, max(measurements["data"])))
-    x0 = (min(measurements["data"]), max(measurements["data"]), measurements["mean"])
+    bnds = ((-np.inf, measurements.mean, measurements.min), (measurements.mean, np.inf, measurements.max))
+    x0 = (measurements.min, measurements.max, measurements.mean)
     args = ([measurements])
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"min": solution.x[0], "max": solution.x[1], "m": solution.x[2]}

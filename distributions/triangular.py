@@ -77,24 +77,24 @@ class TRIANGULAR:
         #     parametric_skewness = math.sqrt(2) * (a + b - 2*c) * (2*a - b - c) * (a - 2*b +c) / (5*(a**2 + b**2 + c**2 - a*b - a*c - b*c)**(3/2))
             
         #     ## System Equations
-        #     eq1 = parametric_mean - measurements["mean"]
-        #     eq2 = parametric_variance - measurements["variance"]
-        #     eq3 = parametric_skewness - measurements["skewness"]
+        #     eq1 = parametric_mean - measurements.mean
+        #     eq2 = parametric_variance - measurements.variance
+        #     eq3 = parametric_skewness - measurements.skewness
         #     return (eq1, eq2, eq3)
         
         # solution =  fsolve(equations, (1, 1, 1), measurements)
         
         ## Second method estimation
-        a = min(measurements["data"]) - 1e-3
-        b = max(measurements["data"]) + 1e-3
-        c = 3 * measurements["mean"] - a - b
+        a = measurements.min - 1e-3
+        b = measurements.max + 1e-3
+        c = 3 * measurements.mean - a - b
         
         ## Third method
         ## https://wernerantweiler.ca/blog.php?item=2019-06-05
-        # q_1_16 = np.quantile(measurements["data"], 1/16)
-        # q_1_4 = np.quantile(measurements["data"], 1/4)
-        # q_3_4 = np.quantile(measurements["data"], 3/4)
-        # q_15_16 = np.quantile(measurements["data"], 15/16)
+        # q_1_16 = np.quantile(measurements.data, 1/16)
+        # q_1_4 = np.quantile(measurements.data, 1/4)
+        # q_3_4 = np.quantile(measurements.data, 3/4)
+        # q_15_16 = np.quantile(measurements.data, 15/16)
         # u = (q_1_4 - q_1_16)**2
         # v = (q_15_16 - q_3_4)**2
 
@@ -103,7 +103,7 @@ class TRIANGULAR:
         # c = (u*b + v*a)/(u+v)
         
         # Scipy parameters of distribution
-        # scipy_params = scipy.stats.triang.fit(measurements["data"])
+        # scipy_params = scipy.stats.triang.fit(measurements.data)
         # a = scipy_params[1]
         # b = scipy_params[1] + scipy_params[2]
         # c = scipy_params[1] + scipy_params[2] * scipy_params[0]
@@ -112,7 +112,7 @@ class TRIANGULAR:
         return parameters
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -123,8 +123,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_triangular.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = TRIANGULAR(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

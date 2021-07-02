@@ -61,10 +61,10 @@ class JOHNSON_SU:
             parametric_median = xi_ + lambda_ * math.sinh(-omega)
             
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            eq3 = parametric_kurtosis - measurements["kurtosis"]
-            eq4 = parametric_median - measurements["median"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_kurtosis - measurements.kurtosis
+            eq4 = parametric_median - measurements.median
             
             return (eq1, eq2, eq3, eq4)
         
@@ -74,7 +74,7 @@ class JOHNSON_SU:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -85,11 +85,11 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_johnson_su.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = JOHNSON_SU(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     
     import time
     ti = time.time()

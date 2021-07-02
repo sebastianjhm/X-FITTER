@@ -90,16 +90,16 @@ class RICE:
             # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
             
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            # eq3 = parametric_skewness - measurements["skewness"]
-            # eq4 = parametric_kurtosis  - measurements["kurtosis"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            # eq3 = parametric_skewness - measurements.skewness
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
             
             
             return (eq1, eq2)
         
         bnds = ((0, 0), (np.inf, np.inf))
-        x0 = (measurements["mean"], math.sqrt(measurements["variance"]))
+        x0 = (measurements.mean, math.sqrt(measurements.variance))
         args = ([measurements])
         solution = least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"v": solution.x[0], "sigma": solution.x[1]}
@@ -110,7 +110,7 @@ class RICE:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -121,9 +121,9 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_rice.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = RICE(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

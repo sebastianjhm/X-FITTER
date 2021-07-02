@@ -1,8 +1,8 @@
 import scipy.stats
 import numpy as np
-from utilities.danoes import danoes_formula
-   
-def test_chi_square(data, distribution):
+from measurements__ import MEASUREMENTS
+
+def test_chi_square(data, distribution_class):
     """
     Chi Square test to evaluate that a sample is distributed according to a probability 
     distribution.
@@ -35,9 +35,13 @@ def test_chi_square(data, distribution):
             considered that the sample is distributed according to the probability 
             distribution. If it's true, no.
     """
+    ## Init a instance of class
+    measurements = MEASUREMENTS(data)
+    distribution = distribution_class(measurements)
+
     ## Parameters and preparations
-    N = len(data)
-    num_bins = danoes_formula(data)
+    N = measurements.length
+    num_bins = measurements.num_bins
     frequencies, bin_edges = np.histogram(data, num_bins)
     freedom_degrees = num_bins - 1 - distribution.get_num_parameters()
     
@@ -66,12 +70,13 @@ def test_chi_square(data, distribution):
     return result_test_chi2
     
 if __name__ == "__main__":
-    from utilities.data_measurements import get_measurements
     from distributions.beta import BETA
     from distributions.burr import BURR
+    from distributions.burr_4P import BURR_4P
     from distributions.cauchy import CAUCHY
     from distributions.chi_square import CHI_SQUARE
     from distributions.dagum import DAGUM
+    from distributions.dagum_4P import DAGUM_4P
     from distributions.erlang import ERLANG
     from distributions.error_function import ERROR_FUNCTION
     from distributions.exponencial import EXPONENCIAL
@@ -121,7 +126,7 @@ if __name__ == "__main__":
     
     _all_distributions = [
         BETA, BURR, CAUCHY, CHI_SQUARE, DAGUM, ERLANG, ERROR_FUNCTION, 
-        EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, 
+        EXPONENCIAL, F, FATIGUE_LIFE, FRECHET, GAMMA, GENERALIZED_EXTREME_VALUE, GENERALIZED_GAMMA_4P,
         GENERALIZED_GAMMA, GENERALIZED_LOGISTIC, GENERALIZED_NORMAL, GUMBEL_LEFT, 
         GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
         JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGGAMMA, LOGISTIC, LOGLOGISTIC,
@@ -130,16 +135,13 @@ if __name__ == "__main__":
         UNIFORM, WEIBULL
     ]
 
-    _my_distributions = [LOGGAMMA, PEARSON_TYPE_6]
-    _my_distributions = [POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
+    _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
+    _my_distributions = [DAGUM, DAGUM_4P, BURR_4P]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
-        data = get_data(path)
-                
-        measurements = get_measurements(data)
-        distribution = distribution_class(measurements)
-        print(test_chi_square(data, distribution))
+        data = get_data(path)                
+        print(test_chi_square(data, distribution_class))
 
     
 

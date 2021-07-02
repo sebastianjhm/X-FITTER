@@ -64,13 +64,13 @@ class GENERALIZED_EXTREME_VALUE:
         parameters : dict
             {"c": *, "miu": *, "sigma": *}
         """
-        scipy_params = scipy.stats.genextreme.fit(measurements["data"])
+        scipy_params = scipy.stats.genextreme.fit(measurements.data)
         parameters = {"c": -scipy_params[0], "miu": scipy_params[1], "sigma": scipy_params[2]}
         return parameters
         
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -81,9 +81,9 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_generalized_extreme_value.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = GENERALIZED_EXTREME_VALUE(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

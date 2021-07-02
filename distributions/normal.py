@@ -54,15 +54,15 @@ class NORMAL:
             {"mean": *, "desv": *}
         """
         
-        mean = measurements["mean"]
-        desv = math.sqrt(measurements["variance"])
+        mean = measurements.mean
+        desv = math.sqrt(measurements.variance)
         
         parameters = {"mean": mean, "desv": desv}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -73,9 +73,9 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_normal.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = NORMAL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     print(distribution.pdf(50000))

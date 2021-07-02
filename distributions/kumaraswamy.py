@@ -87,15 +87,15 @@ class KUMARASWAMY:
             return (eq1, eq2, eq3, eq4)
         
         # solution =  fsolve(equations, (1, 1, 1, 1), measurements)
-        l = min(measurements["data"]) - 3 * abs(min(measurements["data"]))
-        response = least_squares(equations, (1, 1, 1, 1), bounds = ((0, 0, l, l), (np.inf, np.inf, np.inf, np.inf)), args=(measurements["mean"], measurements["variance"], measurements["skewness"], measurements["kurtosis"], measurements["median"]))
+        l = measurements.min - 3 * abs(measurements.min)
+        response = least_squares(equations, (1, 1, 1, 1), bounds = ((0, 0, l, l), (np.inf, np.inf, np.inf, np.inf)), args=(measurements.mean, measurements.variance, measurements.skewness, measurements.kurtosis, measurements.median))
         solution = response.x
         parameters = {"alpha": solution[0], "beta": solution[1], "min": solution[2], "max": solution[3]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_kumaraswamy.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = KUMARASWAMY(measurements)
     
     print(distribution.get_parameters(measurements))

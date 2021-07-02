@@ -57,8 +57,8 @@ class LOGISTIC:
         parameters : dict
             {"miu": *, "sigma": *}
         """
-        μ = measurements["mean"]
-        σ = math.sqrt(3*measurements["variance"]/(math.pi**2))
+        μ = measurements.mean
+        σ = math.sqrt(3*measurements.variance/(math.pi**2))
         
         ## Results
         parameters = {"miu": μ, "sigma": σ}
@@ -67,7 +67,7 @@ class LOGISTIC:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -78,9 +78,9 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_logistic.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LOGISTIC(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

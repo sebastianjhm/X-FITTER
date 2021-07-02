@@ -52,8 +52,8 @@ class LAPLACE:
         parameters : dict
             {"miu": *, "b": *}
         """
-        miu = measurements["mean"]
-        b = math.sqrt(measurements["variance"]/2)
+        miu = measurements.mean
+        b = math.sqrt(measurements.variance/2)
     
         ## Results
         parameters = {"miu": miu, "b": b}
@@ -62,7 +62,7 @@ class LAPLACE:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -73,9 +73,9 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_laplace.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LAPLACE(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     

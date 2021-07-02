@@ -43,10 +43,10 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-def scipy_mode(data):
+def calc_scipy_mode(data):
     return scipy.stats.mode(data)[0]
 
-def minimize_mode(data, distribution):
+def calc_minimize_mode(data, distribution):
     def objective(x):
         return 1/distribution.pdf(x)[0]
     
@@ -55,7 +55,7 @@ def minimize_mode(data, distribution):
     
     return solution.x[0]
 
-def shgo_mode(data, distribution):
+def calc_shgo_mode(data, distribution):
     def objective(x):
         return 1/distribution.pdf(x)[0]
     
@@ -64,29 +64,36 @@ def shgo_mode(data, distribution):
     return solution.x[0]
 
 
-def max_pdf_mode(data, distribution):
+def calc_max_pdf_mode(data, distribution):
     x_domain = np.linspace(min(data), max(data), 1000)
     y_pdf = distribution.pdf(x_domain)
     i = np.argmax(y_pdf)
     return x_domain[i]
-    
-if __name__ == "__main__":
-    ## Get Data
-    path = "..\\data\\data_levy.txt"
-    data = getData(path)
-    
+
+def calculate_mode(data):
     ## KDE
     distribution = scipy.stats.gaussian_kde(data)
     
-    scipy_mode = scipy_mode(data)[0]
-    minimize_mode = minimize_mode(data, distribution)
-    max_pdf_mode = max_pdf_mode(data, distribution)
-    shgo_mode = shgo_mode(data, distribution)
+    # scipy_mode = calc_scipy_mode(data)[0]
+    # minimize_mode = calc_minimize_mode(data, distribution)
+    # max_pdf_mode = calc_max_pdf_mode(data, distribution)
+    shgo_mode = calc_shgo_mode(data, distribution)
     
-    modes = {
-        "scipy_mode": scipy_mode, 
-        "minimize_mode": minimize_mode, 
-        "max_pdf_mode": max_pdf_mode,
-        "shgo_mode": shgo_mode
-    }
-    plot_histogram(data, distribution, modes)
+    # modes = {
+    #     "scipy_mode": scipy_mode, 
+    #     "minimize_mode": minimize_mode, 
+    #     "max_pdf_mode": max_pdf_mode,
+    #     "shgo_mode": shgo_mode
+    # }
+    # plot_histogram(data, distribution, modes)
+    
+    return(shgo_mode)
+    
+if __name__ == "__main__":
+    ## Get Data
+    path = "..\\data\\data_dagum_4P.txt"
+    data = getData(path)
+    
+    calculate_mode(data)
+    
+    

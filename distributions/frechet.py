@@ -59,13 +59,13 @@ class FRECHET:
         parameters : dict
             {"alpha": *, "m": *, "s": *}
         """
-        scipy_params = scipy.stats.invweibull.fit(measurements["data"])
+        scipy_params = scipy.stats.invweibull.fit(measurements.data)
         parameters = {"alpha": scipy_params[0], "m": scipy_params[1], "s": scipy_params[2]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_frechet.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = FRECHET(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

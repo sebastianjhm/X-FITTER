@@ -74,8 +74,8 @@ class LOGLOGISTIC:
             return (eq1, eq2)
         
         bnds = ((0, 0), (np.inf, np.inf))
-        x0 = (measurements["mean"], 1/measurements["variance"]**0.5)
-        args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+        x0 = (measurements.mean, 1/measurements.variance**0.5)
+        args = (measurements.mean, measurements.variance, measurements.skewness)
         solution = least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
 
@@ -83,7 +83,7 @@ class LOGLOGISTIC:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -94,12 +94,12 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_loglogistic.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LOGLOGISTIC(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     print("========= Time parameter estimation analisys ========")
     
@@ -123,8 +123,8 @@ if __name__ == "__main__":
     
     ti = time.time()
     bnds = ((0, 0), (np.inf, np.inf))
-    x0 = (measurements["mean"], 1/measurements["variance"]**0.5)
-    args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+    x0 = (measurements.mean, 1/measurements.variance**0.5)
+    args = (measurements.mean, measurements.variance, measurements.skewness)
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
     print(parameters)

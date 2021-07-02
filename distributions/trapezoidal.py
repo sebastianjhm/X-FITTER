@@ -67,8 +67,8 @@ class TRAPEZOIDAL:
             {"a": * , "b": *, "c": *}
         """
         
-        a = min(measurements["data"]) - 1e-3
-        d = max(measurements["data"]) + 1e-3
+        a = measurements.min - 1e-3
+        d = measurements.max + 1e-3
 
         def equations(sol_i, measurements, a, d):
             ## Variables declaration
@@ -79,8 +79,8 @@ class TRAPEZOIDAL:
             parametric_variance = (1/(6*(d + c - a - b))) * ((d**4-c**4)/(d-c) - (b**4-a**4)/(b-a)) - ((1/(3*(d + c - a - b))) * ((d**3-c**3)/(d-c) - (b**3-a**3)/(b-a)))**2
 
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
         
             return (eq1, eq2)
         x0 = [(d+a)*0.25, (d+a)*0.75]
@@ -92,7 +92,7 @@ class TRAPEZOIDAL:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -103,8 +103,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_trapezoidal.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = TRAPEZOIDAL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

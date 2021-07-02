@@ -51,7 +51,7 @@ class ERROR_FUNCTION:
         parameters : dict
             {"h": *}
         """
-        h = math.sqrt(1/(2*measurements["variance"]))
+        h = math.sqrt(1/(2*measurements.variance))
        
         ## Results
         parameters = {"h": h}
@@ -60,7 +60,7 @@ class ERROR_FUNCTION:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -71,8 +71,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_error_function.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = ERROR_FUNCTION(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

@@ -70,7 +70,7 @@ class JOHNSON_SB:
         ## Percentiles
         z = 0.5384
         percentiles = [scipy.stats.norm.cdf(0.5384*i) for i in range(-3,4,2)]
-        x1, x2, x3, x4 = [scipy.stats.scoreatpercentile(measurements["data"], 100 * x) for x in percentiles]
+        x1, x2, x3, x4 = [scipy.stats.scoreatpercentile(measurements.data, 100 * x) for x in percentiles]
         
         ## Calculation m,n,p
         m = x4 - x3
@@ -85,14 +85,14 @@ class JOHNSON_SB:
         
         parameters = {"xi": xi_, "lambda": lambda_, "gamma": gamma_, "delta": delta_}
         
-        # scipy_params = scipy.stats.johnsonsb.fit(measurements["data"])
+        # scipy_params = scipy.stats.johnsonsb.fit(measurements.data)
         # parameters = {"xi": scipy_params[2], "lambda": scipy_params[3], "gamma": scipy_params[0], "delta": scipy_params[1]}
         return parameters
     
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -103,11 +103,11 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_johnson_sb.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = JOHNSON_SB(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     
     import time
     ti = time.time()

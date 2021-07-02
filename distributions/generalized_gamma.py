@@ -76,28 +76,34 @@ class GENERALIZED_GAMMA:
             # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
         
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            eq3 = parametric_skewness - measurements["skewness"]
-            # eq4 = parametric_kurtosis  - measurements["kurtosis"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_skewness - measurements.skewness
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
         
             return (eq1, eq2, eq3)
-        ## fsolve is 100x faster than least square but sometimes return solutions < 0
-        solution =  fsolve(equations, (1, 1, 1), measurements)
-        
-        ## If return a perameter < 0 then use least_square with restriction
-        if all(x > 0 for x in solution) is False or all(x == 1 for x in solution) is True:
-            bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
-            x0 = (1, 1, 1)
-            args = ([measurements])
-            response = least_squares(equations, x0, bounds = bnds, args=args)
-            solution = response.x
-        parameters = {"a": solution[0], "d": solution[1], "p": solution[2]}
+
+        try:
+            ## fsolve is 100x faster than least square but sometimes return solutions < 0
+            solution =  fsolve(equations, (1, 1, 1), measurements)
+            
+            ## If return a perameter < 0 then use least_square with restriction
+            if all(x > 0 for x in solution) is False or all(x == 1 for x in solution) is True:
+                bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
+                x0 = (1, 1, 1)
+                args = ([measurements])
+                response = least_squares(equations, x0, bounds = bnds, args=args)
+                solution = response.x
+            parameters = {"a": solution[0], "d": solution[1], "p": solution[2]}
+        except:
+            scipy_params = scipy.stats.gengamma.fit(measurements.data)
+            parameters = {"a": scipy_params[0], "c": scipy_params[1], "miu": scipy_params[2], "sigma": scipy_params[3]}
+
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -108,14 +114,14 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_generalized_gamma.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = GENERALIZED_GAMMA(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
-    print(scipy.stats.gengamma.fit(measurements["data"]))
+    print(scipy.stats.gengamma.fit(measurements.data))
     
     
     

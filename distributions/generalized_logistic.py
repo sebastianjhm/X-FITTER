@@ -72,9 +72,9 @@ class GENERALIZED_LOGISTIC:
             parametric_kurtosis = 3+(math.pi**4/15+polygamma(3,gamma))/((math.pi**2/6+polygamma(1, gamma))**2)
 
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
-            eq3 = parametric_skewness - measurements["skewness"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_skewness - measurements.skewness
             
             return (eq1, eq2, eq3)
 
@@ -85,7 +85,7 @@ class GENERALIZED_LOGISTIC:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -96,8 +96,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_generalized_logistic.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = GENERALIZED_LOGISTIC(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

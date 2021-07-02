@@ -80,22 +80,22 @@ class PEARSON_TYPE_6:
         
         try:
             bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
-            x0 = (10*measurements["mean"], 10*measurements["mean"], measurements["mean"])
-            args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+            x0 = (10*measurements.mean, 10*measurements.mean, measurements.mean)
+            args = (measurements.mean, measurements.variance, measurements.skewness)
             solution = least_squares(equations, x0, bounds = bnds, args=args)
             parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2]}
             
-            if math.isnan(((measurements["mean"]/parameters["beta"])**(parameters["alpha1"]-1))/(parameters["beta"] * beta(parameters["alpha1"],parameters["alpha2"]) * (1+measurements["mean"]/parameters["beta"])**(parameters["alpha1"]+parameters["alpha2"]))):
-                scipy_params = scipy.stats.betaprime.fit(measurements["data"])
+            if math.isnan(((measurements.mean/parameters["beta"])**(parameters["alpha1"]-1))/(parameters["beta"] * beta(parameters["alpha1"],parameters["alpha2"]) * (1+measurements.mean/parameters["beta"])**(parameters["alpha1"]+parameters["alpha2"]))):
+                scipy_params = scipy.stats.betaprime.fit(measurements.data)
                 parameters = {"alpha1": scipy_params[0], "alpha2": scipy_params[1], "beta": scipy_params[3]}
         except ValueError:
-            scipy_params = scipy.stats.betaprime.fit(measurements["data"])
+            scipy_params = scipy.stats.betaprime.fit(measurements.data)
             parameters = {"alpha1": scipy_params[0], "alpha2": scipy_params[1], "beta": scipy_params[3]}
         return parameters
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -106,12 +106,12 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_pearson_type_6.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = PEARSON_TYPE_6(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     print("========= Time parameter estimation analisys ========")
     
@@ -132,8 +132,8 @@ if __name__ == '__main__':
     
     ti = time.time()
     bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
-    x0 = (10*measurements["mean"], 10*measurements["mean"], measurements["mean"])
-    args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+    x0 = (10*measurements.mean, 10*measurements.mean, measurements.mean)
+    args = (measurements.mean, measurements.variance, measurements.skewness)
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2]}
     print(parameters)

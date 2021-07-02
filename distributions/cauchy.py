@@ -54,19 +54,19 @@ class CAUCHY:
             {"x0": *, "gamma": *}
         """
         # ## First estimation
-        # x0_ini = measurements["median"]
-        # q1 = scipy.stats.scoreatpercentile(measurements["data"], 25)
-        # q3 = scipy.stats.scoreatpercentile(measurements["data"], 75)
+        # x0_ini = measurements.median
+        # q1 = scipy.stats.scoreatpercentile(measurements.data, 25)
+        # q3 = scipy.stats.scoreatpercentile(measurements.data, 75)
         # gamma_ini = (q3 - q1)/2
         
         
         # ## Maximum Likelihood Estimation Cauchy distribution        
         # def objective(x):
         #     x0, gamma = x
-        #     return - sum([math.log(1/(math.pi * gamma * (1 + ((d - x0)/gamma)**2))) for d in measurements["data"]])
+        #     return - sum([math.log(1/(math.pi * gamma * (1 + ((d - x0)/gamma)**2))) for d in measurements.data])
         # solution = minimize(objective, [x0_ini, gamma_ini], method="SLSQP", bounds = [(-np.inf, np.inf),(0,np.inf)])
        
-        scipy_params = scipy.stats.cauchy.fit(measurements["data"])
+        scipy_params = scipy.stats.cauchy.fit(measurements.data)
     
         ## Results
         parameters = {"x0": scipy_params[0], "gamma": scipy_params[1]}
@@ -75,7 +75,7 @@ class CAUCHY:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -86,11 +86,11 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_cauchy.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = CAUCHY(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     
     # import time
     # ti = time.time()

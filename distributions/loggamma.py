@@ -81,20 +81,20 @@ class LOGGAMMA:
             eq1 = parametric_mean - data_mean
             eq2 = parametric_variance - data_variance
             eq3 = parametric_skewness - data_skewness
-            # eq4 = parametric_kurtosis  - measurements["kurtosis"]
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
             
             return (eq1, eq2, eq3)
     
         bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
         x0 = (1,1,1)
-        args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+        args = (measurements.mean, measurements.variance, measurements.skewness)
         solution = least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"c": solution.x[0], "miu": solution.x[1], "sigma": solution.x[2]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -105,12 +105,12 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_loggamma.txt"
     data = get_data(path)
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LOGGAMMA(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     print("========= Time parameter estimation analisys ========")
     
@@ -128,14 +128,14 @@ if __name__ == '__main__':
         eq1 = parametric_mean - data_mean
         eq2 = parametric_variance - data_variance
         eq3 = parametric_skewness - data_skewness
-        # eq4 = parametric_kurtosis  - measurements["kurtosis"]
+        # eq4 = parametric_kurtosis  - measurements.kurtosis
         
         return (eq1, eq2, eq3)
     
     ti = time.time()
     bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
     x0 = (1,1,1)
-    args = (measurements["mean"], measurements["variance"], measurements["skewness"])
+    args = (measurements.mean, measurements.variance, measurements.skewness)
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"c": solution.x[0], "miu": solution.x[1], "sigma": solution.x[2]}
     print(parameters)

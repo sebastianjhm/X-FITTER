@@ -55,7 +55,7 @@ class F:
             {"df1": *, "df2": *}
         """
         ## Scipy parameters of distribution
-        scipy_params = scipy.stats.f.fit(measurements["data"])
+        scipy_params = scipy.stats.f.fit(measurements.data)
        
         ## Results
         parameters = {"df1": round(scipy_params[0]), "df2": round(scipy_params[1])}
@@ -64,7 +64,7 @@ class F:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -75,8 +75,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_f.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = F(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

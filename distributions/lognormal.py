@@ -56,15 +56,15 @@ class LOGNORMAL:
         """
     
         
-        mean_ = math.log(measurements["mean"]**2/math.sqrt(measurements["mean"]**2 + measurements["variance"]))
-        desv_ = math.sqrt(math.log((measurements["mean"]**2 + measurements["variance"])/(measurements["mean"]**2)))
+        mean_ = math.log(measurements.mean**2/math.sqrt(measurements.mean**2 + measurements.variance))
+        desv_ = math.sqrt(math.log((measurements.mean**2 + measurements.variance)/(measurements.mean**2)))
         
         parameters = {"mean": mean_, "desv": desv_}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -75,8 +75,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_lognormal.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = LOGNORMAL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

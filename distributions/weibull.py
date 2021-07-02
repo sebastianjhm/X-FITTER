@@ -62,8 +62,8 @@ class WEIBULL:
             parametric_variance = (beta_**2/alpha_) * (2 * math.gamma(2/alpha_) - (1/alpha_) * math.gamma(1/alpha_)**2)
 
             ## System Equations
-            eq1 = parametric_mean - measurements["mean"]
-            eq2 = parametric_variance - measurements["variance"]
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
             return (eq1, eq2)
         
         solution =  fsolve(equations, (1, 1), measurements)
@@ -72,7 +72,7 @@ class WEIBULL:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -83,8 +83,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_weibull.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = WEIBULL(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

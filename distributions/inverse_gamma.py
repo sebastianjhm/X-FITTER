@@ -68,13 +68,13 @@ class INVERSE_GAMMA:
         """
         ## Method 1: Solve system equations with theoric mean and variance
         ## Note: bad estimation. All test reject
-        # mean = measurements["mean"]
-        # variance = measurements["variance"]
+        # mean = measurements.mean
+        # variance = measurements.variance
         # alpha = mean ** 2 / variance + 2
         # beta = mean ** 3 / variance + mean
         # parameters = {"alpha": alpha, "beta": beta}
         
-        scipy_params = scipy.stats.invgamma.fit(measurements["data"])
+        scipy_params = scipy.stats.invgamma.fit(measurements.data)
         parameters = {"alpha": scipy_params[0], "beta": scipy_params[2]}
         return parameters
     
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     print("Inverse by gamma method", 1/scipy.stats.gamma.ppf((1-probability), a=alpha, scale=1/beta))
     
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def getData(direction):
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_inverse_gamma.txt"
     data = getData(path)
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = INVERSE_GAMMA(measurements)
     
     print(distribution.get_parameters(measurements))
@@ -111,6 +111,6 @@ if __name__ == "__main__":
     
     
     print(distribution.cdf(3.339))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
     
     

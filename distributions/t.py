@@ -60,7 +60,7 @@ class T:
             {"alpha": *, "beta": *, "min": *, "max": *}
         """
         
-        v = 2 * measurements["variance"] / (measurements["variance"] - 1)
+        v = 2 * measurements.variance / (measurements.variance - 1)
         
         parameters = {"v": v}
         
@@ -70,7 +70,7 @@ class T:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -81,11 +81,11 @@ if __name__ == "__main__":
     ## Distribution class
     path = "..\\data\\data_t.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = T(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
 
-    print(scipy.stats.t.fit((measurements["data"])))
+    print(scipy.stats.t.fit((measurements.data)))

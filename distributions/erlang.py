@@ -55,8 +55,8 @@ class ERLANG:
         parameters : dict
             {"m": *, "beta": *}
         """
-        mean = measurements["mean"]
-        variance = measurements["variance"]
+        mean = measurements.mean
+        variance = measurements.variance
         
         m = round(mean ** 2 / variance)
         beta = variance / mean
@@ -66,7 +66,7 @@ class ERLANG:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -77,8 +77,8 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_erlang.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = ERLANG(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))

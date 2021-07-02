@@ -77,25 +77,25 @@ class BURR:
         #     parametric_median = A * ((2**(1/C))-1)**(1/B)
             
         #     ## System Equations
-        #     eq1 = parametric_mean - measurements["mean"]
-        #     eq2 = parametric_variance - measurements["variance"]
-        #     eq3 = parametric_median - measurements["median"]
+        #     eq1 = parametric_mean - measurements.mean
+        #     eq2 = parametric_variance - measurements.variance
+        #     eq3 = parametric_median - measurements.median
         
         #     return (eq1, eq2, eq3)
         
-        # x0 = [measurements["mean"], measurements["mean"], measurements["mean"]]
+        # x0 = [measurements.mean, measurements.mean, measurements.mean]
         # b = ((1, 1, 1), (np.inf, np.inf, np.inf))
         # solution = least_squares(equations, x0, bounds = b, args=([measurements]))
         # parameters = {"A": solution.x[0], "B": solution.x[1], "C": solution.x[2]}
         
-        scipy_params = scipy.stats.burr12.fit(measurements["data"])
+        scipy_params = scipy.stats.burr12.fit(measurements.data)
         parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1]}
         return parameters
     
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -106,8 +106,9 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_burr.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = BURR(measurements)
     print(distribution.get_parameters(measurements))
 
-
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

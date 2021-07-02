@@ -59,8 +59,8 @@ class RAYLEIGH:
             {"alpha": *, "beta": *, "min": *, "max": *}
         """
         
-        σ = math.sqrt(measurements["variance"] * 2 / (4-math.pi))
-        γ = measurements["mean"] - σ*math.sqrt(math.pi/2)
+        σ = math.sqrt(measurements.variance * 2 / (4-math.pi))
+        γ = measurements.mean - σ*math.sqrt(math.pi/2)
         
         parameters = {"gamma": γ, "sigma": σ}
         return parameters
@@ -68,7 +68,7 @@ class RAYLEIGH:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.data_measurements import get_measurements
+    from measurements.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -79,11 +79,11 @@ if __name__ == '__main__':
     ## Distribution class
     path = "..\\data\\data_rayleigh.txt"
     data = get_data(path) 
-    measurements = get_measurements(data)
+    measurements = MEASUREMENTS(data)
     distribution = RAYLEIGH(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(measurements["mean"]))
-    print(distribution.pdf(measurements["mean"]))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
         
-    print(scipy.stats.rayleigh.fit(measurements["data"]))
+    print(scipy.stats.rayleigh.fit(measurements.data))
