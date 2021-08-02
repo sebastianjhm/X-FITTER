@@ -1,6 +1,8 @@
 import scipy.stats
 import math
 import scipy.special as sc
+import numpy as np
+from scipy.optimize import fsolve, least_squares
 
 class INVERSE_GAMMA:
     """
@@ -66,13 +68,32 @@ class INVERSE_GAMMA:
         parameters : dict
             {"alpha": *, "beta": *}
         """
-        ## Method 1: Solve system equations with theoric mean and variance
-        ## Note: bad estimation. All test reject
-        # mean = measurements.mean
-        # variance = measurements.variance
-        # alpha = mean ** 2 / variance + 2
-        # beta = mean ** 3 / variance + mean
-        # parameters = {"alpha": alpha, "beta": beta}
+        # def equations(sol_i, measurements):
+        #     ## Variables declaration
+        #     α, β = sol_i
+            
+        #     ## Generatred moments function (not-centered)
+        #     E = lambda k: (β**k)/np.prod(np.array([(α-i) for i in range(1,k+1)]))
+            
+        #     ## Parametric expected expressions
+        #     parametric_mean = E(1)
+        #     parametric_variance = (E(2) - E(1)**2)
+        #     # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+        #     # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+            
+        #     ## System Equations
+        #     eq1 = parametric_mean - measurements.mean
+        #     eq2 = parametric_variance - measurements.variance
+        #     # eq3 = parametric_skewness - measurements.skewness
+        #     # eq4 = parametric_kurtosis  - measurements.kurtosis
+            
+        #     return (eq1, eq2)
+        
+        # bnds = ((0, 0), (np.inf, np.inf))
+        # x0 = (5, 1)
+        # args = ([measurements])
+        # solution = least_squares(equations, x0, bounds = bnds, args=args)
+        # parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
         
         scipy_params = scipy.stats.invgamma.fit(measurements.data)
         parameters = {"alpha": scipy_params[0], "beta": scipy_params[2]}
@@ -82,12 +103,7 @@ class INVERSE_GAMMA:
 
 
 if __name__ == "__main__":
-    ## PPF of inverse gamma
-    alpha, beta = 5, 9
-    probability = 0.5
-    print("Scipy method:", scipy.stats.invgamma.ppf(probability, a=alpha, scale=beta))
-    print("Inverse by gamma method", 1/scipy.stats.gamma.ppf((1-probability), a=alpha, scale=1/beta))
-    
+      
     ## Import function to get measurements
     from measurements.measurements import MEASUREMENTS
     
@@ -104,13 +120,48 @@ if __name__ == "__main__":
     distribution = INVERSE_GAMMA(measurements)
     
     print(distribution.get_parameters(measurements))
-    import time
-    ti = time.time()
-    print(scipy.stats.invgamma.fit(data))
-    print("Time estimation scipy", time.time()-ti)
-    
-    
-    print(distribution.cdf(3.339))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     
+    
+    
+    print("\n========= Time parameter estimation analisys ========")
+    
+    import time
+    
+    def equations(sol_i, measurements):
+        ## Variables declaration
+        α, β = sol_i
+        
+        ## Generatred moments function (not-centered)
+        E = lambda k: (β**k)/np.prod(np.array([(α-i) for i in range(1,k+1)]))
+        
+        ## Parametric expected expressions
+        parametric_mean = E(1)
+        parametric_variance = (E(2) - E(1)**2)
+        # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+        # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+        
+        ## System Equations
+        eq1 = parametric_mean - measurements.mean
+        eq2 = parametric_variance - measurements.variance
+        # eq3 = parametric_skewness - measurements.skewness
+        # eq4 = parametric_kurtosis  - measurements.kurtosis
+        
+        return (eq1, eq2)
+    
+    ti = time.time()
+    bnds = ((0, 0), (np.inf, np.inf))
+    x0 = (1.1, 1)
+    args = ([measurements])
+    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
+    print(parameters)
+    print("Solve equations time: ", time.time() -ti)
+    
+    ti = time.time()
+    scipy_params = scipy.stats.invgamma.fit(measurements.data)
+    parameters = {"alpha": scipy_params[0], "beta": scipy_params[2]}
+    print(parameters)
+    print("Scipy time get parameters: ",time.time() -ti)

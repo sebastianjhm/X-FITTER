@@ -104,7 +104,6 @@ class DAGUM_4P:
             return(parameters_sc)
         else:
             a0 = s0_burr3_sc[0]
-            b0 = s0_burr3_sc[3]
             x0 = [a0, 1, 1, measurements.mean]
             b = ((1e-5, 1e-5, 1e-5, -np.inf), (np.inf, np.inf, np.inf, np.inf))
             solution = least_squares(equations, x0, bounds = b, args=([measurements]))
@@ -130,7 +129,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_dagum_4P.txt"
+    path = "..\\data\\data_dagum_4p.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = DAGUM_4P(measurements)

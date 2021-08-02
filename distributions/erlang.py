@@ -1,5 +1,6 @@
 import scipy.integrate
 import math
+import scipy.special as sc
 
 class ERLANG:
     """
@@ -16,14 +17,16 @@ class ERLANG:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
+        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
+        result = lower_inc_gamma(self.m, x/self.beta)/math.gamma(self.m)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
+        result = ((self.beta ** -self.m) * (x**(self.m-1)) * math.e ** (-(x / self.beta))) / math.factorial(self.m-1)
+        return result
     
     def get_num_parameters(self):
         """
@@ -54,14 +57,10 @@ class ERLANG:
         -------
         parameters : dict
             {"m": *, "beta": *}
-        """
-        mean = measurements.mean
-        variance = measurements.variance
-        
-        m = round(mean ** 2 / variance)
-        beta = variance / mean
-        parameters = {"m": m , "beta": beta}
-
+        """        
+        m = round(measurements.mean ** 2 / measurements.variance)
+        β = measurements.variance / measurements.mean
+        parameters = {"m": m , "beta": β}
         return parameters
 
 if __name__ == '__main__':
@@ -75,10 +74,11 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_erlang.txt"
+    path = "../data/data_erlang.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = ERLANG(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

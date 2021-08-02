@@ -50,6 +50,7 @@ def fit_data(data):
     from distributions.burr import BURR
     from distributions.cauchy import CAUCHY
     from distributions.chi_square import CHI_SQUARE
+    from distributions.chi_square_3P import CHI_SQUARE_3P
     from distributions.dagum import DAGUM
     from distributions.erlang import ERLANG
     from distributions.error_function import ERROR_FUNCTION
@@ -159,7 +160,7 @@ def main():
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "./data/data_test.txt"
+    path = "../data/data_chi_square_3p.txt"
     data = getData(path)
     
     results = fit_data(data)

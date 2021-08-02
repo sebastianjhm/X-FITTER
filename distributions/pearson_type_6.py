@@ -65,23 +65,23 @@ class PEARSON_TYPE_6:
         parameters : dict
             {"alpha": *, "beta": *, "min": *, "max": *}
         """
-        def equations(sol_i, data_mean, data_variance, data_skewness):
+        def equations(sol_i, measurements):
             α1, α2, β = sol_i
         
             parametric_mean = β*α1/(α2-1)
             parametric_variance = (β**2)*α1*(α1+α2-1)/((α2-1)**2 * (α2-2))
             parametric_skewness = 2*math.sqrt(((α2-2))/(α1*(α1+α2-1)))*(((2*α1+α2-1))/(α2-3))
         
-            eq1 = parametric_mean - data_mean
-            eq2 = parametric_variance - data_variance
-            eq3 = parametric_skewness - data_skewness
+            eq1 = parametric_mean - measurements.mean
+            eq2 = parametric_variance - measurements.variance
+            eq3 = parametric_skewness - measurements.skewness
         
             return (eq1, eq2, eq3)
         
         try:
             bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
             x0 = (10*measurements.mean, 10*measurements.mean, measurements.mean)
-            args = (measurements.mean, measurements.variance, measurements.skewness)
+            args = ([measurements])
             solution = least_squares(equations, x0, bounds = bnds, args=args)
             parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2]}
             
@@ -123,11 +123,12 @@ if __name__ == '__main__':
         parametric_mean = β*α1/(α2-1)
         parametric_variance = (β**2)*α1*(α1+α2-1)/((α2-1)**2 * (α2-2))
         parametric_skewness = 2*math.sqrt(((α2-2))/(α1*(α1+α2-1)))*(((2*α1+α2-1))/(α2-3))
-    
+        # parametric_mode = β*(α1-1)/(α2+1)
+        
         eq1 = parametric_mean - data_mean
         eq2 = parametric_variance - data_variance
         eq3 = parametric_skewness - data_skewness
-    
+        
         return (eq1, eq2, eq3)
     
     ti = time.time()
@@ -141,6 +142,7 @@ if __name__ == '__main__':
     
     ti = time.time()
     scipy_params = scipy.stats.betaprime.fit(data)
-    parameters = {"alpha1": scipy_params[0], "alpha2": scipy_params[1], "beta": scipy_params[2]}
+    print(scipy_params)
+    parameters = {"alpha1": scipy_params[0], "alpha2": scipy_params[1], "beta": scipy_params[3]}
     print(parameters)
     print("Scipy time get parameters: ",time.time() -ti)

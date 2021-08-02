@@ -1,5 +1,7 @@
 import math
-from scipy.optimize import fsolve
+import numpy as np
+from scipy.optimize import fsolve, least_squares
+import scipy.stats
 
 class WEIBULL:
     """
@@ -55,15 +57,23 @@ class WEIBULL:
         """
         def equations(sol_i, measurements):
             ## Variables declaration
-            alpha_, beta_ = sol_i
+            α, β = sol_i
+            
+            ## Generatred moments function (not-centered)
+            E = lambda k: (β**k)*math.gamma(1+k/α)
             
             ## Parametric expected expressions
-            parametric_mean = (beta_/alpha_) * math.gamma(1/alpha_)
-            parametric_variance = (beta_**2/alpha_) * (2 * math.gamma(2/alpha_) - (1/alpha_) * math.gamma(1/alpha_)**2)
-
+            parametric_mean = E(1)
+            parametric_variance = (E(2) - E(1)**2)
+            # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+            # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+            
             ## System Equations
             eq1 = parametric_mean - measurements.mean
             eq2 = parametric_variance - measurements.variance
+            # eq3 = parametric_skewness - measurements.skewness
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
+            
             return (eq1, eq2)
         
         solution =  fsolve(equations, (1, 1), measurements)
@@ -81,10 +91,53 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_weibull.txt"
+    path = "../data/data_weibull.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = WEIBULL(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    
+    
+    
+    
+    print("\n========= Time parameter estimation analisys ========")
+    
+    import time
+    
+    def equations(sol_i, measurements):
+        ## Variables declaration
+        α, β = sol_i
+        
+        ## Generatred moments function (not-centered)
+        E = lambda k: (β**k)/np.prod(np.array([(α-i) for i in range(1,k+1)]))
+        
+        ## Parametric expected expressions
+        parametric_mean = E(1)
+        parametric_variance = (E(2) - E(1)**2)
+        # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+        # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+        
+        ## System Equations
+        eq1 = parametric_mean - measurements.mean
+        eq2 = parametric_variance - measurements.variance
+        # eq3 = parametric_skewness - measurements.skewness
+        # eq4 = parametric_kurtosis  - measurements.kurtosis
+        
+        return (eq1, eq2)
+    
+    ti = time.time()
+    bnds = ((0, 0), (np.inf, np.inf))
+    x0 = (1.1, 1)
+    args = ([measurements])
+    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
+    print(parameters)
+    print("Solve equations time: ", time.time() -ti)
+    
+    ti = time.time()
+    scipy_params = scipy.stats.weibull_min.fit(measurements.data)
+    parameters = {"alpha": scipy_params[0], "beta": scipy_params[2]}
+    print(parameters)
+    print("Scipy time get parameters: ",time.time() -ti)

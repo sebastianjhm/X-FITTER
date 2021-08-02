@@ -1,5 +1,7 @@
 import scipy.integrate
 import math
+import scipy.stats
+import scipy.special as sc
 
 class CHI_SQUARE:
     """
@@ -8,21 +10,27 @@ class CHI_SQUARE:
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.k = self.parameters["k"]
+        self.df = self.parameters["df"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 0, x)
+        # result, error = scipy.integrate.quad(self.pdf, 0, x)
+        # result = scipy.stats.chi2.cdf(x, self.df)
+        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
+        result = lower_inc_gamma(self.df/2, x/2)/math.gamma(self.df/2)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return (1/(2**(self.k/2) * math.gamma(self.k/2))) * (x**((self.k/2)-1)) * (math.e ** (-x/2))
+        # result = (1/(2**(self.df/2) * math.gamma(self.df/2))) * (x**((self.df/2)-1)) * (math.e ** (-x/2))
+        # print(result)
+        result = scipy.stats.chi2.pdf(x, self.df)
+        return result
     
     def get_num_parameters(self):
         """
@@ -34,8 +42,8 @@ class CHI_SQUARE:
         """
         Check parameters restrictions
         """
-        v1 = self.k > 0
-        v2 = type(self.k) == int
+        v1 = self.df > 0
+        v2 = type(self.df) == int
         return v1 and v2
 
     def get_parameters(self, measurements):
@@ -51,9 +59,9 @@ class CHI_SQUARE:
         Returns
         -------
         parameters : dict
-            {"k": *}
+            {"df": *}
         """
-        parameters = {"k": round(measurements.mean)}
+        parameters = {"df": round(measurements.mean)}
         return parameters
     
 if __name__ == '__main__':
@@ -67,10 +75,13 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_chi_square.txt"
+    path = "../data/data_chi_square.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = CHI_SQUARE(measurements)
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
+    
+    print(scipy.stats.chi2.fit(measurements.data))

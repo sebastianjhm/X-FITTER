@@ -54,12 +54,13 @@ class INVERSE_GAUSSIAN:
         parameters : dict
             {"miu": *, "lambda": *}
         """
+        μ = measurements.mean
+        λ = μ**3/measurements.variance
         
-        miu = measurements.mean
-        lambda_ = miu**3/measurements.variance
-        
-        parameters = {"miu": miu, "lambda": lambda_}
+        parameters = {"miu": μ, "lambda": λ}
         return parameters
+    
+    
     
 if __name__ == '__main__':
     ## Import function to get measurements
@@ -80,4 +81,4 @@ if __name__ == '__main__':
     print(distribution.get_parameters(measurements))
     print(scipy.stats.invgauss.fit(data))
     print(distribution.cdf(measurements.mean))
-    print(distribution.cdf(953.72))
+    print(distribution.pdf(measurements.mean))
