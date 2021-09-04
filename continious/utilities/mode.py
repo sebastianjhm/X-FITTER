@@ -3,13 +3,26 @@ import scipy.stats
 import scipy.optimize
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import math
 import random
 
 mpl.style.use("ggplot")
 
+def danoes_formula(data):
+    """
+    DANOE'S FORMULA
+    https://en.wikipedia.org/wiki/Histogram#Doane's_formula
+    """
+    N = len(data)
+    skewness = scipy.stats.skew(data)
+    sigma_g1 = math.sqrt((6*(N-2))/((N+1)*(N+3)))
+    num_bins = 1 + math.log(N,2) + math.log(1+abs(skewness)/sigma_g1,2)
+    num_bins = round(num_bins)
+    return num_bins
+
 def plot_histogram(data, distribution, modes):
     plt.figure(figsize=(8, 4))
-    plt.hist(data, density=True, ec='white')
+    plt.hist(data, density=True, ec='white', bins=danoes_formula(data))
     plt.title('HISTOGRAM')
     plt.xlabel('Values')
     plt.ylabel('Frequencies')
@@ -25,12 +38,14 @@ def plot_histogram(data, distribution, modes):
     plt.legend(title='DISTRIBUTIONS', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.show()
     
+def getData(direction):
+    file  = open(direction,'r')
+    data = [float(x.replace(",",".")) for x in file.read().splitlines()]
+    return data
 
-## SCIPY MODE
 def calc_scipy_mode(data):
     return scipy.stats.mode(data)[0]
 
-## METHOD 1: MAXIMIZE PDF SCIPY MINIMIZE
 def calc_minimize_mode(data, distribution):
     def objective(x):
         return 1/distribution.pdf(x)[0]
@@ -40,14 +55,6 @@ def calc_minimize_mode(data, distribution):
     
     return solution.x[0]
 
-## METHOD 2: MAXIMIZE PDF AND GET PREIMAGE
-def calc_max_pdf_mode(data, distribution):
-    x_domain = np.linspace(min(data), max(data), 1000)
-    y_pdf = distribution.pdf(x_domain)
-    i = np.argmax(y_pdf)
-    return x_domain[i]
-
-## METHOD 3: ## METHOD 3: MAXIMIZE PDF SCIPY SHGO
 def calc_shgo_mode(data, distribution):
     def objective(x):
         return 1/distribution.pdf(x)[0]
@@ -57,35 +64,34 @@ def calc_shgo_mode(data, distribution):
     return solution.x[0]
 
 
+def calc_max_pdf_mode(data, distribution):
+    x_domain = np.linspace(min(data), max(data), 1000)
+    y_pdf = distribution.pdf(x_domain)
+    i = np.argmax(y_pdf)
+    return x_domain[i]
 
 def calculate_mode(data):
     ## KDE
     distribution = scipy.stats.gaussian_kde(data)
     
-    scipy_mode = calc_scipy_mode(data)[0]
-    minimize_mode = calc_minimize_mode(data, distribution)
-    max_pdf_mode = calc_max_pdf_mode(data, distribution)
+    # scipy_mode = calc_scipy_mode(data)[0]
+    # minimize_mode = calc_minimize_mode(data, distribution)
+    # max_pdf_mode = calc_max_pdf_mode(data, distribution)
     shgo_mode = calc_shgo_mode(data, distribution)
     
-    modes = {
-        "scipy_mode": scipy_mode, 
-        "minimize_mode": minimize_mode, 
-        "max_pdf_mode": max_pdf_mode,
-        "shgo_mode": shgo_mode
-    }
-    plot_histogram(data, distribution, modes)
+    # modes = {
+    #     "scipy_mode": scipy_mode, 
+    #     "minimize_mode": minimize_mode, 
+    #     "max_pdf_mode": max_pdf_mode,
+    #     "shgo_mode": shgo_mode
+    # }
+    # plot_histogram(data, distribution, modes)
     
     return(shgo_mode)
     
 if __name__ == "__main__":
-    def getData(direction):
-        file  = open(direction,'r')
-        data = [float(x.replace(",",".")) for x in file.read().splitlines()]
-        return data
-    
     ## Get Data
-    path = "../continious/data/data_dagum_4P.txt"
-    
+    path = "..\\data\\data_dagum_4P.txt"
     data = getData(path)
     
     calculate_mode(data)
