@@ -5,7 +5,7 @@ This project provides a free and open source alternative to find the probability
 ![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/test.PNG)
 
 **Here certain data sets and the best-fitting distributions**
-![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/plot0.png)
+![alt text](https://github.com/SebastianJHM/Fitter/blob/main/continious/multimedia/plot0.png)
 ![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/plot1.png)
 ![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/plot2.png)
 ![alt text](https://github.com/SebastianJHM/Fitter/blob/main/multimedia/plot3.png)
