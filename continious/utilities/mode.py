@@ -63,6 +63,13 @@ def calc_shgo_mode(data, distribution):
     solution = scipy.optimize.shgo(objective, bounds= bnds, n=100*len(data))
     return solution.x[0]
 
+def calc_fmin_mode(data, distribution):
+    def objective(x):
+        return -distribution.pdf(x)[0]
+    
+    solution = scipy.optimize.fmin(objective, np.mean(data), disp=False)
+    return solution[0]
+
 
 def calc_max_pdf_mode(data, distribution):
     x_domain = np.linspace(min(data), max(data), 1000)
@@ -74,26 +81,28 @@ def calculate_mode(data):
     ## KDE
     distribution = scipy.stats.gaussian_kde(data)
     
-    # scipy_mode = calc_scipy_mode(data)[0]
-    # minimize_mode = calc_minimize_mode(data, distribution)
-    # max_pdf_mode = calc_max_pdf_mode(data, distribution)
+    scipy_mode = calc_scipy_mode(data)[0]
+    minimize_mode = calc_minimize_mode(data, distribution)
+    max_pdf_mode = calc_max_pdf_mode(data, distribution)
     shgo_mode = calc_shgo_mode(data, distribution)
+    fmin_mode = calc_fmin_mode(data, distribution)
     
-    # modes = {
-    #     "scipy_mode": scipy_mode, 
-    #     "minimize_mode": minimize_mode, 
-    #     "max_pdf_mode": max_pdf_mode,
-    #     "shgo_mode": shgo_mode
-    # }
-    # plot_histogram(data, distribution, modes)
+    modes = {
+        "scipy_mode": scipy_mode, 
+        "minimize_mode": minimize_mode, 
+        "max_pdf_mode": max_pdf_mode,
+        "shgo_mode": shgo_mode,
+        "fmin_mode": fmin_mode
+    }
+    plot_histogram(data, distribution, modes)
     
-    return(shgo_mode)
+    return(modes)
     
 if __name__ == "__main__":
     ## Get Data
     path = "..\\data\\data_dagum_4P.txt"
     data = getData(path)
     
-    calculate_mode(data)
+    print(calculate_mode(data))
     
     

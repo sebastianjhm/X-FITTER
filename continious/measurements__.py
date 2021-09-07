@@ -16,20 +16,20 @@ class MEASUREMENTS:
         self.median = np.median(data)
         self.mode = self.calculate_mode(data)
         self.data = data
-        self.num_bins = self.danoes_formula(data)
+        self.num_bins = self.danoes_formula()
 
     def calculate_mode(self, data):
-        def calc_shgo_mode(data, distribution):
-            objective = lambda x: 1/distribution.pdf(x)[0]
-            bnds = [[self.min, self.max]]
-            solution = scipy.optimize.shgo(objective, bounds= bnds, n=100*len(data))
-            return solution.x[0]
+        def calc_fmin_mode(data, distribution):
+            objective = lambda x: -distribution.pdf(x)[0]
+            solution = scipy.optimize.fmin(objective, self.mean, disp=False)
+            return solution[0]
+        
         ## KDE
         distribution = scipy.stats.gaussian_kde(data)
-        shgo_mode = calc_shgo_mode(data, distribution)
-        return(shgo_mode)
+        mode = calc_fmin_mode(data, distribution)
+        return(mode)
 
-    def danoes_formula(self, data):
+    def danoes_formula(self):
         """
         DANOE'S FORMULA
         https://en.wikipedia.org/wiki/Histogram#Doane's_formula
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     data = get_data(path) 
 
     measurements = MEASUREMENTS(data)
+    print(measurements.max-measurements.min)
 
     print("Length: ", measurements.length)
     print("Min: ", measurements.min)
@@ -72,3 +73,4 @@ if __name__ == "__main__":
     print("Kurtosis: ", measurements.kurtosis)
     print("Median: ", measurements.median)
     print("Mode: ", measurements.mode)
+    print("num_bins: ", measurements.num_bins)
