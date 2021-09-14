@@ -114,7 +114,7 @@ if __name__ == "__main__":
         return data
     
     ## Distribution class
-    path = "..\\data\\data_inverse_gamma.txt"
+    path = "../data/data_inverse_gamma.txt"
     data = getData(path)
     measurements = MEASUREMENTS(data)
     distribution = INVERSE_GAMMA(measurements)

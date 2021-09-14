@@ -86,7 +86,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_gumbel_left.txt"
+    path = "../data/data_gumbel_left.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = GUMBEL_LEFT(measurements)

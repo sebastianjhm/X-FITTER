@@ -34,7 +34,7 @@ def equations(sol_i, data_mean, data_variance, data_median):
 #############################################################################
 ## Import function to get measurements
 import sys
-sys.path.append("C:\\Users\\USUARIO\\Desktop\\Fitter\\utilities")
+sys.path.append("C:/Users/USUARIO/Desktop/Fitter/utilities")
 from measurements.measurements import MEASUREMENTS
 
 ## Import function to get measurements
@@ -44,7 +44,7 @@ def get_data(direction):
     return data
 
 ## Distribution class
-path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_burr.txt"
+path = "C:/Users/USUARIO/Desktop/Fitter/data/data_burr.txt"
 data = get_data(path) 
 measurements = MEASUREMENTS(data)
 #############################################################################

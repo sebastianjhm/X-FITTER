@@ -30,7 +30,7 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-path = "..\\data\\data_generalized_gamma.txt"
+path = "../data/data_generalized_gamma.txt"
 data = getData(path) 
 measurements = MEASUREMENTS(data)
 

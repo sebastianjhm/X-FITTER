@@ -74,7 +74,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_inverse_gaussian_3p.txt"
+    path = "../data/data_inverse_gaussian_3p.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = INVERSE_GAUSSIAN_3P(measurements)

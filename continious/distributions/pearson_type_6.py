@@ -104,7 +104,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_pearson_type_6.txt"
+    path = "../data/data_pearson_type_6.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = PEARSON_TYPE_6(measurements)

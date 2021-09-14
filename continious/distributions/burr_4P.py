@@ -108,7 +108,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_burr_4P.txt"
+    path = "../data/data_burr_4P.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = BURR_4P(measurements)

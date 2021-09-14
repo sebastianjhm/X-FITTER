@@ -93,6 +93,6 @@ if __name__ == "__main__":
     
     for distribution_class in _all_distributions:
         print(distribution_class.__name__)
-        path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
+        path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
         data = get_data(path)
         print(test_kolmogorov_smirnov(data, distribution_class))

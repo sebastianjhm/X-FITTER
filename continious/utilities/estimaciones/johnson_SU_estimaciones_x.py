@@ -50,7 +50,7 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-path = "C:\\Users\\USUARIO\\Desktop\\Fitter\\data\\data_johnson_SU.txt"
+path = "C:/Users/USUARIO/Desktop/Fitter/data/data_johnson_SU.txt"
 data = getData(path)
 measurements = MEASUREMENTS(data)
 

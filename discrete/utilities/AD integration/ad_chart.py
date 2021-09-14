@@ -54,7 +54,7 @@ if __name__ == "__main__":
     _all_distributions = [beta, chi_square, exponencial, gamma, johnson_SB, lognormal, normal, weibull]
     distribution = normal
     
-    path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_normal.txt"
+    path = "C:/Users/USUARIO1/Desktop/Fitter/data/data_normal.txt"
     data = getData(path)
     
     measurements = MEASUREMENTS(data)
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     
     # for distribution in _all_distributions:
     #     print(str(distribution.__file__)[33:-3])
-    #     path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data\\data_" + str(distribution.__file__)[33:-3] +".txt"
+    #     path = "C:/Users/USUARIO1/Desktop/Fitter/data/data_" + str(distribution.__file__)[33:-3] +".txt"
     #     data = getData(path)
         
     #     measurements = MEASUREMENTS(data)

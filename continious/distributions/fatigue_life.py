@@ -91,7 +91,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_fatigue_life.txt"
+    path = "../data/data_fatigue_life.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = FATIGUE_LIFE(measurements)

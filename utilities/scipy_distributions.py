@@ -100,7 +100,7 @@ def main():
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = ".\\data\\data_test.txt"
+    path = "./data/data_test.txt"
     data = getData(path)
     
     results = fit_data(data)

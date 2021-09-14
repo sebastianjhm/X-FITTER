@@ -119,7 +119,7 @@ if __name__ == "__main__":
         return data
     
     ## Distribution class
-    path = "..\\data\\data_rice.txt"
+    path = "../data/data_rice.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = RICE(measurements)

@@ -79,7 +79,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_generalized_extreme_value.txt"
+    path = "../data/data_generalized_extreme_value.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = GENERALIZED_EXTREME_VALUE(measurements)

@@ -111,7 +111,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_pert.txt"
+    path = "../data/data_pert.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = PERT(measurements)

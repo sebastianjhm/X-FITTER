@@ -73,7 +73,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_f.txt"
+    path = "../data/data_f.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = F(measurements)

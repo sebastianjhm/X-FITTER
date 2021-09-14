@@ -44,7 +44,7 @@ def entropy(data, distribution):
     
 if __name__ == "__main__":
     ## Get Data
-    path = "..\\data\\data_normal.txt"
+    path = "../data/data_normal.txt"
     data = getData(path)
     
     ## KDE

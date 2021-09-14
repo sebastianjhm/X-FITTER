@@ -91,7 +91,7 @@ def calculate_mode(data):
     
 if __name__ == "__main__":
     ## Get Data
-    path = "..\\data\\data_dagum_4P.txt"
+    path = "../data/data_dagum_4P.txt"
     data = getData(path)
     
     calculate_mode(data)

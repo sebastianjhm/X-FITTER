@@ -29,7 +29,7 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-path = "..\\data\\data_generalized_extreme_value.txt"
+path = "../data/data_generalized_extreme_value.txt"
 data = getData(path) 
 measurements = MEASUREMENTS(data)
 

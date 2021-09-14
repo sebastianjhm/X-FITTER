@@ -31,7 +31,7 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-path = "..\\data\\data_cauchy.txt"
+path = "../data/data_cauchy.txt"
 data = getData(path) 
 measurements = MEASUREMENTS(data)
 

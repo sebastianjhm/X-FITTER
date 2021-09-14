@@ -8,7 +8,7 @@ def getData(direction):
     data = [float(x.replace(",",".")) for x in file.read().splitlines()]
     return data
 
-path = "C:\\Users\\USUARIO1\\Desktop\\Fitter\\data.txt"
+path = "C:/Users/USUARIO1/Desktop/Fitter/data.txt"
 data = getData(path)
 
 z = 0.5384

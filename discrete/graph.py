@@ -36,8 +36,8 @@ def main():
         return data
     
     distribution_class = BINOMIAL
-    path = ".\\data\\data_" + distribution_class.__name__.lower() + ".txt"
-    path = ".\\data\\data_uniform.txt"
+    path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
+    path = "./data/data_uniform.txt"
     data = get_data(path)
     measurements = MEASUREMENTS(data)
     frequencies = measurements.frequencies

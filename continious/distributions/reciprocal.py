@@ -71,7 +71,7 @@ if __name__ == '__main__':
         return data
     
     ## Distribution class
-    path = "..\\data\\data_reciprocal.txt"
+    path = "../data/data_reciprocal.txt"
     data = get_data(path) 
     measurements = MEASUREMENTS(data)
     distribution = RECIPROCAL(measurements)
