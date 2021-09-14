@@ -145,7 +145,8 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
-    _my_distributions = [DAGUM_4P, BURR, CHI_SQUARE_3P, EXPONENTIAL_2P, GAMMA_3P, 
+    _my_distributions = [DAGUM_4P, BURR.
+                         , CHI_SQUARE_3P, EXPONENTIAL_2P, GAMMA_3P, 
                          INVERSE_GAUSSIAN_3P, LOGLOGISTIC_3P, PEARSON_TYPE_6_4P, INVERSE_GAMMA_3P, 
                          WEIBULL_3P, ERLANG_3P]
     for distribution_class in _my_distributions:
