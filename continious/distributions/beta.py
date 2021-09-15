@@ -1,4 +1,3 @@
-import scipy.integrate
 import math
 from scipy.optimize import fsolve
 import scipy.special as sc

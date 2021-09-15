@@ -19,9 +19,9 @@ class JOHNSON_SB:
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
+        # result, error = scipy.integrate.quad(self.pdf, self.xi_, x)
         z = lambda x: (x-self.xi_)/self.lambda_
         result = scipy.stats.norm.cdf(self.gamma_ + self.delta_*math.log(z(x)/(1-z(x))))
-        # result, error = scipy.integrate.quad(self.pdf, self.xi_, x)
         return result
     
     def pdf(self, x):

@@ -83,7 +83,7 @@ class BURR:
             eq3 = parametric_mode - measurements.mode
             # eq3 = parametric_kurtosis - measurements.kurtosis
             # eq3 = parametric_skewness - measurements.skewness
-            # eq3 = parametric_variance - measurements.variance
+            # eq2 = parametric_variance - measurements.variance
         
             return (eq1, eq2, eq3)
         

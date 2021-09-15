@@ -1,5 +1,5 @@
-import scipy.integrate
 import math
+import scipy.stats
 
 class LOGNORMAL:
     """
@@ -16,7 +16,8 @@ class LOGNORMAL:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, 1e-15, x)
+        # result, error = scipy.integrate.quad(self.pdf, 1e-15, x)
+        result = scipy.stats.norm.cdf((math.log(x)-self.mean)/self.desv)
         return result
     
     def pdf(self, x):

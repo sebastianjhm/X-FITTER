@@ -1,6 +1,4 @@
-import scipy.integrate
 import math
-import scipy.stats
 import scipy.special as sc
 
 class GAMMA:

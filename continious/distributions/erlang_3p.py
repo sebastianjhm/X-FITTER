@@ -1,4 +1,3 @@
-import scipy.integrate
 import math
 import scipy.special as sc
 

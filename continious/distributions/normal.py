@@ -16,7 +16,8 @@ class NORMAL:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
+        # result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
+        result = scipy.stats.norm.cdf((x-self.mean)/self.desv)
         return result
     
     def pdf(self, x):

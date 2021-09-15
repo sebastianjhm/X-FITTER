@@ -2,7 +2,7 @@ import scipy.stats
 import math
 import scipy.special as sc
 import numpy as np
-from scipy.optimize import fsolve, least_squares
+from scipy.optimize import least_squares
 
 class INVERSE_GAMMA_3P:
     """

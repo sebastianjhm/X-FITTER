@@ -65,7 +65,7 @@ def test_chi_square(data, distribution_class):
         "critical_value": critical_value, 
         "p-value": p_value,
         "rejected": rejected
-        }
+    }
     
     return result_test_chi2
     
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     from distributions.generalized_normal import GENERALIZED_NORMAL
     from distributions.gumbel_left import GUMBEL_LEFT
     from distributions.gumbel_right import GUMBEL_RIGHT
-    from distributions.hypernolic_secant import HYPERBOLIC_SECANT
+    from distributions.hyperbolic_secant import HYPERBOLIC_SECANT
     from distributions.inverse_gamma import INVERSE_GAMMA
     from distributions.inverse_gamma_3p import INVERSE_GAMMA_3P
     from distributions.inverse_gaussian import INVERSE_GAUSSIAN
@@ -145,10 +145,7 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
-    _my_distributions = [DAGUM_4P, BURR.
-                         , CHI_SQUARE_3P, EXPONENTIAL_2P, GAMMA_3P, 
-                         INVERSE_GAUSSIAN_3P, LOGLOGISTIC_3P, PEARSON_TYPE_6_4P, INVERSE_GAMMA_3P, 
-                         WEIBULL_3P, ERLANG_3P]
+    _my_distributions = [BURR_4P]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "./data/data_" + distribution_class.__name__.lower() + ".txt"

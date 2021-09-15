@@ -1,6 +1,6 @@
 import scipy.integrate
 import math
-from scipy.optimize import fsolve, least_squares
+from scipy.optimize import least_squares
 import numpy as np
 
 class KUMARASWAMY:
