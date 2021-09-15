@@ -26,7 +26,6 @@ class GENERALIZED_GAMMA_4P:
         
         lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
         result = lower_inc_gamma(self.d/self.p, ((x-self.loc)/self.a)**self.p)/math.gamma(self.d/self.p)
-
         return result
     
     def pdf(self, x):
@@ -72,27 +71,39 @@ class GENERALIZED_GAMMA_4P:
             
             parametric_mean = E(1) + loc
             parametric_variance = E(2) - E(1)**2
-            parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+            # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
             parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+            parametric_median = a * scipy.stats.gamma.ppf(0.5, a=d/p, scale=1)**(1/p) + loc
+            # parametric_mode = loc + a * ((d-1)/p) ** (1/p)
         
             ## System Equations
             eq1 = parametric_mean - measurements.mean
             eq2 = parametric_variance - measurements.variance
-            eq3 = parametric_skewness - measurements.skewness
+            # eq3 = parametric_skewness - measurements.skewness
+            eq3 = parametric_median - measurements.median
             eq4 = parametric_kurtosis  - measurements.kurtosis
             
             return (eq1, eq2, eq3, eq4)
+        
         ## fsolve is 100x faster than least square but sometimes return solutions < 0
         solution =  fsolve(equations, (1, 1, 1, 1), measurements)
             
         ## If return a perameter < 0 then use least_square with restriction
         if all(x > 0 for x in solution) is False or all(x == 1 for x in solution) is True:
-            bnds = ((0, 0, 0, 0), (np.inf, np.inf, np.inf, np.inf))
-            x0 = (1, 1, 1, measurements.mean)
-            args = ([measurements])
-            response = least_squares(equations, x0, bounds = bnds, args=args)
-            solution = response.x
+            try:
+                bnds = ((0, 0, 0, 0), (np.inf, np.inf, np.inf, np.inf))
+                if measurements.mean < 0:
+                    bnds = ((0, 0, 0, -np.inf), (np.inf, np.inf, np.inf, 0))
+                x0 = (1, 1, 1, measurements.mean)
+                args = ([measurements])
+                response = least_squares(equations, x0, bounds = bnds, args=args)
+                solution = response.x
+            except:
+                scipy_params = scipy.stats.gengamma.fit(measurements.data)
+                solution = [scipy_params[3], scipy_params[0], scipy_params[1], scipy_params[2]]
+        
         parameters = {"a": solution[0], "d": solution[1], "p": solution[2], "loc": solution[3]}
+        
         return parameters
     
 if __name__ == '__main__':
@@ -115,7 +126,9 @@ if __name__ == '__main__':
     print(distribution.cdf(measurements.mean))
     print(distribution.pdf(measurements.mean))
     
-    print(scipy.stats.gengamma.fit(measurements.data))
+    scipy_params = scipy.stats.gengamma.fit(measurements.data)
+    parameters = {"a": scipy_params[3], "d": scipy_params[0], "p": scipy_params[1], "loc": scipy_params[2]}
+    print(parameters)
     
     
     
