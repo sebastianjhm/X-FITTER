@@ -86,8 +86,6 @@ class HYPERGEOMETRIC:
         x0 = (measurements.max*5, measurements.max*3, measurements.max)
         args = ([measurements])
         solution = least_squares(equations, x0, bounds = bnds, args=args)
-        
-        
         parameters = {"N": round(solution.x[0]), "K": round(solution.x[1]), "n": round(solution.x[2])}
         
         # N, K, n = solution.x
