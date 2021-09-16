@@ -99,6 +99,10 @@ class BURR:
         # parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1]}
         # print(parameters)
         
+        ## This is a exact copy of the scipy burr12_gen founded in
+        ## https://github.com/scipy/scipy/blob/master/scipy/stats/_continuous_distns.py
+        ## The reason of that is beacause the version 0.18.0 of pyodide run scipy 0.17 and in 
+        ## this version doesn't exist BURR12
         from scipy.stats import rv_continuous
         class burr12_gen(rv_continuous):
             def _pdf(self, x, c, d):
@@ -133,8 +137,6 @@ class BURR:
         burr12 = burr12_gen(a=0.0, name='burr12')
         scipy_params = burr12.fit(measurements.data)
         parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1]}
-        print(parameters)
-        
         
         return parameters
     
