@@ -1,8 +1,8 @@
-import scipy.integrate
-from scipy.optimize import minimize, least_squares
-from scipy.special import beta
+from scipy.optimize import least_squares
 import numpy as np
 import scipy.stats
+import scipy.special as sc
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -67,13 +67,13 @@ class BURR:
             A, B, C = sol_i
             
             ## Moments Burr Distribution
-            miu = lambda r: (A**r) * C * beta((B*C-r)/B, (B+r)/B)
+            miu = lambda r: (A**r) * C * sc.beta((B*C-r)/B, (B+r)/B)
             
             ## Parametric expected expressions
             parametric_mean = miu(1)
-            parametric_variance = -(miu(1)**2) + miu(2)
-            parametric_skewness = 2*miu(1)**3 - 3*miu(1)*miu(2) + miu(3)
-            parametric_kurtosis = -3*miu(1)**4 + 6*miu(1)**2 * miu(2) -4 * miu(1) * miu(3) + miu(4)
+            # parametric_variance = -(miu(1)**2) + miu(2)
+            # parametric_skewness = 2*miu(1)**3 - 3*miu(1)*miu(2) + miu(3)
+            # parametric_kurtosis = -3*miu(1)**4 + 6*miu(1)**2 * miu(2) -4 * miu(1) * miu(3) + miu(4)
             parametric_median = A * ((2**(1/C))-1)**(1/B)
             parametric_mode = A * ((B-1)/(B*C+1))**(1/B)
             
@@ -87,14 +87,55 @@ class BURR:
         
             return (eq1, eq2, eq3)
         
+        ## Solve equations system
         # x0 = [measurements.mean, measurements.mean, measurements.mean]
         # b = ((0, 0, 0), (np.inf, np.inf, np.inf))
         # solution = least_squares(equations, x0, bounds = b, args=([measurements]))
         # parameters = {"A": solution.x[0], "B": solution.x[1], "C": solution.x[2]}
         # print(parameters)
         
-        scipy_params = scipy.stats.burr12.fit(measurements.data)
+        ## Scipy class
+        # scipy_params = scipy.stats.burr12.fit(measurements.data)
+        # parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1]}
+        # print(parameters)
+        
+        from scipy.stats import rv_continuous
+        class burr12_gen(rv_continuous):
+            def _pdf(self, x, c, d):
+                # burr12.pdf(x, c, d) = c * d * x**(c-1) * (1+x**(c))**(-d-1)
+                return np.exp(self._logpdf(x, c, d))
+        
+            def _logpdf(self, x, c, d):
+                return np.log(c) + np.log(d) + sc.xlogy(c - 1, x) + sc.xlog1py(-d-1, x**c)
+        
+            def _cdf(self, x, c, d):
+                return -sc.expm1(self._logsf(x, c, d))
+        
+            def _logcdf(self, x, c, d):
+                return sc.log1p(-(1 + x**c)**(-d))
+        
+            def _sf(self, x, c, d):
+                return np.exp(self._logsf(x, c, d))
+        
+            def _logsf(self, x, c, d):
+                return sc.xlog1py(-d, x**c)
+        
+            def _ppf(self, q, c, d):
+                # The following is an implementation of
+                #   ((1 - q)**(-1.0/d) - 1)**(1.0/c)
+                # that does a better job handling small values of q.
+                return sc.expm1(-1/d * sc.log1p(-q))**(1/c)
+        
+            def _munp(self, n, c, d):
+                nc = 1. * n / c
+                return d * sc.beta(1.0 + nc, d - nc)
+        
+        burr12 = burr12_gen(a=0.0, name='burr12')
+        scipy_params = burr12.fit(measurements.data)
         parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1]}
+        print(parameters)
+        
+        
         return parameters
     
     
