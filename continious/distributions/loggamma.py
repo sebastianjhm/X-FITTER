@@ -22,7 +22,7 @@ class LOGGAMMA:
         Calculated with quadrature integration method of scipy.
         """
         # result = scipy.stats.gamma.cdf(math.exp((x-self.miu)/self.sigma), a=self.c, scale=1)
-        # result = scipy.stats.loggamma.cdf(x, self.c, loc=self.miu, scale=self.sigma)
+        # print(scipy.stats.loggamma.cdf(x, self.c, loc=self.miu, scale=self.sigma))
         
         y = lambda x: (x-self.miu)/self.sigma
         lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
@@ -33,10 +33,10 @@ class LOGGAMMA:
         """
         Probability density function
         """
+        # print(scipy.stats.loggamma.pdf(x, self.c, loc=self.miu, scale=self.sigma))
         y = lambda x: (x-self.miu)/self.sigma
-        result = np.exp(self.c*y(x)-np.exp(y(x))-sc.gammaln(self.c))/self.sigma
+        result = math.exp(self.c*y(x)-math.exp(y(x))-sc.gammaln(self.c))/self.sigma
         
-        result = scipy.stats.loggamma.pdf(x, self.c, loc=self.miu, scale=self.sigma)
         return result
     
     def get_num_parameters(self):

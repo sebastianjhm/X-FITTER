@@ -37,8 +37,8 @@ class WEIBULL_3P:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha >= 0
-        v2 = self.beta >= 0
+        v1 = self.alpha > 0
+        v2 = self.beta > 0
         return v1 and v2
 
     def get_parameters(self, measurements):

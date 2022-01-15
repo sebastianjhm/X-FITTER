@@ -32,7 +32,9 @@ class UNIFORM:
         Check parameters restrictions
         """
         v1 = self.max_ > self.min_
-        return v1
+        v2 = type(self.max_) == int
+        v3 = type(self.min_) == int
+        return v1 and v2 and v3
 
     def get_parameters(self, measurements):
         """

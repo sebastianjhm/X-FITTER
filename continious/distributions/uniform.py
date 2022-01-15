@@ -1,7 +1,7 @@
 class UNIFORM:
     """
     Uniform distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php
+    https://en.wikipedia.org/wiki/Continuous_uniform_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -77,3 +77,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

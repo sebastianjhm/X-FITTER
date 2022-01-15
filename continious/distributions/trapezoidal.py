@@ -1,10 +1,9 @@
-import scipy.stats
 from scipy.optimize import least_squares
-import numpy as np
+
 
 class TRAPEZOIDAL:
     """
-    Triangular distribution
+    Trapezoidal distribution
     https://en.wikipedia.org/wiki/Triangular_distribution
     """
     def __init__(self, measurements):
@@ -47,9 +46,10 @@ class TRAPEZOIDAL:
         """
         Check parameters restrictions
         """
-        v1 = self.b > self.c
-        v2 = self.c > self.a
-        return v1 and v2
+        v1 = self.a < self.b
+        v2 = self.b < self.c
+        v3 = self.c < self.d
+        return v1 and v2 and v3
         
     def get_parameters(self, measurements):
         """
@@ -108,3 +108,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

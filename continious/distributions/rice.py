@@ -34,7 +34,7 @@ class RICE:
             resultado  = suma * math.exp(-(a**2+b**2)/2)
             return resultado
 
-        result = scipy.stats.rice.cdf(x, self.v/self.sigma, scale = self.sigma)
+        # print(scipy.stats.rice.cdf(x, self.v/self.sigma, scale = self.sigma))
         # result, error = scipy.integrate.quad(self.pdf, 0, x)
         result = 1 - Q(1, self.v/self.sigma, x/self.sigma)
         return result
@@ -57,8 +57,8 @@ class RICE:
         """
         Check parameters restrictions
         """
-        v1 = self.v >= 0
-        v2 = self.sigma >= 0
+        v1 = self.v > 0
+        v2 = self.sigma > 0
         return v1 and v2
     
     def get_parameters(self, measurements):

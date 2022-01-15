@@ -8,8 +8,8 @@ class NORMAL:
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
-        self.mean = self.parameters["mean"]
-        self.desv = self.parameters["desv"]
+        self.miu = self.parameters["miu"]
+        self.sigma = self.parameters["sigma"]
 
     def cdf(self, x):
         """
@@ -17,14 +17,14 @@ class NORMAL:
         Calculated with quadrature integration method of scipy.
         """
         # result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
-        result = scipy.stats.norm.cdf((x-self.mean)/self.desv)
+        result = scipy.stats.norm.cdf((x-self.miu)/self.sigma)
         return result
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return (1/(self.desv * math.sqrt(2 * math.pi))) * math.e ** (-(((x - self.mean)**2) / (2*self.desv**2)))
+        return (1/(self.sigma * math.sqrt(2 * math.pi))) * math.e ** (-(((x - self.miu)**2) / (2*self.sigma**2)))
     
     def get_num_parameters(self):
         """
@@ -36,7 +36,7 @@ class NORMAL:
         """
         Check parameters restrictions
         """
-        v1 = self.desv > 0
+        v1 = self.sigma > 0
         return v1
 
     def get_parameters(self, measurements):
@@ -47,18 +47,18 @@ class NORMAL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"miu": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
 
         Returns
         -------
         parameters : dict
-            {"mean": *, "desv": *}
+            {"miu": *, "sigma": *}
         """
         
         μ = measurements.mean
         σ = math.sqrt(measurements.variance)
         
-        parameters = {"mean": μ, "desv": σ}
+        parameters = {"miu": μ, "sigma": σ}
         return parameters
     
 if __name__ == '__main__':
@@ -79,4 +79,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    print(distribution.pdf(50000))
+    print(distribution.pdf(measurements.mean))

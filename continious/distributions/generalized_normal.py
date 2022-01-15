@@ -1,6 +1,7 @@
 import scipy.stats
-from scipy.special import gammaincc
-from scipy.special import gamma
+import scipy.special as sc
+import numpy as np
+import math
 
 class GENERALIZED_NORMAL:
     """
@@ -26,13 +27,15 @@ class GENERALIZED_NORMAL:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        return scipy.stats.gennorm.cdf(x , self.beta, loc=self.miu, scale=self.alpha)
-    
+        # print(scipy.stats.gennorm.cdf(x , self.beta, loc=self.miu, scale=self.alpha))
+        return 0.5 + (np.sign(x-self.miu)/2) * sc.gammainc(1/self.beta, abs((x - self.miu)/self.alpha) ** self.beta)
+        
     def pdf(self, x):
         """
         Probability density function
         """
-        return scipy.stats.gennorm.pdf(x , self.beta, loc=self.miu, scale=self.alpha)
+        # print(scipy.stats.gennorm.pdf(x , self.beta, loc=self.miu, scale=self.alpha))
+        return (self.beta/(2*self.alpha*math.gamma(1/self.beta)) * math.exp(-(abs(x -self.miu)/self.alpha)**self.beta))
     
     def get_num_parameters(self):
         """
@@ -85,3 +88,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

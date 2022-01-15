@@ -11,27 +11,27 @@ class MEASUREMENTS:
         self.max = max(data)
         self.mean = np.mean(data)
         self.variance = np.var(data, ddof=1)
-        self.std = math.sqrt(np.var(data, ddof=1))
-        self.skewness = scipy.stats.moment(data, 3) / pow(np.std(data, ddof=1),3)
-        self.kurtosis = scipy.stats.moment(data, 4) / pow(np.std(data, ddof=1),4)
+        self.std = np.std(data, ddof=1)
+        self.skewness = scipy.stats.moment(data, 3) / pow(self.std, 3)
+        self.kurtosis = scipy.stats.moment(data, 4) / pow(self.std, 4)
         self.median = np.median(data)
         self.mode = self.calculate_mode()
-        self.num_bins = self.danoes_formula()
+        self.num_bins = self.doanes_formula()
 
     def calculate_mode(self):
-        def calc_fmin_mode(data, distribution):
+        def calc_shgo_mode(distribution):
             objective = lambda x: -distribution.pdf(x)[0]
-            solution = scipy.optimize.fmin(objective, self.mean, disp=False)
-            return solution[0]
-        
+            bnds = [[self.min, self.max]]
+            solution = scipy.optimize.shgo(objective, bounds= bnds, n=100*self.length)
+            return solution.x[0]
         ## KDE
         distribution = scipy.stats.gaussian_kde(self.data)
-        mode = calc_fmin_mode(self.data, distribution)
-        return(mode)
+        shgo_mode = calc_shgo_mode(distribution)
+        return(shgo_mode)
 
-    def danoes_formula(self):
+    def doanes_formula(self):
         """
-        DANOE'S FORMULA
+        DONAE'S FORMULA
         https://en.wikipedia.org/wiki/Histogram#Doane's_formula
         
         Parameters

@@ -38,7 +38,7 @@ class NAKAGAMI:
         """
         Check parameters restriction
         """
-        v1 = self.m > 0.5
+        v1 = self.m >= 0.5
         v2 = self.omega > 0
         return v1 and v2
 
@@ -86,4 +86,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    print(distribution.cdf(10.98))
+    print(distribution.pdf(measurements.mean))

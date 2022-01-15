@@ -5,33 +5,33 @@ import math
 
 class MEASUREMENTS:
     def __init__(self, data):
+        self.data = data
         self.length = len(data)
         self.min = min(data)
         self.max = max(data)
         self.mean = np.mean(data)
         self.variance = np.var(data, ddof=1)
-        self.std = math.sqrt(np.var(data, ddof=1))
-        self.skewness = scipy.stats.moment(data, 3) / pow(np.std(data, ddof=1),3)
-        self.kurtosis = scipy.stats.moment(data, 4) / pow(np.std(data, ddof=1),4)
+        self.std = np.std(data, ddof=1)
+        self.skewness = scipy.stats.moment(data, 3) / pow(self.std, 3)
+        self.kurtosis = scipy.stats.moment(data, 4) / pow(self.std, 4)
         self.median = np.median(data)
-        self.mode = self.calculate_mode(data)
-        self.data = data
-        self.num_bins = self.danoes_formula(data)
+        self.mode = self.calculate_mode()
+        self.num_bins = self.doanes_formula()
 
-    def calculate_mode(self, data):
-        def calc_shgo_mode(data, distribution):
-            objective = lambda x: 1/distribution.pdf(x)[0]
+    def calculate_mode(self):
+        def calc_shgo_mode(distribution):
+            objective = lambda x: -distribution.pdf(x)[0]
             bnds = [[self.min, self.max]]
-            solution = scipy.optimize.shgo(objective, bounds= bnds, n=100*len(data))
+            solution = scipy.optimize.shgo(objective, bounds= bnds, n=100*self.length)
             return solution.x[0]
         ## KDE
-        distribution = scipy.stats.gaussian_kde(data)
-        shgo_mode = calc_shgo_mode(data, distribution)
+        distribution = scipy.stats.gaussian_kde(self.data)
+        shgo_mode = calc_shgo_mode(distribution)
         return(shgo_mode)
 
-    def danoes_formula(self, data):
+    def doanes_formula(self):
         """
-        DANOE'S FORMULA
+        DONAE'S FORMULA
         https://en.wikipedia.org/wiki/Histogram#Doane's_formula
         
         Parameters
@@ -44,7 +44,7 @@ class MEASUREMENTS:
             Cumulative distribution function evaluated at x
         """
         N = self.length
-        skewness = scipy.stats.skew(data)
+        skewness = scipy.stats.skew(self.data)
         sigma_g1 = math.sqrt((6*(N-2))/((N+1)*(N+3)))
         num_bins = 1 + math.log(N,2) + math.log(1+abs(skewness)/sigma_g1,2)
         num_bins = round(num_bins)
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         return data
     
     ## Distribution class
-    path = "./data/data_normal.txt"
+    path = "../../data/data_normal.txt"
     data = get_data(path) 
 
     measurements = MEASUREMENTS(data)

@@ -36,8 +36,8 @@ class WEIBULL:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha >= 0
-        v2 = self.beta >= 0
+        v1 = self.alpha > 0
+        v2 = self.beta > 0
         return v1 and v2
 
     def get_parameters(self, measurements):
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    
+    print(distribution.pdf(measurements.mean))
     
     
     
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     
     ti = time.time()
     bnds = ((0, 0), (np.inf, np.inf))
-    x0 = (1.1, 1)
+    x0 = (measurements.mean, measurements.mean)
     args = ([measurements])
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1]}

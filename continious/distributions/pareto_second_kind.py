@@ -1,8 +1,5 @@
 import scipy.integrate
-import math
-from scipy.optimize import fsolve
 import scipy.stats
-import numpy as np
 
 class PARETO_SECOND_KIND:
     """

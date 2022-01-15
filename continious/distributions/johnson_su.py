@@ -3,6 +3,10 @@ from scipy.optimize import fsolve
 import scipy.stats
 
 class JOHNSON_SU:
+    """
+    Johnson SU distribution
+    http://www.ntrand.com/johnson-su-distribution/           
+    """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
         self.xi_ = self.parameters["xi"]
@@ -90,6 +94,7 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     import time
     ti = time.time()

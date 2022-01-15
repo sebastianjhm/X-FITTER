@@ -23,7 +23,7 @@ class TRIANGULAR:
             return (x - self.a)**2/((self.b - self.a)*(self.c - self.a))
         elif self.c < x and x < self.b:
             return 1 - ((self.b - x)**2/((self.b - self.a)*(self.b - self.c)))
-        elif self.b <= x:
+        else:
             return 1
     
     def pdf(self, x):
@@ -36,6 +36,8 @@ class TRIANGULAR:
             return 2/(self.b - self.a)
         elif x > self.c and x <= self.b:
             return 2*(self.b - x)/((self.b - self.a)*(self.b - self.c))
+        else:
+            return 0
         
     def get_num_parameters(self):
         """
@@ -47,8 +49,8 @@ class TRIANGULAR:
         """
         Check parameters restrictions
         """
-        v1 = self.b > self.c
-        v2 = self.c > self.a
+        v1 = self.a < self.c
+        v2 = self.c < self.b
         return v1 and v2
         
     def get_parameters(self, measurements):
@@ -128,3 +130,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

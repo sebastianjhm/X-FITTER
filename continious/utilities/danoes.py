@@ -1,9 +1,9 @@
 import math
 import scipy.stats
 
-def danoes_formula(data):
+def doanes_formula(data):
     """
-    DANOE'S FORMULA
+    DONAE'S FORMULA
     https://en.wikipedia.org/wiki/Histogram#Doane's_formula
     
     Parameters
@@ -33,4 +33,4 @@ if __name__ == "__main__":
     path = "../data/data_normal.txt"
     data = get_data(path) 
     
-    print(danoes_formula(data))
+    print(doanes_formula(data))

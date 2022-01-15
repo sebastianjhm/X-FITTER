@@ -18,15 +18,13 @@ class POWER_FUNCTION:
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
-        result = ((x - self.a)/(self.b - self.a)) ** self.alpha
-        return result
+        return ((x - self.a)/(self.b - self.a)) ** self.alpha
     
     def pdf(self, x):
         """
         Probability density function
         """
-        result = self.alpha * ((x - self.a) ** (self.alpha - 1))/((self.b - self.a) ** self.alpha)
-        return result
+        return self.alpha * ((x - self.a) ** (self.alpha - 1))/((self.b - self.a) ** self.alpha)
 
     def get_num_parameters(self):
         """
@@ -38,7 +36,7 @@ class POWER_FUNCTION:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha >= 0
+        v1 = self.alpha > 0
         v2 = self.b > self.a
         return v1 and v2
     
@@ -65,19 +63,19 @@ class POWER_FUNCTION:
             E1 = (a + b*α)/(1 + α)
             E2 = (2*a**2 + 2*a*b*α + b**2*α*(1 + α))/((1 + α)*(2 + α))
             E3 = (6*a**3 + 6*a**2*b*α + 3*a*b**2*α*(1 + α) + b**3*α*(1 + α)*(2 + α))/((1 + α)*(2 + α)*(3 + α))
-            E4 = (24*a**4 + 24*α*a**3*b + 12*α*(α + 1)*a**2*b**2 + 4*α*(α + 1)*(α + 2)*a*b**3 + α*(α + 1)*(α + 2)*(α + 3)*b**4)/((α + 1)*(α + 2)*(α + 3)*(α + 4))
+            # E4 = (24*a**4 + 24*α*a**3*b + 12*α*(α + 1)*a**2*b**2 + 4*α*(α + 1)*(α + 2)*a*b**3 + α*(α + 1)*(α + 2)*(α + 3)*b**4)/((α + 1)*(α + 2)*(α + 3)*(α + 4))
             
             parametric_mean = E1
             parametric_variance = (E2 - E1**2)
             parametric_skewness = (E3 - 3*E2*E1 + 2*E1**3) / ((E2-E1**2))**1.5
-            parametric_kurtosis = (E4 - 4 * E1 * E3 + 6 * E1**2 * E2 - 3 * E1**4)/ ((E2-E1**2))**2
+            # parametric_kurtosis = (E4 - 4 * E1 * E3 + 6 * E1**2 * E2 - 3 * E1**4)/ ((E2-E1**2))**2
             # parametric_median = (0.5**(1/α))*(b-a)+a
         
             ## System Equations
             eq1 = parametric_mean - measurements.mean
             eq2 = parametric_variance - measurements.variance
             eq3 = parametric_skewness - measurements.skewness
-            eq4 = parametric_kurtosis  - measurements.kurtosis
+            # eq4 = parametric_kurtosis  - measurements.kurtosis
             # eq5 = parametric_median - measurements.median
             
             return (eq1, eq2, eq3)
@@ -109,7 +107,6 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    print(distribution.cdf(139.86))
     print(distribution.pdf(measurements.mean))
         
     print(scipy.stats.powerlaw.fit(measurements.data))

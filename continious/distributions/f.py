@@ -1,9 +1,11 @@
 import scipy.stats
+import scipy.special as sc
 
 class F:
     """
     F distribution
     https://en.wikipedia.org/wiki/F-distribution
+    http://atomic.phys.uni-sofia.bg/local/nist-e-handbook/e-handbook/eda/section3/eda366a.htm
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -15,13 +17,15 @@ class F:
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        return scipy.stats.f.cdf(x, self.df1, self.df2)
+        ## print(scipy.stats.f.cdf(x, self.df1, self.df2))
+        return sc.betainc(self.df1/2, self.df2/2, x * self.df1 / (self.df1 * x + self.df2))
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return scipy.stats.f.pdf(x, self.df1, self.df2)
+        ## print(scipy.stats.f.pdf(x, self.df1, self.df2))
+        return (1 / sc.beta(self.df1 / 2, self.df2 / 2)) * ((self.df1 / self.df2) ** (self.df1 / 2)) * (x ** (self.df1 / 2 - 1)) * ((1 + x * self.df1 / self.df2) ** (-1 * (self.df1 + self.df2) / 2))
     
     def get_num_parameters(self):
         """
@@ -35,9 +39,7 @@ class F:
         """
         v1 = self.df1 > 0
         v2 = self.df2 > 0
-        v3 = type(self.df1) == int
-        v4 = type(self.df2) == int
-        return v1 and v2 and v3 and v4
+        return v1 and v2
         
     def get_parameters(self, measurements):
         """
@@ -80,3 +82,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

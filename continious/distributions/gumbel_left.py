@@ -27,7 +27,7 @@ class GUMBEL_LEFT:
         Probability density function
         """
         z = lambda x: (x - self.miu) / self.sigma
-        return (1/self.sigma) * math.exp(z(x)+math.exp(-z(x)))
+        return (1/self.sigma) * math.exp(z(x) - math.exp(z(x)))
     
     def get_num_parameters(self):
         """
@@ -92,4 +92,5 @@ if __name__ == '__main__':
     distribution = GUMBEL_LEFT(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(70))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

@@ -70,6 +70,7 @@ def test_chi_square(data, distribution_class):
     return result_test_chi2
     
 if __name__ == "__main__":
+    from distributions.alpha import ALPHA
     from distributions.beta import BETA
     from distributions.burr import BURR
     from distributions.burr_4p import BURR_4P
@@ -121,7 +122,8 @@ if __name__ == "__main__":
     from distributions.rayleigh import RAYLEIGH
     from distributions.reciprocal import RECIPROCAL
     from distributions.rice import RICE
-    from distributions.t import T
+    from distributions.t_student import T_STUDENT
+    from distributions.t_student_3p import T_STUDENT_3P
     from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
     from distributions.uniform import UNIFORM
@@ -140,12 +142,12 @@ if __name__ == "__main__":
         GUMBEL_RIGHT, HYPERBOLIC_SECANT, INVERSE_GAMMA, INVERSE_GAUSSIAN, JOHNSON_SB, 
         JOHNSON_SU, KUMARASWAMY, LAPLACE, LEVY, LOGGAMMA, LOGISTIC, LOGLOGISTIC,
         LOGNORMAL,  NAKAGAMI, NORMAL, PARETO_FIRST_KIND, PARETO_SECOND_KIND, PEARSON_TYPE_6, 
-        PERT, POWER_FUNCTION, RAYLEIGH, RECIPROCAL, RICE, T, TRAPEZOIDAL, TRIANGULAR,
+        PERT, POWER_FUNCTION, RAYLEIGH, RECIPROCAL, RICE, T_STUDENT, TRAPEZOIDAL, TRIANGULAR,
         UNIFORM, WEIBULL
     ]
 
-    _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T, GENERALIZED_GAMMA_4P]
-    _my_distributions = [BURR_4P]
+    _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T_STUDENT, GENERALIZED_GAMMA_4P]
+    _my_distributions = [ALPHA]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "./data/data_" + distribution_class.__name__.lower() + ".txt"

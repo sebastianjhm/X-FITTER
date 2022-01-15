@@ -122,7 +122,7 @@ if __name__ == "__main__":
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
     print(distribution.pdf(measurements.mean))
-    
+    print(scipy.stats.invgamma.cdf(0.4954563682682342, a=5, scale=1))
     
     
     

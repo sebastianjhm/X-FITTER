@@ -57,27 +57,30 @@ class LOGLOGISTIC:
         parameters : dict
             {"alpha": *, "beta": *}
         """        
-        def equations(sol_i, data_mean, data_variance, data_skewness):
-            α, β = sol_i
+        # def equations(sol_i, data_mean, data_variance, data_skewness):
+        #     α, β = sol_i
         
-            E = lambda r: (α**r) * (r*math.pi/β) / math.sin(r*math.pi/β)
+        #     E = lambda r: (α**r) * (r*math.pi/β) / math.sin(r*math.pi/β)
             
-            parametric_mean = E(1)
-            parametric_variance = (E(2) - E(1)**2)
-            parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
-            parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+        #     parametric_mean = E(1)
+        #     parametric_variance = (E(2) - E(1)**2)
+        #     parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+        #     parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
         
-            ## System Equations
-            eq1 = parametric_mean - data_mean
-            eq2 = parametric_variance - data_variance
+        #     ## System Equations
+        #     eq1 = parametric_mean - data_mean
+        #     eq2 = parametric_variance - data_variance
             
-            return (eq1, eq2)
+        #     return (eq1, eq2)
         
-        bnds = ((0, 0), (np.inf, np.inf))
-        x0 = (measurements.mean, 1/measurements.variance**0.5)
-        args = (measurements.mean, measurements.variance, measurements.skewness)
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
-        parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
+        # bnds = ((0, 0), (np.inf, np.inf))
+        # x0 = (measurements.mean, 1/measurements.variance**0.5)
+        # args = (measurements.mean, measurements.variance, measurements.skewness)
+        # solution = least_squares(equations, x0, bounds = bnds, args=args)
+        # parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
+        
+        scipy_params = scipy.stats.fisk.fit(measurements.data)
+        parameters = {"alpha": scipy_params[2], "beta": scipy_params[0]}
 
         return parameters
 
@@ -112,8 +115,8 @@ if __name__ == "__main__":
         
         parametric_mean = E(1)
         parametric_variance = (E(2) - E(1)**2)
-        parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
-        parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
+        # parametric_skewness = (E(3) - 3*E(2)*E(1) + 2*E(1)**3) / ((E(2)-E(1)**2))**1.5
+        # parametric_kurtosis = (E(4) - 4 * E(1) * E(3) + 6 * E(1)**2 * E(2) - 3 * E(1)**4)/ ((E(2)-E(1)**2))**2
     
         ## System Equations
         eq1 = parametric_mean - data_mean
@@ -123,7 +126,7 @@ if __name__ == "__main__":
     
     ti = time.time()
     bnds = ((0, 0), (np.inf, np.inf))
-    x0 = (measurements.mean, 1/measurements.variance**0.5)
+    x0 = (measurements.mean, measurements.variance)
     args = (measurements.mean, measurements.variance, measurements.skewness)
     solution = least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1]}

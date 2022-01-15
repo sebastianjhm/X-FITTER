@@ -5,12 +5,11 @@ class GENERALIZED_EXTREME_VALUE:
     """
     Generalized Extreme Value Distribution
     https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution
-    Notation: xi <-> c
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
         
-        self.c = self.parameters["c"]
+        self.ξ = self.parameters["ξ"]
         self.miu = self.parameters["miu"]
         self.sigma = self.parameters["sigma"]
         
@@ -20,21 +19,21 @@ class GENERALIZED_EXTREME_VALUE:
         Calculated with quadrature integration method of scipy.
         """
         z = lambda x: (x - self.miu) / self.sigma
-        if self.c == 0:
+        if self.ξ == 0:
             return math.exp(-math.exp(-z(x)))
         else:
-            return math.exp(-(1+self.c*z(x))**(-1/self.c))
-        # return scipy.stats.genectreme.cdf(x, -self.c, loc=self.miu, scale=self.sigma)
+            return math.exp(-(1+self.ξ*z(x))**(-1/self.ξ))
+        # return scipy.stats.genectreme.cdf(x, -self.ξ, loc=self.miu, scale=self.sigma)
     
     def pdf(self, x):
         """
         Probability density function
         """
         z = lambda x: (x - self.miu) / self.sigma
-        if self.c == 0:
+        if self.ξ == 0:
             return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
         else:
-            return (1/self.sigma) * math.exp(-(1+self.c*z(x))**(-1/self.c)) * (1+self.c*z(x))**(-1-1/self.c)
+            return (1/self.sigma) * math.exp(-(1+self.ξ*z(x))**(-1/self.ξ)) * (1+self.ξ*z(x))**(-1-1/self.ξ)
        
     def get_num_parameters(self):
         """
@@ -62,10 +61,10 @@ class GENERALIZED_EXTREME_VALUE:
         Returns
         -------
         parameters : dict
-            {"c": *, "miu": *, "sigma": *}
+            {"ξ": *, "miu": *, "sigma": *}
         """
         scipy_params = scipy.stats.genextreme.fit(measurements.data)
-        parameters = {"c": -scipy_params[0], "miu": scipy_params[1], "sigma": scipy_params[2]}
+        parameters = {"ξ": -scipy_params[0], "miu": scipy_params[1], "sigma": scipy_params[2]}
         return parameters
         
 if __name__ == '__main__':

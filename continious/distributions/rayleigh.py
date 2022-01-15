@@ -18,15 +18,13 @@ class RAYLEIGH:
         Cumulative distribution function
         Calculated with quadrature integration method of scipy
         """
-        result = 1 - math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
-        return result
+        return 1 - math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
     
     def pdf(self, x):
         """
         Probability density function
         """
-        result = ((x - self.gamma)/(self.sigma**2)) * math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
-        return result
+        return ((x - self.gamma)/(self.sigma**2)) * math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
 
     def get_num_parameters(self):
         """
@@ -38,7 +36,7 @@ class RAYLEIGH:
         """
         Check parameters restrictions
         """
-        v1 = self.sigma >= 0
+        v1 = self.sigma > 0
         return v1
     
     def get_parameters(self, measurements):

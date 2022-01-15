@@ -40,8 +40,8 @@ class FRECHET:
         """
         Check parameters restrictions
         """
-        v1 = self.alpha >= 0
-        v2 = self.s >= 0
+        v1 = self.alpha > 0
+        v2 = self.s > 0
         return v1 and v2
 
     def get_parameters(self, measurements):
@@ -81,3 +81,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

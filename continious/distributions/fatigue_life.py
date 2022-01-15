@@ -6,27 +6,27 @@ class FATIGUE_LIFE:
     """
     Fatigue life distribution
     https://www.vosesoftware.com/riskwiki/FatigueLifedistribution.php
-    ** Variance: beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
+    ** Variance: scale**2 * gamma**2 * (1 + 5 * gamma**2/4)
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
         
         self.gamma = self.parameters["gamma"]
-        self.alpha = self.parameters["alpha"]
-        self.beta = self.parameters["beta"]
+        self.loc = self.parameters["loc"]
+        self.scale = self.parameters["scale"]
         
     def cdf(self, x):
         """
         Cumulative distribution function.
         Calculated with quadrature integration method of scipy.
         """
-        return scipy.stats.fatiguelife.cdf(x, self.gamma, loc=self.alpha, scale=self.beta)
+        return scipy.stats.fatiguelife.cdf(x, self.gamma, loc=self.loc, scale=self.scale)
     
     def pdf(self, x):
         """
         Probability density function
         """
-        return scipy.stats.fatiguelife.pdf(x, self.gamma, loc=self.alpha, scale=self.beta)
+        return scipy.stats.fatiguelife.pdf(x, self.gamma, loc=self.loc, scale=self.scale)
     
     def get_num_parameters(self):
         """
@@ -38,7 +38,7 @@ class FATIGUE_LIFE:
         """
         Check parameters restrictions
         """
-        v1 = self.beta > 0
+        v1 = self.scale > 0
         v2 = self.gamma > 0
         return v1 and v2
         
@@ -55,16 +55,16 @@ class FATIGUE_LIFE:
         Returns
         -------
         parameters : dict
-            {"gamma": *, "alpha": *, "beta": *}
+            {"gamma": *, "loc": *, "scale": *}
         """
-        ## NO SE ESTÁN RESOLVIENDO LAS ECUACIONES PARA GAMMA = 5, BETA = 10, ALPHA = 5
+        ## NO SE ESTÁN RESOLVIENDO LAS ECUACIONES PARA GAMMA = 5, scale = 10, loc = 5
         # def equations(sol_i, measurements):
         #     ## Variables declaration
-        #     alpha, beta, gamma = sol_i
+        #     loc, scale, gamma = sol_i
             
         #     ## Parametric expected expressions
-        #     parametric_mean = alpha + beta * (1 + gamma**2/2)
-        #     parametric_variance = beta**2 * gamma**2 * (1 + 5 * gamma**2/4)
+        #     parametric_mean = loc + scale * (1 + gamma**2/2)
+        #     parametric_variance = scale**2 * gamma**2 * (1 + 5 * gamma**2/4)
         #     parametric_skewness = 4 * gamma**2 * (11*gamma**2 + 6) / ((4+5*gamma**2)*math.sqrt(gamma**2 * (4+5*gamma**2)))
         
         #     ## System Equations
@@ -77,7 +77,7 @@ class FATIGUE_LIFE:
         # solution =  fsolve(equations, (1, 1, 1), measurements)
         # print(solution)
         scipy_params = scipy.stats.fatiguelife.fit(measurements.data)
-        parameters = {"gamma": scipy_params[0], "alpha": scipy_params[1], "beta": scipy_params[2]}
+        parameters = {"gamma": scipy_params[0], "loc": scipy_params[1], "scale": scipy_params[2]}
         return parameters
     
 if __name__ == '__main__':
@@ -98,3 +98,7 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
+    
+    print(scipy.stats.fatiguelife.pdf(20, 0.5, loc=15, scale=10))
+    print(scipy.stats.fatiguelife.ppf(0.55, 0.5, loc=15, scale=10))

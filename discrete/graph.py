@@ -35,9 +35,9 @@ def main():
         data = [int(x) for x in file.read().splitlines()]
         return data
     
-    distribution_class = BINOMIAL
+    distribution_class = POISSON
     path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
-    path = "./data/data_uniform.txt"
+    ## path = "./data/data_poisson.txt"
     data = get_data(path)
     measurements = MEASUREMENTS(data)
     frequencies = measurements.frequencies

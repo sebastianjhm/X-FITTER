@@ -1,6 +1,8 @@
 import scipy.special as sc
 import scipy.stats
 import math
+from scipy.optimize import fsolve, least_squares
+import numpy as np
 
 class LEVY:
     """
@@ -60,6 +62,28 @@ class LEVY:
         parameters : dict
             {"miu": *, "c": *}
         """
+        # def equations(sol_i, measurements):
+        #     ## Variables declaration
+        #     miu, c = sol_i
+            
+        #     ## Parametric expected expressions
+        #     parametric_median = miu +  c/(2*(sc.erfcinv(0.5) ** 2))
+        #     parametric_mode = miu + c/3
+            
+        #     ## System Equations
+        #     eq1 = parametric_median - measurements.median
+        #     eq2 = parametric_mode - measurements.mode
+            
+        #     return (eq1, eq2)
+    
+        
+        # bnds = ((-np.inf, 0), (np.inf, np.inf))
+        # x0 = (1, 1)
+        # args = ([measurements])
+        # solution = least_squares(equations, x0, bounds = bnds, args=args)
+        # print(solution.x)
+        # parameters = {"miu": solution.x[0], "c": solution.x[1]}
+        
         scipy_params = scipy.stats.levy.fit(measurements.data)
     
         ## Results
@@ -86,13 +110,3 @@ if __name__ == "__main__":
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
     print(distribution.pdf(measurements.mean))
-    print(distribution.cdf(144.14707))
-    print(distribution.pdf(144.14707))
-    
-    def entropy(data, distribution):
-        H = sum([-p * math.log(p,2) for p in [distribution.pdf(d) for d in data]])
-        return H
-    
-    entropy = entropy(data, distribution)
-    
-    print(entropy)

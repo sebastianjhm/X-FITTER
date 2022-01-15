@@ -37,8 +37,9 @@ class INVERSE_GAUSSIAN_3P:
         """
         Check parameters restrictions
         """
-        v1 = self.sigma > 0
-        return v1
+        v1 = self.miu > 0
+        v2 = self.lambda_ > 0
+        return v1 and v2
 
     def get_parameters(self, measurements):
         """

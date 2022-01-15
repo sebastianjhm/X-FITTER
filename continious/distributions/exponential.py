@@ -74,6 +74,5 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    import scipy.stats
-    print(scipy.stats.expon.fit(measurements.data))
+    print(distribution.pdf(measurements.mean))
     

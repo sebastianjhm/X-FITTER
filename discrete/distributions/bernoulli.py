@@ -1,6 +1,3 @@
-import scipy.stats
-import math
-
 class BERNOULLI:
     """
     Bernoulli distribution

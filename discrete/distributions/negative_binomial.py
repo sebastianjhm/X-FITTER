@@ -40,8 +40,8 @@ class NEGATIVE_BINOMIAL:
         Check parameters restrictions
         """
         v1 = self.p > 0 and self.p < 1
-        v2 = self.n > 0
-        v3 = type(self.n) == int
+        v2 = self.r > 0
+        v3 = type(self.r) == int
         return v1 and v2 and v3
 
     def get_parameters(self, measurements):

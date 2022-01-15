@@ -5,7 +5,7 @@ import numpy as np
 
 class KUMARASWAMY:
     """
-    Beta distribution
+    Kumaraswami distribution
     https://www.vosesoftware.com/riskwiki/Kumaraswamy4distribution.php          
     """
     def __init__(self, measurements):

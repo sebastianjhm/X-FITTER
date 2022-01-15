@@ -17,8 +17,7 @@ class PARETO_FIRST_KIND:
         Calculated with quadrature integration method of scipy.
         """
         # print(scipy.stats.pareto.cdf(x, self.alpha, scale=self.xm))
-        result = 1 - (self.xm/x) ** self.alpha
-        return result
+        return 1 - (self.xm/x) ** self.alpha
     
     def pdf(self, x):
         """
@@ -84,7 +83,7 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
-    print(distribution.pdf(13.806))
+    print(distribution.pdf(measurements.mean))
     
     ## Get parameters of distribution: SCIPY vs EQUATIONS
     import time

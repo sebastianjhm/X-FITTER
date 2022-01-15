@@ -93,4 +93,5 @@ if __name__ == '__main__':
     distribution = GUMBEL_RIGHT(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(181.1450))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

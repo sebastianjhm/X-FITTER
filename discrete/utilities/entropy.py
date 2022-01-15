@@ -6,9 +6,9 @@ import math
 
 mpl.style.use("ggplot")
 
-def danoes_formula(data):
+def doanes_formula(data):
     """
-    DANOE'S FORMULA
+    DONAE'S FORMULA
     https://en.wikipedia.org/wiki/Histogram#Doane's_formula
     """
     N = len(data)
@@ -20,7 +20,7 @@ def danoes_formula(data):
 
 def plot_histogram(data, distribution):
     plt.figure(figsize=(8, 4))
-    plt.hist(data, density=True, ec='white', bins=danoes_formula(data))
+    plt.hist(data, density=True, ec='white', bins=doanes_formula(data))
     plt.title('HISTOGRAM')
     plt.xlabel('Values')
     plt.ylabel('Frequencies')

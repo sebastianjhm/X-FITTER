@@ -1,5 +1,6 @@
 import math
 import scipy.special as sc
+import scipy.stats
 
 class GAMMA:
     """
@@ -89,3 +90,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))

@@ -106,7 +106,7 @@ if __name__ == "__main__":
         return (eq1, eq2, eq3)
     
     bnds = ((0, 0, -np.inf), (np.inf, np.inf, np.inf))
-    x0 = (measurements.mean, 1/measurements.variance**0.5, measurements.mean)
+    x0 = (measurements.mean, measurements.variance, measurements.mean)
     args = ([measurements])
     ti = time.time()
     solution = least_squares(equations, x0, bounds = bnds, args=args)

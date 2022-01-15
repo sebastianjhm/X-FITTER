@@ -9,9 +9,9 @@ import random
 
 mpl.style.use("ggplot")
 
-def danoes_formula(data):
+def doanes_formula(data):
     """
-    DANOE'S FORMULA
+    DONAE'S FORMULA
     https://en.wikipedia.org/wiki/Histogram#Doane's_formula
     """
     N = len(data)
@@ -65,7 +65,7 @@ def fit_data(data):
     # MY_DISTRIBUTIONS = [st.beta, st.expon, st.norm, st.uniform, st.johnsonsb, st.gennorm, st.gausshyper, st.gengamma]
 
     ## Calculae Histogram
-    num_bins = danoes_formula(data)
+    num_bins = doanes_formula(data)
     frequencies, bin_edges = np.histogram(data, num_bins, density=True)
     central_values = [(bin_edges[i] + bin_edges[i+1])/2 for i in range(len(bin_edges)-1)]
 
