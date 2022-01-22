@@ -4,8 +4,8 @@ import scipy.special as sc
 
 class ARGUS:
     """
-    Alpha distribution
-    http://bayanbox.ir/view/5343019340232060584/Norman-L.-Johnson-Samuel-Kotz-N.-Balakrishnan-BookFi.org.pdf          
+    Argus distribution
+    https://en.wikipedia.org/wiki/ARGUS_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
