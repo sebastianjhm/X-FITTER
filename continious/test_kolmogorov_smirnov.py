@@ -74,6 +74,7 @@ def test_kolmogorov_smirnov(data, distribution_class):
     
 if __name__ == "__main__":
     from distributions.alpha import ALPHA
+    from distributions.argus import ARGUS
     from distributions.beta import BETA
     from distributions.burr import BURR
     from distributions.burr_4p import BURR_4P
@@ -150,7 +151,7 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T_STUDENT, GENERALIZED_GAMMA_4P]
-    _my_distributions = [ALPHA]
+    _my_distributions = [ALPHA, ARGUS]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
