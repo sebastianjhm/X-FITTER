@@ -9,8 +9,9 @@ class BERNOULLI:
                 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         if ( x < 0 ):
             result = 0
@@ -23,6 +24,7 @@ class BERNOULLI:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         result = (self.p**x)*(1-self.p)**(1-x)
         return result
@@ -48,7 +50,7 @@ class BERNOULLI:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

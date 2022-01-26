@@ -16,13 +16,15 @@ class RAYLEIGH:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         return 1 - math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return ((x - self.gamma)/(self.sigma**2)) * math.exp(-0.5 * ((x - self.gamma)/self.sigma) ** 2)
 
@@ -49,7 +51,7 @@ class RAYLEIGH:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

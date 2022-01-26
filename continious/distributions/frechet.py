@@ -17,8 +17,9 @@ class FRECHET:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # return scipy.stats.invweibull.cdf(40.89022608, self.alpha, loc = self.m, scale = self.s)
         return math.exp(-((x-self.m)/self.s)**(-self.alpha))
@@ -26,6 +27,7 @@ class FRECHET:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # print(scipy.stats.invweibull.pdf(40.89022608, self.alpha, loc = self.m, scale = self.s))
         return (self.alpha/self.s) * (((x-self.m)/self.s)**(-1-self.alpha)) * math.exp(-((x-self.m)/self.s)**(-self.alpha))
@@ -52,7 +54,7 @@ class FRECHET:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

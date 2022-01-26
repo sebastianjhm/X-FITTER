@@ -13,8 +13,9 @@ class BINOMIAL:
                 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         result = scipy.stats.binom.cdf(x, self.n, self.p)
         return result
@@ -23,6 +24,7 @@ class BINOMIAL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         # result = scipy.stats.binom.pmf(x, self.n, self.p)
         result = sc.comb(self.n, x) * (self.p**x) * ((1-self.p)**(self.n-x))
@@ -51,7 +53,7 @@ class BINOMIAL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

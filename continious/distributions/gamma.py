@@ -5,7 +5,8 @@ import scipy.stats
 class GAMMA:
     """
     Gamma distribution
-    https://www.vosesoftware.com/riskwiki/Gammadistribution.php        
+    https://en.wikipedia.org/wiki/Gamma_distribution
+    Compendium of Common Probability Distributions (pag.39) ... Michael P. McLaughlin    
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -14,8 +15,9 @@ class GAMMA:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         ## Method 1: Integrate PDF function
         # result, error = scipy.integrate.quad(self.pdf, 0, x)
@@ -24,14 +26,13 @@ class GAMMA:
         ## Method 2: Scipy Gamma Distribution class
         # result = scipy.stats.gamma.cdf(x, a=self.alpha, scale=self.beta)
         # print(result)
-        
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.alpha, x/self.beta)/math.gamma(self.alpha)
+        result = sc.gammainc(self.alpha, x/self.beta)
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return ((self.beta ** -self.alpha) * (x**(self.alpha-1)) * math.e ** (-(x / self.beta))) / math.gamma(self.alpha)
     
@@ -57,7 +58,7 @@ class GAMMA:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

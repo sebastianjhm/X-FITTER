@@ -3,8 +3,7 @@ import scipy.special as sc
 
 class ERLANG_3P:
     """
-    Erlang distribution
-    https://www.vosesoftware.com/riskwiki/Erlangdistribution.php        
+    Erlang distribution  
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -14,16 +13,17 @@ class ERLANG_3P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.m, (x-self.loc)/self.beta)/math.gamma(self.m)
+        result = sc.gammainc(self.m, (x-self.loc)/self.beta)
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         result = ((self.beta ** -self.m) * ((x-self.loc)**(self.m-1)) * math.e ** (-((x-self.loc)/self.beta))) / math.factorial(self.m-1)
         return result
@@ -51,7 +51,7 @@ class ERLANG_3P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

@@ -1,13 +1,12 @@
-import math
 import numpy as np
 from scipy.optimize import least_squares
 import scipy.special as sc
-import scipy.stats
+
 
 class PERT:
     """
     Pert distribution
-    https://www.vosesoftware.com/riskwiki/PERTdistribution.php       
+    https://en.wikipedia.org/wiki/PERT_distribution    
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -18,7 +17,8 @@ class PERT:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         α1 = (4*self.mode + self.max - 5*self.min) / (self.max - self.min)
         α2 = (5*self.max - self.min - 4*self.mode) / (self.max - self.min)
@@ -32,6 +32,7 @@ class PERT:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         α1 = (4*self.mode + self.max - 5*self.min) / (self.max - self.min)
         α2 = (5*self.max - self.min - 4*self.mode) / (self.max - self.min)
@@ -61,7 +62,7 @@ class PERT:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

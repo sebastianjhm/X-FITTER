@@ -6,7 +6,7 @@ import numpy as np
 class KUMARASWAMY:
     """
     Kumaraswami distribution
-    https://www.vosesoftware.com/riskwiki/Kumaraswamy4distribution.php          
+    https://en.wikipedia.org/wiki/Kumaraswamy_distribution        
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -18,7 +18,8 @@ class KUMARASWAMY:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
         result = 1 - ( 1 - z(x)**self.alpha_) ** self.beta_
@@ -27,6 +28,7 @@ class KUMARASWAMY:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
         return (self.alpha_ * self.beta_) * (z(x)**(self.alpha_-1)) * ((1-z(x)**self.alpha_)**(self.beta_-1))/ (self.max_ - self.min_)
@@ -56,7 +58,7 @@ class KUMARASWAMY:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

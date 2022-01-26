@@ -5,8 +5,6 @@ from scipy.optimize import fsolve
 class FATIGUE_LIFE:
     """
     Fatigue life distribution
-    https://www.vosesoftware.com/riskwiki/FatigueLifedistribution.php
-    ** Variance: scale**2 * gamma**2 * (1 + 5 * gamma**2/4)
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -17,14 +15,16 @@ class FATIGUE_LIFE:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         return scipy.stats.fatiguelife.cdf(x, self.gamma, loc=self.loc, scale=self.scale)
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return scipy.stats.fatiguelife.pdf(x, self.gamma, loc=self.loc, scale=self.scale)
     
@@ -50,7 +50,7 @@ class FATIGUE_LIFE:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

@@ -3,7 +3,7 @@ import math
 class HYPERBOLIC_SECANT:
     """
     Hyperbolic Secant distribution
-    https://www.vosesoftware.com/riskwiki/Hyperbolic-Secantdistribution.php         
+    https://en.wikipedia.org/wiki/Hyperbolic_secant_distribution   
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -12,8 +12,9 @@ class HYPERBOLIC_SECANT:
 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: math.pi * (x - self.miu) / (2 * self.sigma)
         return (2/math.pi) * math.atan(math.exp((z(x))))
@@ -21,6 +22,7 @@ class HYPERBOLIC_SECANT:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: math.pi * (x - self.miu) / (2 * self.sigma)
         return (1/math.cosh(z(x)))/ (2 * self.sigma)

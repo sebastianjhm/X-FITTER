@@ -92,7 +92,6 @@ def ad_distribution(data, distribution, parameters):
     
     I = scipy.integrate.quad(G, inf, sup, limit=100, full_output=True)
     return I[0]*len(data)
-    # https://www.vosesoftware.com/riskwiki/AndersonDarlingADStatistic.php
     
 if __name__ == "__main__":
     from data_measurements import get_measurements

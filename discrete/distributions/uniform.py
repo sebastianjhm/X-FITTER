@@ -10,14 +10,16 @@ class UNIFORM:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         return (x - self.min_ + 1)/(self.max_ - self.min_ + 1)
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         return 1/(self.max_ - self.min_ + 1)
     
@@ -44,7 +46,7 @@ class UNIFORM:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

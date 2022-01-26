@@ -15,16 +15,17 @@ class NAKAGAMI:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.m, (self.m/self.omega) * x**2)/math.gamma(self.m)
+        result = sc.gammainc(self.m, (self.m/self.omega) * x**2)
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return (2 * self.m**self.m)/(math.gamma(self.m) * self.omega**self.m) * (x**(2*self.m-1) * math.exp(-(self.m/self.omega) * x**2))
     
@@ -50,7 +51,7 @@ class NAKAGAMI:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

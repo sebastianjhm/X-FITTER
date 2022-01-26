@@ -16,13 +16,15 @@ class POWER_FUNCTION:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         return ((x - self.a)/(self.b - self.a)) ** self.alpha
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return self.alpha * ((x - self.a) ** (self.alpha - 1))/((self.b - self.a) ** self.alpha)
 
@@ -50,7 +52,7 @@ class POWER_FUNCTION:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

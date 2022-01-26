@@ -14,18 +14,19 @@ class CHI_SQUARE:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # result, error = scipy.integrate.quad(self.pdf, 0, x)
         # result = scipy.stats.chi2.cdf(x, self.df)
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.df/2, x/2)/math.gamma(self.df/2)
+        result = sc.gammainc(self.df/2, x/2)
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # result = (1/(2**(self.df/2) * math.gamma(self.df/2))) * (x**((self.df/2)-1)) * (math.e ** (-x/2))
         # print(result)
@@ -54,7 +55,7 @@ class CHI_SQUARE:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

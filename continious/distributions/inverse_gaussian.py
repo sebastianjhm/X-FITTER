@@ -13,8 +13,9 @@ class INVERSE_GAUSSIAN:
 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         result = scipy.stats.norm.cdf(math.sqrt(self.lambda_/x)*((x/self.miu)-1)) + math.exp(2*self.lambda_/self.miu)*scipy.stats.norm.cdf(-math.sqrt(self.lambda_/x)*((x/self.miu)+1))
         return result
@@ -22,6 +23,7 @@ class INVERSE_GAUSSIAN:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         result = math.sqrt(self.lambda_/(2*math.pi*x**3)) * math.exp(-(self.lambda_*(x-self.miu)**2)/(2*self.miu**2*x))
         return result

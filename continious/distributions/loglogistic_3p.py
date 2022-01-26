@@ -16,8 +16,9 @@ class LOGLOGISTIC_3P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         result = (x-self.loc)**self.beta/(self.alpha**self.beta + (x-self.loc)**self.beta)
         return result
@@ -25,6 +26,7 @@ class LOGLOGISTIC_3P:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         result = self.beta/self.alpha * ((x-self.loc)/self.alpha)**(self.beta-1) / ((1+((x-self.loc)/self.alpha)**self.beta)**2)
         return result
@@ -51,7 +53,7 @@ class LOGLOGISTIC_3P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

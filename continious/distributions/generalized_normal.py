@@ -7,7 +7,6 @@ class GENERALIZED_NORMAL:
     """
     Generalized normal distribution
     https://en.wikipedia.org/wiki/Generalized_normal_distribution
-    https://www.vosesoftware.com/riskwiki/Errordistribution.php
     This distribution is known whit the following names:
     * Error Distribution
     * Exponential Power Distribution
@@ -24,8 +23,9 @@ class GENERALIZED_NORMAL:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # print(scipy.stats.gennorm.cdf(x , self.beta, loc=self.miu, scale=self.alpha))
         return 0.5 + (np.sign(x-self.miu)/2) * sc.gammainc(1/self.beta, abs((x - self.miu)/self.alpha) ** self.beta)
@@ -33,6 +33,7 @@ class GENERALIZED_NORMAL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # print(scipy.stats.gennorm.pdf(x , self.beta, loc=self.miu, scale=self.alpha))
         return (self.beta/(2*self.alpha*math.gamma(1/self.beta)) * math.exp(-(abs(x -self.miu)/self.alpha)**self.beta))
@@ -59,7 +60,7 @@ class GENERALIZED_NORMAL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

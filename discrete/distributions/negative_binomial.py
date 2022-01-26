@@ -13,8 +13,9 @@ class NEGATIVE_BINOMIAL:
                 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         # result = scipy.stats.nbinom.cdf(x, self.r, self.p)
         result = scipy.stats.beta.cdf(self.p, self.r, x+1)
@@ -24,6 +25,7 @@ class NEGATIVE_BINOMIAL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         # result = scipy.stats.nbinom.pmf(x, self.r, self.p)
         result = sc.comb(self.r+x-1, x)*(self.p**self.r)*((1-self.p)**x)
@@ -52,7 +54,7 @@ class NEGATIVE_BINOMIAL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

@@ -16,7 +16,8 @@ class ARGUS:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: (x - self.loc)/self.scale
         # Ψ = lambda t: scipy.stats.norm.cdf(t) - t * scipy.stats.norm.pdf(t) - 0.5
@@ -28,6 +29,7 @@ class ARGUS:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: (x - self.loc)/self.scale
         Ψ = lambda t: scipy.stats.norm.cdf(t) - t * scipy.stats.norm.pdf(t) - 0.5
@@ -59,7 +61,7 @@ class ARGUS:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

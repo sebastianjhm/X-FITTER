@@ -17,7 +17,8 @@ class JOHNSON_SU:
     def cdf(self, x):      
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: (x-self.xi_)/self.lambda_
         result = scipy.stats.norm.cdf(self.gamma_ + self.delta_*math.asinh(z(x)))
@@ -27,6 +28,7 @@ class JOHNSON_SU:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: (x - self.xi_) / self.lambda_
         return (self.delta_ / (self.lambda_ * math.sqrt(2 * math.pi) * math.sqrt(z(x)**2 + 1))) * math.e ** (-(1/2) * (self.gamma_ + self.delta_ * math.asinh(z(x)))**2)

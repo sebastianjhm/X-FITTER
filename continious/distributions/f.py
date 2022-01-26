@@ -14,8 +14,9 @@ class F:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         ## print(scipy.stats.f.cdf(x, self.df1, self.df2))
         return sc.betainc(self.df1/2, self.df2/2, x * self.df1 / (self.df1 * x + self.df2))
@@ -23,6 +24,7 @@ class F:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         ## print(scipy.stats.f.pdf(x, self.df1, self.df2))
         return (1 / sc.beta(self.df1 / 2, self.df2 / 2)) * ((self.df1 / self.df2) ** (self.df1 / 2)) * (x ** (self.df1 / 2 - 1)) * ((1 + x * self.df1 / self.df2) ** (-1 * (self.df1 + self.df2) / 2))
@@ -49,7 +51,7 @@ class F:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

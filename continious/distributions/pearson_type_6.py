@@ -7,8 +7,8 @@ from scipy.special import beta
 class PEARSON_TYPE_6:
     """
     PEARSON TYPE 6 distribution
-    https://www.vosesoftware.com/riskwiki/PearsonType6distribution.php    
     pearson_type_6(α1, α2, 1) = prime_beta(α1, α2)
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.betaprime.html  
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -19,7 +19,8 @@ class PEARSON_TYPE_6:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # result = scipy.stats.betaprime.cdf(x, self.alpha1, self.alpha2, scale=self.beta)
         result = scipy.stats.beta.cdf(x/(x+self.beta),self.alpha1, self.alpha2)
@@ -28,6 +29,7 @@ class PEARSON_TYPE_6:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # result = scipy.stats.betaprime.pdf(x, self.alpha1, self.alpha2, scale=self.beta)
         result = ((x/self.beta)**(self.alpha1-1))/(self.beta * beta(self.alpha1,self.alpha2) * (1+x/self.beta)**(self.alpha1+self.alpha2))
@@ -58,7 +60,7 @@ class PEARSON_TYPE_6:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

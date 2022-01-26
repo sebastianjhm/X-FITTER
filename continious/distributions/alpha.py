@@ -15,7 +15,8 @@ class ALPHA:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # print(scipy.stats.alpha.cdf(x, self.alpha, loc=self.loc, scale=self.scale))
         z = lambda x: (x - self.loc)/self.scale
@@ -25,6 +26,7 @@ class ALPHA:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # print(scipy.stats.alpha.pdf(x, self.alpha, loc=self.loc, scale=self.scale))
         z = lambda x: (x - self.loc)/self.scale
@@ -55,7 +57,7 @@ class ALPHA:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

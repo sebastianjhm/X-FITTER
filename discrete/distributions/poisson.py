@@ -12,8 +12,9 @@ class POISSON:
                 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         result = scipy.stats.poisson.cdf(x, self.lambda_)
         return result
@@ -22,6 +23,7 @@ class POISSON:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         result = (self.lambda_**x)*math.exp(-self.lambda_)/math.factorial(x)
         return result
@@ -47,7 +49,7 @@ class POISSON:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

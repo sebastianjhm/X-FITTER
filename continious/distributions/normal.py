@@ -13,8 +13,9 @@ class NORMAL:
 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
         result = scipy.stats.norm.cdf((x-self.miu)/self.sigma)
@@ -23,6 +24,7 @@ class NORMAL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return (1/(self.sigma * math.sqrt(2 * math.pi))) * math.e ** (-(((x - self.miu)**2) / (2*self.sigma**2)))
     

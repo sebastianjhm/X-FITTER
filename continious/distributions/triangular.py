@@ -14,8 +14,9 @@ class TRIANGULAR:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         if x <= self.a:
             return 0
@@ -29,6 +30,7 @@ class TRIANGULAR:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         if self.a <= x and x < self.c:
             return 2*(x - self.a)/((self.b - self.a)*(self.c - self.a))
@@ -61,7 +63,7 @@ class TRIANGULAR:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

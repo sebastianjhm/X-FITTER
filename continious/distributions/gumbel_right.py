@@ -6,7 +6,7 @@ class GUMBEL_RIGHT:
     Gumbel Right Distribution
     Gumbel Max Distribution
     Extreme Value Maximum Distribution
-    https://www.vosesoftware.com/riskwiki/ExtremeValueMindistribution.php
+    Compendium of Common Probability Distributions (pag.43) ... Michael P. McLaughlin  
     https://en.wikipedia.org/wiki/Gumbel_distribution
     """
     def __init__(self, measurements):
@@ -17,8 +17,9 @@ class GUMBEL_RIGHT:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: (x - self.miu) / self.sigma
         return math.exp(-math.exp(-z(x)))
@@ -26,6 +27,7 @@ class GUMBEL_RIGHT:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: (x - self.miu) / self.sigma
         return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
@@ -51,7 +53,7 @@ class GUMBEL_RIGHT:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

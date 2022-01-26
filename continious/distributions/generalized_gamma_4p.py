@@ -19,18 +19,18 @@ class GENERALIZED_GAMMA_4P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # result = scipy.stats.gamma.cdf(((x-self.loc)/self.a)**self.p, a=self.d/self.p, scale=1)
-        
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.d/self.p, ((x-self.loc)/self.a)**self.p)/math.gamma(self.d/self.p)
+        result = sc.gammainc(self.d/self.p, ((x-self.loc)/self.a)**self.p)
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return (self.p/(self.a**self.d)) * ((x-self.loc) ** (self.d - 1)) * math.exp(-((x-self.loc)/self.a)**self.p) / math.gamma(self.d/self.p)
     
@@ -57,7 +57,7 @@ class GENERALIZED_GAMMA_4P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

@@ -1,12 +1,14 @@
 import math
-from scipy.optimize import fsolve
+from scipy.optimize import fsolve, least_squares
+import numpy as np
 import scipy.special as sc
 import scipy.stats
 
 class BETA:
     """
     Beta distribution
-    https://www.vosesoftware.com/riskwiki/Beta4distribution.php          
+    https://en.wikipedia.org/wiki/Beta_distribution
+    Compendium of Common Probability Distributions (pag.23) ... Michael P. McLaughlin
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -18,7 +20,8 @@ class BETA:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
         # print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
@@ -30,6 +33,7 @@ class BETA:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: (x - self.min_) / (self.max_ - self.min_)
         return ( 1 / (self.max_ - self.min_)) * ( math.gamma(self.alpha_ + self.beta_) / (math.gamma(self.alpha_) * math.gamma(self.beta_))) * (z(x)**(self.alpha_-1)) * ((1-z(x))**(self.beta_-1))
@@ -59,7 +63,7 @@ class BETA:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------
@@ -84,8 +88,11 @@ class BETA:
             
             return (eq1, eq2, eq3, eq4)
         
-        solution =  fsolve(equations, (1, 1, 1, 1), measurements)
-        parameters = {"alpha": solution[0], "beta": solution[1], "min": solution[2], "max": solution[3]}
+        bnds = ((0, 0, -np.inf, measurements.mean), (np.inf, np.inf, measurements.mean, np.inf))
+        x0 = (1, 1, measurements.min, measurements.max)
+        args = ([measurements])
+        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        parameters = {"alpha": solution.x[0], "beta": solution.x[1], "min": solution.x[2], "max": solution.x[3]}
         
         v1 = parameters["alpha"] > 0
         v2 = parameters["beta"] > 0
@@ -111,7 +118,9 @@ if __name__ == '__main__':
     measurements = MEASUREMENTS(data)
     distribution = BETA(measurements)
     
+    print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     
     
     
@@ -150,8 +159,7 @@ if __name__ == '__main__':
     print("Scipy time get parameters: ",time.time() - ti)
     
     print("=====")
-    from scipy.optimize import least_squares
-    import numpy as np
+    
     ti = time.time()
     bnds = ((0, 0, -np.inf, measurements.mean), (np.inf, np.inf, measurements.mean, np.inf))
     x0 = (1, 1, measurements.min, measurements.max)

@@ -6,7 +6,7 @@ from scipy.optimize import fsolve
 class GENERALIZED_LOGISTIC:
     """
     Generalized Logistic Distribution
-    https://www.vosesoftware.com/riskwiki/Generalisedlogisticdistribution.php
+    Compendium of Common Probability Distributions (pag.41) ... Michael P. McLaughlin  
     https://docs.scipy.org/doc/scipy/reference/tutorial/stats/continuous_genlogistic.html
     V = math.pi**2/6 + ψ'(gamma)
     """
@@ -19,8 +19,9 @@ class GENERALIZED_LOGISTIC:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # return scipy.stats.genlogistic.cdf(x, self.gamma, loc=self.alpha, scale=self.beta)
         return 1/((1 + math.exp(-(x-self.alpha)/self.beta))**self.gamma)
@@ -28,6 +29,7 @@ class GENERALIZED_LOGISTIC:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # return scipy.stats.genlogistic.pdf(x, self.gamma, loc=self.alpha, scale=self.beta)
         return  (self.gamma/self.beta) * math.exp((-x+self.alpha)/self.beta) * ((1 + math.exp((-x+self.alpha)/self.beta))**(-self.gamma-1))
@@ -54,7 +56,7 @@ class GENERALIZED_LOGISTIC:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

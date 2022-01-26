@@ -17,8 +17,9 @@ class HYPERGEOMETRIC:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         result = scipy.stats.hypergeom.cdf(x, self.N, self.n, self.K)
         return result
@@ -27,6 +28,7 @@ class HYPERGEOMETRIC:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         # result = scipy.stats.hypergeom.pmf(x, self.N, self.n, self.K)
         result = sc.comb(self.K, x) * sc.comb(self.N-self.K, self.n-x) / sc.comb(self.N, self.n)
@@ -55,12 +57,12 @@ class HYPERGEOMETRIC:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------
         parameters : dict
-            {"alpha": *, "beta": *, "gamma": *}
+            {"N": *, "K": *, "n": *}
         """
         def equations(sol_i, measurements):
             ## Variables declaration

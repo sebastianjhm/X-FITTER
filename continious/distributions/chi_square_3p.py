@@ -1,6 +1,7 @@
 import math
 from scipy.optimize import fsolve
 import scipy.special as sc
+import scipy.stats
 
 class CHI_SQUARE_3P:
     """
@@ -15,18 +16,19 @@ class CHI_SQUARE_3P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # result, error = scipy.integrate.quad(self.pdf, 0, x)
         # result = scipy.stats.chi2.cdf(x, self.df, self.loc, self.scale)
-        lower_inc_gamma = lambda a, x: sc.gammainc(a, x) * math.gamma(a)
-        result = lower_inc_gamma(self.df/2, (x-self.loc)/(2*self.scale))/math.gamma(self.df/2)
+        result = sc.gammainc(self.df/2, (x-self.loc)/(2*self.scale))
         return result
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # result = scipy.stats.chi2.pdf(x, self.df, loc=self.loc, scale=self.scale)
         z = lambda x: (x-self.loc)/self.scale
@@ -55,7 +57,7 @@ class CHI_SQUARE_3P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------
@@ -114,6 +116,3 @@ if __name__ == '__main__':
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
     print(distribution.pdf(measurements.mean))
-    
-    import scipy.stats
-    print(scipy.stats.chi2.fit(measurements.data))

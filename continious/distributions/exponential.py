@@ -19,6 +19,7 @@ class EXPONENTIAL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return self.lambda_ * math.e ** (-self.lambda_ * x)
     
@@ -45,7 +46,7 @@ class EXPONENTIAL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

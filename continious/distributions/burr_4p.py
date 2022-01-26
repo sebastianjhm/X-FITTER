@@ -21,14 +21,16 @@ class BURR_4P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         return 1 - ((1 + ((x-self.loc)/self.A) ** (self.B )) ** (-self.C))
       
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return ((self.B * self.C)/self.A) * (((x-self.loc)/self.A) ** (self.B - 1)) * ((1 + ((x-self.loc)/self.A) ** (self.B )) ** (-self.C - 1))
         
@@ -55,7 +57,7 @@ class BURR_4P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

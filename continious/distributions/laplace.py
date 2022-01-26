@@ -13,14 +13,16 @@ class LAPLACE:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         return 0.5 + 0.5*np.sign(x-self.miu)*(1-math.exp(-abs(x-self.miu)/self.b))
     
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return (1/(2*self.b)) * math.exp(-abs(x-self.miu)/self.b)
     
@@ -45,7 +47,7 @@ class LAPLACE:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

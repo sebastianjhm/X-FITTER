@@ -4,7 +4,7 @@ import scipy.stats
 class PARETO_FIRST_KIND:
     """
     Pareto first kind distribution distribution
-    https://www.vosesoftware.com/riskwiki/Pareto(firstkind)distribution.php     
+    Compendium of Common Probability Distributions (pag.61) ... Michael P. McLaughlin  
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -13,8 +13,9 @@ class PARETO_FIRST_KIND:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         # print(scipy.stats.pareto.cdf(x, self.alpha, scale=self.xm))
         return 1 - (self.xm/x) ** self.alpha
@@ -22,6 +23,7 @@ class PARETO_FIRST_KIND:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # print(scipy.stats.pareto.pdf(x, self.alpha, scale=self.xm))
         return (self.alpha * self.xm ** self.alpha) / (x ** (self.alpha + 1))
@@ -48,7 +50,7 @@ class PARETO_FIRST_KIND:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

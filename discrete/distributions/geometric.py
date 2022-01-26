@@ -9,8 +9,9 @@ class GEOMETRIC:
                 
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Probability density function
+        Calculated using the definition of the function
+        Alternative: scipy cdf method
         """
         result = 1 - (1 - self.p)**(x+1)
         return result
@@ -19,6 +20,7 @@ class GEOMETRIC:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using the definition of the function
         """
         result = self.p * (1-self.p) ** (x-1)
         return result
@@ -44,7 +46,7 @@ class GEOMETRIC:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

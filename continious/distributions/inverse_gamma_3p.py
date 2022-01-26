@@ -8,8 +8,7 @@ class INVERSE_GAMMA_3P:
     """
     Inverse Gamma distribution
     Also known Pearson Type 5 distribution
-    https://en.wikipedia.org/wiki/Inverse-gamma_distribution    
-    https://www.vosesoftware.com/riskwiki/PearsonType5distribution.php
+    https://en.wikipedia.org/wiki/Inverse-gamma_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -19,8 +18,9 @@ class INVERSE_GAMMA_3P:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         ## Method 1: Integrate PDF function
         # result, error = scipy.integrate.quad(self.pdf, 0, x)
@@ -37,6 +37,7 @@ class INVERSE_GAMMA_3P:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return ((self.beta ** self.alpha) * ((x-self.loc)**(-self.alpha-1)) * math.e ** (-(self.beta/(x-self.loc)))) / math.gamma(self.alpha)
     
@@ -62,7 +63,7 @@ class INVERSE_GAMMA_3P:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

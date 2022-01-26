@@ -23,6 +23,7 @@ class WEIBULL:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         return (self.alpha / self.beta) * ((x / self.beta) ** (self.alpha - 1)) * math.e ** (-(x / self.beta) ** self.alpha)
     
@@ -48,7 +49,7 @@ class WEIBULL:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

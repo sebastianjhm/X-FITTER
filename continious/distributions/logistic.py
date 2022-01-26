@@ -14,8 +14,9 @@ class LOGISTIC:
         
     def cdf(self, x):
         """
-        Cumulative distribution function.
-        Calculated with quadrature integration method of scipy.
+        Cumulative distribution function
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         z = lambda x: math.exp(-(x-self.miu)/self.sigma)
         result = 1/(1+z(x))
@@ -24,6 +25,7 @@ class LOGISTIC:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         z = lambda x: math.exp(-(x-self.miu)/self.sigma)
         result = z(x)/(self.sigma*(1+z(x))**2)
@@ -50,7 +52,7 @@ class LOGISTIC:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------

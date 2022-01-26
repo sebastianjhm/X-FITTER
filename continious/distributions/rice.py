@@ -17,7 +17,8 @@ class RICE:
     def cdf(self, x):
         """
         Cumulative distribution function
-        Calculated with quadrature integration method of scipy
+        Calculated using the definition of the function
+        Alternative: quadrature integration method
         """
         def Q(M, a, b):
             """
@@ -42,6 +43,7 @@ class RICE:
     def pdf(self, x):
         """
         Probability density function
+        Calculated using definition of the function in the documentation
         """
         # result = scipy.stats.rice.pdf(x, self.v/self.sigma, scale = self.sigma)
         result = (x/(self.sigma**2)) * math.exp(-(x**2+self.v**2)/(2*self.sigma**2)) * sc.i0(x * self.v / (self.sigma**2))
@@ -71,7 +73,7 @@ class RICE:
         Parameters
         ----------
         measurements : dict
-            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "data": *}
+            {"mean": *, "variance": *, "skewness": *, "kurtosis": *, "median": *, "mode": *}
 
         Returns
         -------
