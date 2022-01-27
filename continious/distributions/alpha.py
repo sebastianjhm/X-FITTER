@@ -19,7 +19,7 @@ class ALPHA:
         Alternative: quadrature integration method
         """
         # print(scipy.stats.alpha.cdf(x, self.alpha, loc=self.loc, scale=self.scale))
-        z = lambda x: (x - self.loc)/self.scale
+        z = lambda t: (t - self.loc) / self.scale
         result = scipy.stats.norm.cdf(self.alpha - 1/z(x))/scipy.stats.norm.cdf(self.alpha)
         return result
     
@@ -29,7 +29,7 @@ class ALPHA:
         Calculated using definition of the function in the documentation
         """
         # print(scipy.stats.alpha.pdf(x, self.alpha, loc=self.loc, scale=self.scale))
-        z = lambda x: (x - self.loc)/self.scale
+        z = lambda t: (t - self.loc) / self.scale
         result = (1/(self.scale*z(x)*z(x)*scipy.stats.norm.cdf(self.alpha)*math.sqrt(2*math.pi))) * math.exp(-0.5*(self.alpha - 1/z(x))**2)
         return result
 

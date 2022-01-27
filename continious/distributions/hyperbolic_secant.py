@@ -16,7 +16,7 @@ class HYPERBOLIC_SECANT:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: math.pi * (x - self.miu) / (2 * self.sigma)
+        z = lambda t: math.pi * (t - self.miu) / (2 * self.sigma)
         return (2/math.pi) * math.atan(math.exp((z(x))))
     
     def pdf(self, x):
@@ -24,7 +24,7 @@ class HYPERBOLIC_SECANT:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: math.pi * (x - self.miu) / (2 * self.sigma)
+        z = lambda t: math.pi * (t - self.miu) / (2 * self.sigma)
         return (1/math.cosh(z(x)))/ (2 * self.sigma)
     
     def get_num_parameters(self):

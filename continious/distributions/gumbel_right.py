@@ -21,7 +21,7 @@ class GUMBEL_RIGHT:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: (x - self.miu) / self.sigma
+        z = lambda t: (t - self.miu) / self.sigma
         return math.exp(-math.exp(-z(x)))
     
     def pdf(self, x):
@@ -29,7 +29,7 @@ class GUMBEL_RIGHT:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.miu) / self.sigma
+        z = lambda t: (t - self.miu) / self.sigma
         return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
     
     def get_num_parameters(self):

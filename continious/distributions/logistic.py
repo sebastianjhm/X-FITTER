@@ -18,7 +18,7 @@ class LOGISTIC:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: math.exp(-(x-self.miu)/self.sigma)
+        z = lambda t: math.exp(-(t - self.miu) / self.sigma)
         result = 1/(1+z(x))
         return result
     
@@ -27,7 +27,7 @@ class LOGISTIC:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: math.exp(-(x-self.miu)/self.sigma)
+        z = lambda t: math.exp(-(t - self.miu) / self.sigma)
         result = z(x)/(self.sigma*(1+z(x))**2)
         return result
     

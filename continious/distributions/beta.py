@@ -23,7 +23,7 @@ class BETA:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: (x - self.min_) / (self.max_ - self.min_)
+        z = lambda t: (t - self.min_) / (self.max_ - self.min_)
         # print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
         # print(result, error = scipy.integrate.quad(self.pdf, self.min_, x))
         result = sc.betainc(self.alpha_, self.beta_, z(x))
@@ -35,7 +35,7 @@ class BETA:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.min_) / (self.max_ - self.min_)
+        z = lambda t: (t - self.min_) / (self.max_ - self.min_)
         return ( 1 / (self.max_ - self.min_)) * ( math.gamma(self.alpha_ + self.beta_) / (math.gamma(self.alpha_) * math.gamma(self.beta_))) * (z(x)**(self.alpha_-1)) * ((1-z(x))**(self.beta_-1))
 
     def get_num_parameters(self):

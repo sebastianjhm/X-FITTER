@@ -21,7 +21,7 @@ class JOHNSON_SB:
         Alternative: quadrature integration method
         """
         # result, error = scipy.integrate.quad(self.pdf, self.xi_, x)
-        z = lambda x: (x-self.xi_)/self.lambda_
+        z = lambda t: (t - self.xi_) / self.lambda_
         result = scipy.stats.norm.cdf(self.gamma_ + self.delta_*math.log(z(x)/(1-z(x))))
         return result
     
@@ -30,7 +30,7 @@ class JOHNSON_SB:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.xi_) / self.lambda_
+        z = lambda t: (t - self.xi_) / self.lambda_
         return (self.delta_ / (self.lambda_ * math.sqrt(2 * math.pi) * z(x) * (1-z(x)))) * math.e ** (-(1/2) * (self.gamma_ + self.delta_ * math.log(z(x) / (1-z(x))))**2)
     
     def get_num_parameters(self):

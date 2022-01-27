@@ -22,7 +22,7 @@ class PERT:
         """
         α1 = (4*self.mode + self.max - 5*self.min) / (self.max - self.min)
         α2 = (5*self.max - self.min - 4*self.mode) / (self.max - self.min)
-        z = lambda x: (x - self.min) / (self.max - self.min)
+        z = lambda t: (t - self.min) / (self.max - self.min)
         
         # result = scipy.stats.beta.cdf(z(x), α1, α2)
         result = sc.betainc(α1, α2, z(x))

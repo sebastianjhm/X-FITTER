@@ -21,7 +21,7 @@ class KUMARASWAMY:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: (x - self.min_) / (self.max_ - self.min_)
+        z = lambda t: (t - self.min_) / (self.max_ - self.min_)
         result = 1 - ( 1 - z(x)**self.alpha_) ** self.beta_
         return result
     
@@ -30,7 +30,7 @@ class KUMARASWAMY:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.min_) / (self.max_ - self.min_)
+        z = lambda t: (t - self.min_) / (self.max_ - self.min_)
         return (self.alpha_ * self.beta_) * (z(x)**(self.alpha_-1)) * ((1-z(x)**self.alpha_)**(self.beta_-1))/ (self.max_ - self.min_)
 
     def get_num_parameters(self):

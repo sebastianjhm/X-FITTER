@@ -31,7 +31,7 @@ class CHI_SQUARE_3P:
         Calculated using definition of the function in the documentation
         """
         # result = scipy.stats.chi2.pdf(x, self.df, loc=self.loc, scale=self.scale)
-        z = lambda x: (x-self.loc)/self.scale
+        z = lambda t: (t-self.loc)/self.scale
         result = (1/self.scale)*(1/(2**(self.df/2) * math.gamma(self.df/2))) * (z(x)**((self.df/2)-1)) * (math.e ** (-z(x)/2))
         return result
     

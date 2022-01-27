@@ -19,7 +19,7 @@ class GENERALIZED_EXTREME_VALUE:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: (x - self.miu) / self.sigma
+        z = lambda t: (t - self.miu) / self.sigma
         if self.ξ == 0:
             return math.exp(-math.exp(-z(x)))
         else:
@@ -31,7 +31,7 @@ class GENERALIZED_EXTREME_VALUE:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.miu) / self.sigma
+        z = lambda t: (t - self.miu) / self.sigma
         if self.ξ == 0:
             return (1/self.sigma) * math.exp(-z(x)-math.exp(-z(x)))
         else:

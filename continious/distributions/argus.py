@@ -19,7 +19,7 @@ class ARGUS:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        z = lambda x: (x - self.loc)/self.scale
+        z = lambda t: (t - self.loc) / self.scale
         # Ψ = lambda t: scipy.stats.norm.cdf(t) - t * scipy.stats.norm.pdf(t) - 0.5
         # print(scipy.stats.argus.cdf(x, self.chi, loc=self.loc, scale=self.scale))
         # print(1 - Ψ(self.chi * math.sqrt(1 - z(x) * z(x))) / Ψ(self.chi))
@@ -31,7 +31,7 @@ class ARGUS:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        z = lambda x: (x - self.loc)/self.scale
+        z = lambda t: (t - self.loc) / self.scale
         Ψ = lambda t: scipy.stats.norm.cdf(t) - t * scipy.stats.norm.pdf(t) - 0.5
         # print(scipy.stats.argus.pdf(x, self.chi, loc=self.loc, scale=self.scale))
         result = (1/self.scale) * ((self.chi ** 3) / (math.sqrt(2*math.pi) * Ψ(self.chi))) * z(x) * math.sqrt(1-z(x)*z(x)) * math.exp(-0.5 * self.chi ** 2 * (1-z(x)*z(x)))
