@@ -1,3 +1,4 @@
+from bcrypt import re
 import scipy.stats
 import math
 from scipy.optimize import fsolve
@@ -5,6 +6,8 @@ from scipy.optimize import fsolve
 class FATIGUE_LIFE:
     """
     Fatigue life distribution
+    Also known as Birnbaum–Saunders distribution
+    https://en.wikipedia.org/wiki/Birnbaum%E2%80%93Saunders_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -19,14 +22,20 @@ class FATIGUE_LIFE:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        return scipy.stats.fatiguelife.cdf(x, self.gamma, loc=self.loc, scale=self.scale)
+        #result = scipy.stats.fatiguelife.cdf(x, self.gamma, loc=self.loc, scale=self.scale)
+        z = lambda t: math.sqrt((t - self.loc) / self.scale)
+        result = scipy.stats.norm.cdf((z(x) - 1 / z(x)) / (self.gamma))
+        return result
     
     def pdf(self, x):
         """
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        return scipy.stats.fatiguelife.pdf(x, self.gamma, loc=self.loc, scale=self.scale)
+        #result = scipy.stats.fatiguelife.pdf(x, self.gamma, loc=self.loc, scale=self.scale)
+        z = lambda t: math.sqrt((t - self.loc) / self.scale)
+        result = (z(x) + 1 / z(x)) / (2 * self.gamma * (x - self.loc)) * scipy.stats.norm.pdf((z(x) - 1 / z(x)) / (self.gamma))
+        return result
     
     def get_num_parameters(self):
         """
@@ -99,6 +108,3 @@ if __name__ == '__main__':
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(measurements.mean))
     print(distribution.pdf(measurements.mean))
-    
-    print(scipy.stats.fatiguelife.pdf(20, 0.5, loc=15, scale=10))
-    print(scipy.stats.fatiguelife.ppf(0.55, 0.5, loc=15, scale=10))
