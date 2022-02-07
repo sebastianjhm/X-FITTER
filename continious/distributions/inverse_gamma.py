@@ -2,7 +2,7 @@ import scipy.stats
 import math
 import scipy.special as sc
 import numpy as np
-from scipy.optimize import least_squares
+import scipy.optimize
 
 class INVERSE_GAMMA:
     """
@@ -93,7 +93,7 @@ class INVERSE_GAMMA:
         # bnds = ((0, 0), (np.inf, np.inf))
         # x0 = (5, 1)
         # args = ([measurements])
-        # solution = least_squares(equations, x0, bounds = bnds, args=args)
+        # solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         # parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
         
         scipy_params = scipy.stats.invgamma.fit(measurements.data)
@@ -106,7 +106,7 @@ class INVERSE_GAMMA:
 if __name__ == "__main__":
       
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def getData(direction):
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     bnds = ((0, 0), (np.inf, np.inf))
     x0 = (1.1, 1)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

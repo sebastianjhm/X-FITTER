@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.optimize import least_squares
+import scipy.optimize
 import scipy.special as sc
 
 
@@ -94,7 +94,7 @@ class PERT:
         bnds = ((-np.inf, measurements.mean, measurements.min), (measurements.mean, np.inf, measurements.max))
         x0 = (measurements.min, measurements.max, measurements.mean)
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"min": solution.x[0], "max": solution.x[1], "mode": solution.x[2]}
         
         parameters["min"] = min(measurements.min-1e-3, parameters["min"])
@@ -104,7 +104,7 @@ class PERT:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     bnds = ((-np.inf, measurements.mean, measurements.min), (measurements.mean, np.inf, measurements.max))
     x0 = (measurements.min, measurements.max, measurements.mean)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"min": solution.x[0], "max": solution.x[1], "mode": solution.x[2]}
     print(parameters)
     print("Solve equations time: ", time.time() - ti)

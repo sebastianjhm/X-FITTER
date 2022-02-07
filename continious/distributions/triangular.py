@@ -86,7 +86,7 @@ class TRIANGULAR:
         #     eq3 = parametric_skewness - measurements.skewness
         #     return (eq1, eq2, eq3)
         
-        # solution =  fsolve(equations, (1, 1, 1), measurements)
+        # solution =  scipy.optimize.fsolve(equations, (1, 1, 1), measurements)
         
         ## Second method estimation
         a = measurements.min - 1e-3
@@ -116,7 +116,7 @@ class TRIANGULAR:
         return parameters
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

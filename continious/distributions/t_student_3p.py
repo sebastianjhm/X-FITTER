@@ -1,4 +1,7 @@
 import scipy.stats
+import scipy.special as sc
+import math
+
 
 class T_STUDENT_3P:
     """
@@ -17,16 +20,20 @@ class T_STUDENT_3P:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        # print(scipy.stats.t.cdf(x, self.df, self.loc, self.scale)) 
-        return scipy.stats.t.cdf((x-self.loc)/self.scale, self.df)
+        z = lambda t: (t - self.loc) / self.scale
+        # result = scipy.stats.t.cdf(z(x), self.df)
+        result = sc.betainc(self.df / 2, self.df / 2, (z(x) + math.sqrt(z(x)**2 + self.df)) / (2 * math.sqrt(z(x)**2 + self.df)))
+        return result
     
     def pdf(self, x):
         """
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        # print(scipy.stats.t.pdf(x, self.df, self.loc, self.scale)) 
-        return scipy.stats.t.pdf((x-self.loc)/self.scale, self.df)/self.scale
+        z = lambda t: (t - self.loc) / self.scale
+        # result = scipy.stats.t.pdf(z(x), self.df)
+        result = (1 / (math.sqrt(self.df) * sc.beta(0.5, self.df / 2))) * (1 + z(x) * z(x) / self.df) ** (-(self.df + 1) / 2)
+        return result
 
     def get_num_parameters(self):
         """
@@ -68,7 +75,7 @@ class T_STUDENT_3P:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):

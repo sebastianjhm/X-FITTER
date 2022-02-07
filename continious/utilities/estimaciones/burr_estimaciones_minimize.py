@@ -33,7 +33,7 @@ def constraint_median(sol_i, data_median):
 ## Import function to get measurements
 import sys
 sys.path.append("C:/Users/USUARIO/Desktop/Fitter/utilities")
-from measurements.measurements import MEASUREMENTS
+from measurements_cont.measurements import MEASUREMENTS
 
 ## Import function to get measurements
 def get_data(direction):

@@ -1,6 +1,6 @@
 import scipy.stats
 import math
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import numpy as np
 
 class LOGLOGISTIC_3P:
@@ -67,7 +67,7 @@ class LOGLOGISTIC_3P:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     x0 = (measurements.mean, measurements.variance, measurements.mean)
     args = ([measurements])
     ti = time.time()
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1], "loc": solution.x[2]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

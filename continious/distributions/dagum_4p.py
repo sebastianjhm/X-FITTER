@@ -1,4 +1,4 @@
-from scipy.optimize import least_squares
+import scipy.optimize
 import numpy as np
 import scipy.special
 
@@ -108,7 +108,7 @@ class DAGUM_4P:
             a0 = s0_burr3_sc[0]
             x0 = [a0, 1, 1, measurements.mean]
             b = ((1e-5, 1e-5, 1e-5, -np.inf), (np.inf, np.inf, np.inf, np.inf))
-            solution = least_squares(equations, x0, bounds = b, args=([measurements]))
+            solution = scipy.optimize.least_squares(equations, x0, bounds = b, args=([measurements]))
             parameters_ls = {"a": solution.x[0], "b": solution.x[1], "p": solution.x[2], "loc": solution.x[3]}
             
             sse_sc = sse(parameters_sc)
@@ -122,7 +122,7 @@ class DAGUM_4P:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

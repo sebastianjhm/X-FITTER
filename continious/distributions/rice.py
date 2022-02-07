@@ -2,7 +2,7 @@ import scipy.special as sc
 import math
 import scipy.stats
 import numpy as np
-from scipy.optimize import least_squares
+import scipy.optimize
 
 class RICE:
     """
@@ -103,7 +103,7 @@ class RICE:
         bnds = ((0, 0), (np.inf, np.inf))
         x0 = (measurements.mean, math.sqrt(measurements.variance))
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"v": solution.x[0], "sigma": solution.x[1]}
         
         
@@ -112,7 +112,7 @@ class RICE:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):

@@ -36,7 +36,7 @@ def graph(data, distribution, parameters):
     plt.show()
     
 if __name__ == "__main__":
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     import beta
     import chi_square
     import exponencial

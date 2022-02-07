@@ -1,7 +1,7 @@
 from bcrypt import re
 import scipy.stats
 import math
-from scipy.optimize import fsolve
+import scipy.optimize
 
 class FATIGUE_LIFE:
     """
@@ -83,7 +83,7 @@ class FATIGUE_LIFE:
             
         #     return (eq1, eq2, eq3)
         
-        # solution =  fsolve(equations, (1, 1, 1), measurements)
+        # solution =  scipy.optimize.fsolve(equations, (1, 1, 1), measurements)
         # print(solution)
         scipy_params = scipy.stats.fatiguelife.fit(measurements.data)
         parameters = {"gamma": scipy_params[0], "loc": scipy_params[1], "scale": scipy_params[2]}
@@ -91,7 +91,7 @@ class FATIGUE_LIFE:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

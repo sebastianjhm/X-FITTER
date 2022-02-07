@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import scipy.stats
 
 class WEIBULL_3P:
@@ -81,14 +81,14 @@ class WEIBULL_3P:
         bnds = ((0, 0, -np.inf), (np.inf, np.inf, np.inf))
         x0 = (1, 1, measurements.mean)
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"alpha": solution.x[0], "beta": solution.x[1], "loc": solution.x[2]}
         
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -134,16 +134,16 @@ if __name__ == '__main__':
         return (eq1, eq2, eq3)
     
     ti = time.time()
-    solution =  fsolve(equations, (1, 1, 1), measurements)
+    solution =  scipy.optimize.fsolve(equations, (1, 1, 1), measurements)
     parameters = {"alpha": solution[0], "beta": solution[1], "loc": solution[2]}
     print(parameters)
-    print("fsolve equations time: ", time.time()-ti)
+    print("scipy.optimize.fsolve equations time: ", time.time()-ti)
     
     ti = time.time()
     bnds = ((0, 0, -np.inf), (np.inf, np.inf, np.inf))
     x0 = (1, 1, measurements.mean)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1], "loc": solution.x[2]}
     print(parameters)
     print("leastsquare time get parameters: ", time.time() -ti)

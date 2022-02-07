@@ -32,7 +32,7 @@ def plot_histogram(data, results):
     ll = min(data)
     ul = max(data)
     for distribution, sse in list(results.items())[:5]:
-        if distribution.__class__.__name__ in ["LEVY", "CAUCHY", "FRECHET"]:
+        if distribution.__class__.__name__ in ["LEVY", "CAUCHY", "FRECHET", "GENERALIZED_PARETO"]:
             ll = min(data) - 10
             ul = max(data) + 10
         x_plot = np.linspace(ll, ul, 1000)
@@ -54,6 +54,7 @@ def plot_histogram(data, results):
 def fit_data(data):
     from distributions.alpha import ALPHA
     from distributions.beta import BETA
+    from distributions.bradford import BRADFORD
     from distributions.burr import BURR
     from distributions.burr_4p import BURR_4P
     from distributions.cauchy import CAUCHY
@@ -68,6 +69,7 @@ def fit_data(data):
     from distributions.f import F
     from distributions.fatigue_life import FATIGUE_LIFE
     from distributions.frechet import FRECHET
+    from distributions.folded_normal import FOLDED_NORMAL
     from distributions.gamma import GAMMA
     from distributions.gamma_3p import GAMMA_3P
     from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
@@ -75,8 +77,10 @@ def fit_data(data):
     from distributions.generalized_gamma_4p import GENERALIZED_GAMMA_4P
     from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
+    from distributions.generalized_pareto import GENERALIZED_PARETO
     from distributions.gumbel_left import GUMBEL_LEFT
     from distributions.gumbel_right import GUMBEL_RIGHT
+    from distributions.half_normal import HALF_NORMAL
     from distributions.hyperbolic_secant import HYPERBOLIC_SECANT
     from distributions.inverse_gamma import INVERSE_GAMMA
     from distributions.inverse_gaussian import INVERSE_GAUSSIAN
@@ -92,6 +96,7 @@ def fit_data(data):
     from distributions.loglogistic import LOGLOGISTIC
     from distributions.loglogistic_3p import LOGLOGISTIC_3P
     from distributions.lognormal import LOGNORMAL
+    from distributions.moyal import MOYAL
     from distributions.nakagami import NAKAGAMI
     from distributions.normal import NORMAL
     from distributions.pareto_first_kind import PARETO_FIRST_KIND
@@ -103,6 +108,7 @@ def fit_data(data):
     from distributions.rayleigh import RAYLEIGH
     from distributions.reciprocal import RECIPROCAL
     from distributions.rice import RICE
+    from distributions.semicircular import SEMICIRCULAR
     from distributions.t_student import T_STUDENT
     from distributions.trapezoidal import TRAPEZOIDAL
     from distributions.triangular import TRIANGULAR
@@ -124,7 +130,7 @@ def fit_data(data):
         UNIFORM, WEIBULL
     ]
 
-    _my_distributions = [ALPHA]
+    _my_distributions = [BRADFORD]
     
     
     ## Calculae Histogram
@@ -135,7 +141,7 @@ def fit_data(data):
     measurements = MEASUREMENTS(data)
     
     results = {}
-    for distribution_class in _all_distributions:
+    for distribution_class in _my_distributions:
         try:
             distribution = distribution_class(measurements)
             # response = test_kolmogorov_smirnov(data, distribution)
@@ -174,7 +180,7 @@ def main():
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "./data/data_alpha.txt"
+    path = "./data/data_bradford.txt"
     data = getData(path)
     
     results = fit_data(data)

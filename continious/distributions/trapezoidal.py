@@ -1,10 +1,10 @@
-from scipy.optimize import least_squares
+import scipy.optimize
 
 
 class TRAPEZOIDAL:
     """
     Trapezoidal distribution
-    https://en.wikipedia.org/wiki/Triangular_distribution
+    https://en.wikipedia.org/wiki/Trapezoidal_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -87,14 +87,14 @@ class TRAPEZOIDAL:
             return (eq1, eq2)
         x0 = [(d+a)*0.25, (d+a)*0.75]
         bnds = ((a, a), (d, d))
-        solution = least_squares(equations, x0, bounds = bnds, args=([measurements, a, d]))
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=([measurements, a, d]))
         
         parameters = {"a": a, "b": solution.x[0], "c": solution.x[1], "d": d}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

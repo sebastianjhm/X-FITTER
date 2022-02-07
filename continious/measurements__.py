@@ -11,9 +11,9 @@ class MEASUREMENTS:
         self.max = max(data)
         self.mean = np.mean(data)
         self.variance = np.var(data, ddof=1)
-        self.std = np.std(data, ddof=1)
-        self.skewness = scipy.stats.moment(data, 3) / pow(self.std, 3)
-        self.kurtosis = scipy.stats.moment(data, 4) / pow(self.std, 4)
+        self.standard_deviation = np.std(data, ddof=1)
+        self.skewness = scipy.stats.moment(data, 3) / pow(self.standard_deviation, 3)
+        self.kurtosis = scipy.stats.moment(data, 4) / pow(self.standard_deviation, 4)
         self.median = np.median(data)
         self.mode = self.calculate_mode()
         self.num_bins = self.doanes_formula()
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         return data
     
     ## Distribution class
-    path = "./data/data_normal.txt"
+    path = "../../data/data_generalized_pareto.txt"
     data = get_data(path) 
 
     measurements = MEASUREMENTS(data)
@@ -72,4 +72,3 @@ if __name__ == "__main__":
     print("Kurtosis: ", measurements.kurtosis)
     print("Median: ", measurements.median)
     print("Mode: ", measurements.mode)
-    print("num_bins: ", measurements.num_bins)

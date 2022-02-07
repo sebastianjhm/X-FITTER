@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import scipy.stats
 
 class WEIBULL:
@@ -77,13 +77,13 @@ class WEIBULL:
             
             return (eq1, eq2)
         
-        solution =  fsolve(equations, (1, 1), measurements)
+        solution =  scipy.optimize.fsolve(equations, (1, 1), measurements)
         parameters = {"alpha": solution[0], "beta": solution[1]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     bnds = ((0, 0), (np.inf, np.inf))
     x0 = (measurements.mean, measurements.mean)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha": solution.x[0], "beta": solution.x[1]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

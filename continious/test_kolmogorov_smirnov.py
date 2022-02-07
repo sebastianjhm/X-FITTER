@@ -76,6 +76,7 @@ if __name__ == "__main__":
     from distributions.alpha import ALPHA
     from distributions.argus import ARGUS
     from distributions.beta import BETA
+    from distributions.bradford import BRADFORD
     from distributions.burr import BURR
     from distributions.burr_4p import BURR_4P
     from distributions.cauchy import CAUCHY
@@ -91,6 +92,7 @@ if __name__ == "__main__":
     from distributions.f import F
     from distributions.fatigue_life import FATIGUE_LIFE
     from distributions.frechet import FRECHET
+    from distributions.folded_normal import FOLDED_NORMAL
     from distributions.gamma import GAMMA
     from distributions.gamma_3p import GAMMA_3P
     from distributions.generalized_extreme_value import GENERALIZED_EXTREME_VALUE
@@ -98,13 +100,16 @@ if __name__ == "__main__":
     from distributions.generalized_gamma_4p import GENERALIZED_GAMMA_4P
     from distributions.generalized_logistic import  GENERALIZED_LOGISTIC
     from distributions.generalized_normal import GENERALIZED_NORMAL
+    from distributions.generalized_pareto import GENERALIZED_PARETO
     from distributions.gumbel_left import GUMBEL_LEFT
     from distributions.gumbel_right import GUMBEL_RIGHT
+    from distributions.half_normal import HALF_NORMAL
     from distributions.hyperbolic_secant import HYPERBOLIC_SECANT
     from distributions.inverse_gamma import INVERSE_GAMMA
     from distributions.inverse_gamma_3p import INVERSE_GAMMA_3P
     from distributions.inverse_gaussian import INVERSE_GAUSSIAN
     from distributions.inverse_gaussian_3p import INVERSE_GAUSSIAN_3P
+    from distributions.inverse_weibull import INVERSE_WEIBULL
     from distributions.johnson_sb import JOHNSON_SB
     from distributions.johnson_su import JOHNSON_SU
     from distributions.kumaraswamy import KUMARASWAMY
@@ -115,6 +120,7 @@ if __name__ == "__main__":
     from distributions.loglogistic import LOGLOGISTIC
     from distributions.loglogistic_3p import LOGLOGISTIC_3P
     from distributions.lognormal import LOGNORMAL
+    from distributions.moyal import MOYAL
     from distributions.nakagami import NAKAGAMI
     from distributions.normal import NORMAL
     from distributions.pareto_first_kind import PARETO_FIRST_KIND
@@ -126,6 +132,7 @@ if __name__ == "__main__":
     from distributions.rayleigh import RAYLEIGH
     from distributions.reciprocal import RECIPROCAL
     from distributions.rice import RICE
+    from distributions.semicircular import SEMICIRCULAR
     from distributions.t_student import T_STUDENT
     from distributions.t_student_3p import T_STUDENT_3P
     from distributions.trapezoidal import TRAPEZOIDAL
@@ -151,7 +158,7 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T_STUDENT, GENERALIZED_GAMMA_4P]
-    _my_distributions = [ALPHA, ARGUS]
+    _my_distributions = [BRADFORD]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "./data/data_" + distribution_class.__name__.lower() + ".txt"

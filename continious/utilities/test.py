@@ -73,7 +73,8 @@ if __name__ == "__main__":
     for distribution_class in _my_distributions:
         print(Fore.BLUE + distribution_class.__name__)
         print(Fore.BLUE + "="*len(distribution_class.__name__))
-        path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
+        # path = "./data/data_" + distribution_class.__name__.lower() + ".txt"
+        path = "./data_tet.txt"
         data = get_data(path)
                 
         if(test_chi_square(data, distribution_class)["rejected"] == False):

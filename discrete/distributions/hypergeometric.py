@@ -25,7 +25,7 @@ class HYPERGEOMETRIC:
         return result
 
     
-    def pdf(self, x):
+    def pmf(self, x):
         """
         Probability density function
         Calculated using the definition of the function
@@ -119,4 +119,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(round(measurements.mean)))
-    print(distribution.pdf(round(measurements.mean)))
+    print(distribution.pmf(round(measurements.mean)))

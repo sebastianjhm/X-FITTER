@@ -1,4 +1,4 @@
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import numpy as np
 import math
 import scipy.stats
@@ -85,7 +85,7 @@ class POWER_FUNCTION:
         bnds = ((0, -np.inf, -np.inf), (np.inf, np.inf, np.inf))
         x0 = (1, 1, measurements.max)
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"alpha": solution.x[0], "a": solution.x[1], "b": measurements.max + 1e-3}
         
         return parameters
@@ -93,7 +93,7 @@ class POWER_FUNCTION:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):

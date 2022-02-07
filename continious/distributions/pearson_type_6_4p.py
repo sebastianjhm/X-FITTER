@@ -1,4 +1,4 @@
-from scipy.optimize import least_squares
+import scipy.optimize
 import math
 import scipy.stats
 import numpy as np
@@ -8,7 +8,7 @@ class PEARSON_TYPE_6_4P:
     """
     PEARSON TYPE 6 distribution
     pearson_type_6(α1, α2, 1) = prime_beta(α1, α2)
-    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.betaprime.html    
+    https://en.wikipedia.org/wiki/Beta_prime_distribution   
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -90,7 +90,7 @@ class PEARSON_TYPE_6_4P:
             bnds = ((0, 0, 0, -np.inf), (np.inf, np.inf, np.inf, np.inf))
             x0 = (measurements.mean, measurements.mean, measurements.mean, measurements.mean)
             args = ([measurements])
-            solution = least_squares(equations, x0, bounds = bnds, args=args)
+            solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
             parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2], "loc": solution.x[3]}
             
             if math.isnan(((measurements.mean/parameters["beta"])**(parameters["alpha1"]-1))/(parameters["beta"] * beta(parameters["alpha1"],parameters["alpha2"]) * (1+measurements.mean/parameters["beta"])**(parameters["alpha1"]+parameters["alpha2"]))):
@@ -103,7 +103,7 @@ class PEARSON_TYPE_6_4P:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     bnds = ((0, 0, 0, -np.inf), (np.inf, np.inf, np.inf, np.inf))
     x0 = (measurements.mean, measurements.mean, measurements.mean, measurements.mean)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2], "loc": solution.x[3]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

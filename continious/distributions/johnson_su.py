@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import fsolve
+import scipy.optimize
 import scipy.stats
 
 class JOHNSON_SU:
@@ -74,13 +74,13 @@ class JOHNSON_SU:
             
             return (eq1, eq2, eq3, eq4)
         
-        solution =  fsolve(equations, (1, 1, 1, 1), measurements)
+        solution =  scipy.optimize.fsolve(equations, (1, 1, 1, 1), measurements)
         parameters = {"xi": solution[0], "lambda": solution[1], "gamma": solution[2], "delta": solution[3]}
         return parameters
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

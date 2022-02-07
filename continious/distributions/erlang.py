@@ -4,7 +4,8 @@ import scipy.special as sc
 
 class ERLANG:
     """
-    Erlang distribution      
+    Erlang distribution
+    https://en.wikipedia.org/wiki/Erlang_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -65,7 +66,7 @@ class ERLANG:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

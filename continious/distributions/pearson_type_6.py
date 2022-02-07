@@ -1,4 +1,4 @@
-from scipy.optimize import least_squares
+import scipy.optimize
 import math
 import scipy.stats
 import numpy as np
@@ -84,7 +84,7 @@ class PEARSON_TYPE_6:
             bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
             x0 = (10*measurements.mean, 10*measurements.mean, measurements.mean)
             args = ([measurements])
-            solution = least_squares(equations, x0, bounds = bnds, args=args)
+            solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
             parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2]}
             
             if math.isnan(((measurements.mean/parameters["beta"])**(parameters["alpha1"]-1))/(parameters["beta"] * beta(parameters["alpha1"],parameters["alpha2"]) * (1+measurements.mean/parameters["beta"])**(parameters["alpha1"]+parameters["alpha2"]))):
@@ -97,7 +97,7 @@ class PEARSON_TYPE_6:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
     x0 = (10*measurements.mean, 10*measurements.mean, measurements.mean)
     args = (measurements.mean, measurements.variance, measurements.skewness)
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"alpha1": solution.x[0], "alpha2": solution.x[1], "beta": solution.x[2]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

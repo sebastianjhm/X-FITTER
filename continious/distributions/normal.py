@@ -1,4 +1,5 @@
-import scipy.integrate
+import scipy.special as sc
+import scipy.stats
 import math
 
 class NORMAL:
@@ -17,8 +18,9 @@ class NORMAL:
         Calculated using the definition of the function
         Alternative: quadrature integration method
         """
-        # result, error = scipy.integrate.quad(self.pdf, float("-inf"), x)
-        result = scipy.stats.norm.cdf((x-self.miu)/self.sigma)
+        # result = scipy.stats.norm.cdf((x-self.miu)/self.sigma)
+        z = lambda t: (t - self.miu) / self.sigma
+        result = 0.5 * ( 1 + sc.erf(z(x)/math.sqrt(2)))
         return result
     
     def pdf(self, x):
@@ -26,7 +28,8 @@ class NORMAL:
         Probability density function
         Calculated using definition of the function in the documentation
         """
-        return (1/(self.sigma * math.sqrt(2 * math.pi))) * math.e ** (-(((x - self.miu)**2) / (2*self.sigma**2)))
+        result = (1/(self.sigma * math.sqrt(2 * math.pi))) * math.e ** (-(((x - self.miu)**2) / (2*self.sigma**2)))
+        return result
     
     def get_num_parameters(self):
         """
@@ -58,14 +61,14 @@ class NORMAL:
         """
         
         μ = measurements.mean
-        σ = math.sqrt(measurements.variance)
+        σ = measurements.standard_deviation
         
         parameters = {"miu": μ, "sigma": σ}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

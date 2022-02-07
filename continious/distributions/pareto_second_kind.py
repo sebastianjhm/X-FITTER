@@ -3,7 +3,8 @@ import scipy.stats
 class PARETO_SECOND_KIND:
     """
     Pareto second kind distribution distribution
-    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.lomax.html
+    Also known as Lomax Distribution or Pareto Type II distributions
+    https://en.wikipedia.org/wiki/Lomax_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -69,7 +70,7 @@ class PARETO_SECOND_KIND:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

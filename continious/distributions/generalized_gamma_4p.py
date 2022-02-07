@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import numpy as np
 import scipy.stats
 import scipy.special as sc
@@ -85,8 +85,8 @@ class GENERALIZED_GAMMA_4P:
             
             return (eq1, eq2, eq3, eq4)
         
-        ## fsolve is 100x faster than least square but sometimes return solutions < 0
-        solution =  fsolve(equations, (1, 1, 1, 1), measurements)
+        ## scipy.optimize.fsolve is 100x faster than least square but sometimes return solutions < 0
+        solution =  scipy.optimize.fsolve(equations, (1, 1, 1, 1), measurements)
             
         ## If return a perameter < 0 then use least_square with restriction
         if all(x > 0 for x in solution) is False or all(x == 1 for x in solution) is True:
@@ -96,7 +96,7 @@ class GENERALIZED_GAMMA_4P:
                     bnds = ((0, 0, 0, -np.inf), (np.inf, np.inf, np.inf, 0))
                 x0 = (1, 1, 1, measurements.mean)
                 args = ([measurements])
-                response = least_squares(equations, x0, bounds = bnds, args=args)
+                response = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
                 solution = response.x
             except:
                 scipy_params = scipy.stats.gengamma.fit(measurements.data)
@@ -108,7 +108,7 @@ class GENERALIZED_GAMMA_4P:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

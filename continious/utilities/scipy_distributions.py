@@ -1,7 +1,5 @@
 import numpy as np
-import pandas as pd
 import scipy.stats as st
-import statsmodels.api as sm
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import math
@@ -94,13 +92,13 @@ def fit_data(data):
         
 def main():
     ## Import data
-    data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
+    # data = pd.Series(sm.datasets.elnino.load_pandas().data.set_index('YEAR').values.ravel())
     def getData(direction):
         file  = open(direction,'r')
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "./data/data_test.txt"
+    path = "./data_test.txt"
     data = getData(path)
     
     results = fit_data(data)

@@ -20,11 +20,13 @@ class POISSON:
         return result
 
     
-    def pdf(self, x):
+    def pmf(self, x):
         """
         Probability density function
         Calculated using the definition of the function
         """
+        # result = scipy.stats.poisson.pmf(x, self.lambda_)
+        # print(result)
         result = (self.lambda_**x)*math.exp(-self.lambda_)/math.factorial(x)
         return result
     
@@ -78,4 +80,4 @@ if __name__ == '__main__':
     
     print(distribution.get_parameters(measurements))
     print(distribution.cdf(round(measurements.mean)))
-    print(distribution.pdf(round(measurements.mean)))
+    print(distribution.pmf(round(measurements.mean)))

@@ -1,7 +1,7 @@
 import scipy.special as sc
 import scipy.stats
 import math
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import numpy as np
 
 class LEVY:
@@ -82,7 +82,7 @@ class LEVY:
         # bnds = ((-np.inf, 0), (np.inf, np.inf))
         # x0 = (1, 1)
         # args = ([measurements])
-        # solution = least_squares(equations, x0, bounds = bnds, args=args)
+        # solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         # print(solution.x)
         # parameters = {"miu": solution.x[0], "c": solution.x[1]}
         
@@ -95,7 +95,7 @@ class LEVY:
 
 if __name__ == "__main__":   
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def get_data(direction):

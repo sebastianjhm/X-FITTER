@@ -3,7 +3,8 @@ import scipy.special as sc
 
 class ERLANG_3P:
     """
-    Erlang distribution  
+    Erlang 3p distribution  
+    https://en.wikipedia.org/wiki/Erlang_distribution
     """
     def __init__(self, measurements):
         self.parameters = self.get_parameters(measurements)
@@ -67,7 +68,7 @@ class ERLANG_3P:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

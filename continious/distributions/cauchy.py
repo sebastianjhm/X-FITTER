@@ -1,6 +1,7 @@
 import math
 import scipy.stats
-from scipy.optimize import minimize
+import scipy.optimize
+import numpy as np
 
 class CAUCHY:
     """
@@ -66,8 +67,9 @@ class CAUCHY:
         # def objective(x):
         #     x0, gamma = x
         #     return - sum([math.log(1/(math.pi * gamma * (1 + ((d - x0)/gamma)**2))) for d in measurements.data])
-        # solution = minimize(objective, [x0_ini, gamma_ini], method="SLSQP", bounds = [(-np.inf, np.inf),(0,np.inf)])
-       
+        # solution = scipy.optimize.minimize(objective, [x0_ini, gamma_ini], method="SLSQP", bounds = [(-np.inf, np.inf),(0,np.inf)])
+        # print(solution)
+        
         scipy_params = scipy.stats.cauchy.fit(measurements.data)
     
         ## Results
@@ -77,7 +79,7 @@ class CAUCHY:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

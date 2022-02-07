@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import fsolve
+import scipy.optimize
 
 class GUMBEL_RIGHT:
     """
@@ -74,13 +74,13 @@ class GUMBEL_RIGHT:
             
             return (eq1, eq2,)
         
-        solution =  fsolve(equations, (1, 1), measurements)
+        solution =  scipy.optimize.fsolve(equations, (1, 1), measurements)
         parameters = {"miu": solution[0], "sigma": solution[1]}
         return parameters
         
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

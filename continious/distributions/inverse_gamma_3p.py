@@ -2,7 +2,7 @@ import scipy.stats
 import math
 import scipy.special as sc
 import numpy as np
-from scipy.optimize import least_squares
+import scipy.optimize
 
 class INVERSE_GAMMA_3P:
     """
@@ -95,7 +95,7 @@ class INVERSE_GAMMA_3P:
             bnds = ((0, 0, -np.inf), (np.inf, np.inf, np.inf))
             x0 = (2, 1, measurements.mean)
             args = ([measurements])
-            solution = least_squares(equations, x0, bounds = bnds, args=args)
+            solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
             parameters = {"alpha": solution.x[0], "beta": solution.x[1], "loc": solution.x[2]}
         except:
             scipy_params = scipy.stats.invgamma.fit(measurements.data)
@@ -108,7 +108,7 @@ class INVERSE_GAMMA_3P:
 
 if __name__ == "__main__":  
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
     
     ## Import function to get measurements
     def getData(direction):

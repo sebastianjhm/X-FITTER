@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import fsolve
+import scipy.optimize
 import scipy.special as sc
 import scipy.stats
 
@@ -82,7 +82,7 @@ class CHI_SQUARE_3P:
             
         #     return(eq1, eq2, eq3)
         
-        # solution =  fsolve(equations, (1, 1, 1), measurements)
+        # solution =  scipy.optimize.fsolve(equations, (1, 1, 1), measurements)
         # print(solution)
         
         # ## Method 1: Solve system
@@ -99,7 +99,7 @@ class CHI_SQUARE_3P:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

@@ -1,6 +1,6 @@
 import scipy.stats
 import scipy.special as sc
-from scipy.optimize import least_squares
+import scipy.optimize
 import numpy as np
 import math
 
@@ -89,13 +89,13 @@ class LOGGAMMA:
         bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
         x0 = (1,1,1)
         args = (measurements.mean, measurements.variance, measurements.skewness)
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"c": solution.x[0], "miu": solution.x[1], "sigma": solution.x[2]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     bnds = ((0, 0, 0), (np.inf, np.inf, np.inf))
     x0 = (1,1,1)
     args = (measurements.mean, measurements.variance, measurements.skewness)
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     parameters = {"c": solution.x[0], "miu": solution.x[1], "sigma": solution.x[2]}
     print(parameters)
     print("Solve equations time: ", time.time() -ti)

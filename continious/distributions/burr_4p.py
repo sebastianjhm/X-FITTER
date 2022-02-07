@@ -1,4 +1,4 @@
-from scipy.optimize import least_squares
+import scipy.optimize
 import numpy as np
 import scipy.stats
 import scipy.special as sc
@@ -87,62 +87,24 @@ class BURR_4P:
             
             return (eq1, eq2, eq3, eq4)
         
-        ## Solve equations system
+        # ## Solve equations system
         # x0 = [measurements.mean, measurements.mean, measurements.mean, measurements.mean]
         # b = ((1e-5, 1e-5, 1e-5, -np.inf), (np.inf, np.inf, np.inf, np.inf))
-        # solution = least_squares(equations, x0, bounds = b, args=([measurements]))
+        # solution = scipy.optimize.least_squares(equations, x0, bounds = b, args=([measurements]))
         # parameters = {"A": solution.x[0], "B": solution.x[1], "C": solution.x[2], "loc": solution.x[3]}
         # print(parameters)
         
         ## Scipy class
-        # scipy_params = scipy.stats.burr12.fit(measurements.data)
-        # parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1], "loc": scipy_params[2]}
-        
-        ## This is a exact copy of the scipy burr12_gen founded in
-        ## https://github.com/scipy/scipy/blob/master/scipy/stats/_continuous_distns.py
-        ## The reason of that is beacause the version 0.18.0 of pyodide run scipy 0.17 and in 
-        ## this version doesn't exist BURR12
-        from scipy.stats import rv_continuous
-        class burr12_gen(rv_continuous):
-            def _pdf(self, x, c, d):
-                # burr12.pdf(x, c, d) = c * d * x**(c-1) * (1+x**(c))**(-d-1)
-                return np.exp(self._logpdf(x, c, d))
-        
-            def _logpdf(self, x, c, d):
-                return np.log(c) + np.log(d) + sc.xlogy(c - 1, x) + sc.xlog1py(-d-1, x**c)
-        
-            def _cdf(self, x, c, d):
-                return -sc.expm1(self._logsf(x, c, d))
-        
-            def _logcdf(self, x, c, d):
-                return sc.log1p(-(1 + x**c)**(-d))
-        
-            def _sf(self, x, c, d):
-                return np.exp(self._logsf(x, c, d))
-        
-            def _logsf(self, x, c, d):
-                return sc.xlog1py(-d, x**c)
-        
-            def _ppf(self, q, c, d):
-                # The following is an implementation of
-                #   ((1 - q)**(-1.0/d) - 1)**(1.0/c)
-                # that does a better job handling small values of q.
-                return sc.expm1(-1/d * sc.log1p(-q))**(1/c)
-        
-            def _munp(self, n, c, d):
-                nc = 1. * n / c
-                return d * sc.beta(1.0 + nc, d - nc)
-        
-        burr12 = burr12_gen(a=0.0, name='burr12')
-        scipy_params = burr12.fit(measurements.data)
+        scipy_params = scipy.stats.burr12.fit(measurements.data)
         parameters = {"A": scipy_params[3], "B": scipy_params[0], "C": scipy_params[1], "loc": scipy_params[2]}
+    
         
         return parameters
     
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

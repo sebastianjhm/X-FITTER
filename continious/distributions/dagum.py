@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import least_squares
+import scipy.optimize
 import numpy as np
 import scipy.special
 
@@ -110,7 +110,7 @@ class DAGUM:
         b0 = s0_burr3_sc[3]
         x0 = [a0, b0, 1]
         b = ((1e-5, 1e-5, 1e-5), (np.inf, np.inf, np.inf))
-        solution = least_squares(
+        solution = scipy.optimize.least_squares(
             equations, x0, bounds=b, args=([measurements]))
         parameters_ls = {"a": solution.x[0],
                          "b": solution.x[1], "p": solution.x[2]}
@@ -132,7 +132,7 @@ class DAGUM:
 
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):

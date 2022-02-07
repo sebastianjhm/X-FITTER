@@ -1,5 +1,5 @@
 import math
-from scipy.optimize import fsolve, least_squares
+import scipy.optimize
 import numpy as np
 import scipy.special as sc
 import scipy.stats
@@ -24,8 +24,8 @@ class BETA:
         Alternative: quadrature integration method
         """
         z = lambda t: (t - self.min_) / (self.max_ - self.min_)
-        # print(scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_))
-        # print(result, error = scipy.integrate.quad(self.pdf, self.min_, x))
+        # result = scipy.stats.beta.cdf(z(x), self.alpha_, self.beta_)
+        # result = print(result, error = scipy.integrate.quad(self.pdf, self.min_, x)
         result = sc.betainc(self.alpha_, self.beta_, z(x))
         
         return result
@@ -91,7 +91,7 @@ class BETA:
         bnds = ((0, 0, -np.inf, measurements.mean), (np.inf, np.inf, measurements.mean, np.inf))
         x0 = (1, 1, measurements.min, measurements.max)
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         parameters = {"alpha": solution.x[0], "beta": solution.x[1], "min": solution.x[2], "max": solution.x[3]}
         
         v1 = parameters["alpha"] > 0
@@ -104,7 +104,7 @@ class BETA:
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     import time
     print("=====")
     ti = time.time()
-    solution =  fsolve(equations, (1, 1, 1, 1), measurements)
+    solution =  scipy.optimize.fsolve(equations, (1, 1, 1, 1), measurements)
     parameters = {"alpha": solution[0], "beta": solution[1], "min": solution[2], "max": solution[3]}
     print(parameters)
     print("Solve equations time: ", time.time() - ti)
@@ -164,7 +164,7 @@ if __name__ == '__main__':
     bnds = ((0, 0, -np.inf, measurements.mean), (np.inf, np.inf, measurements.mean, np.inf))
     x0 = (1, 1, measurements.min, measurements.max)
     args = ([measurements])
-    solution = least_squares(equations, x0, bounds = bnds, args=args)
+    solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
     print(solution.x)
     print("Solve equations time: ", time.time() - ti)
     

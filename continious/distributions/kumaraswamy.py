@@ -1,6 +1,6 @@
 import scipy.integrate
 import math
-from scipy.optimize import least_squares
+import scipy.optimize
 import numpy as np
 
 class KUMARASWAMY:
@@ -88,19 +88,19 @@ class KUMARASWAMY:
             
             return (eq1, eq2, eq3, eq4)
         
-        # solution =  fsolve(equations, (1, 1, 1, 1), measurements)
+        # solution =  scipy.optimize.fsolve(equations, (1, 1, 1, 1), measurements)
         l = measurements.min - 3 * abs(measurements.min)
         bnds = ((0, 0, l, l), (np.inf, np.inf, np.inf, np.inf))
         x0 = (1, 1, 1, 1)
         args = ([measurements])
-        solution = least_squares(equations, x0, bounds = bnds, args=args)
+        solution = scipy.optimize.least_squares(equations, x0, bounds = bnds, args=args)
         
         parameters = {"alpha": solution.x[0], "beta": solution.x[1], "min": solution.x[2], "max": solution.x[3]}
         return parameters
     
 if __name__ == '__main__':
     ## Import function to get measurements
-    from measurements.measurements import MEASUREMENTS
+    from measurements_cont.measurements import MEASUREMENTS
 
     ## Import function to get measurements
     def get_data(direction):
