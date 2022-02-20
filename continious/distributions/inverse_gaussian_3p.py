@@ -4,6 +4,7 @@ import scipy.stats
 class INVERSE_GAUSSIAN_3P:
     """
     Inverse Gaussian distribution
+    Also known like Wald distribution
     https://en.wikipedia.org/wiki/Inverse_Gaussian_distribution        
     """
     def __init__(self, measurements):

@@ -74,6 +74,7 @@ def test_kolmogorov_smirnov(data, distribution_class):
     
 if __name__ == "__main__":
     from distributions.alpha import ALPHA
+    from distributions.arcsine import ARCSINE
     from distributions.argus import ARGUS
     from distributions.beta import BETA
     from distributions.bradford import BRADFORD
@@ -120,8 +121,12 @@ if __name__ == "__main__":
     from distributions.loglogistic import LOGLOGISTIC
     from distributions.loglogistic_3p import LOGLOGISTIC_3P
     from distributions.lognormal import LOGNORMAL
+    from distributions.maxwell import MAXWELL
     from distributions.moyal import MOYAL
     from distributions.nakagami import NAKAGAMI
+    from distributions.nc_chi_square import NC_CHI_SQUARE
+    from distributions.nc_f import NC_F
+    from distributions.nc_t_student import NC_T_STUDENT
     from distributions.normal import NORMAL
     from distributions.pareto_first_kind import PARETO_FIRST_KIND
     from distributions.pareto_second_kind import PARETO_SECOND_KIND
@@ -158,7 +163,7 @@ if __name__ == "__main__":
     ]
 
     _my_distributions = [DAGUM, DAGUM_4P, POWER_FUNCTION, RICE, RAYLEIGH, RECIPROCAL, T_STUDENT, GENERALIZED_GAMMA_4P]
-    _my_distributions = [BRADFORD]
+    _my_distributions = [ARCSINE]
     for distribution_class in _my_distributions:
         print(distribution_class.__name__)
         path = "./data/data_" + distribution_class.__name__.lower() + ".txt"

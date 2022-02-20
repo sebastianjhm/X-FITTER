@@ -115,6 +115,6 @@ if __name__ == '__main__':
     distribution = KUMARASWAMY(measurements)
     
     print(distribution.get_parameters(measurements))
-    print(distribution.cdf(18))
-    print(distribution.pdf(18))
+    print(distribution.cdf(measurements.mean))
+    print(distribution.pdf(measurements.mean))
     

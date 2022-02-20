@@ -27,13 +27,13 @@ class RICE:
             """
             k = 1 - M
             x = (a/b)**k * sc.iv(k, a*b)
-            suma = 0
+            acum = 0
             while(x > 1e-20):
-                suma += x
+                acum += x
                 k += 1
                 x = (a/b)**k * sc.iv(k, a*b)
-            resultado  = suma * math.exp(-(a**2+b**2)/2)
-            return resultado
+            res  = acum * math.exp(-(a**2+b**2)/2)
+            return res
 
         # print(scipy.stats.rice.cdf(x, self.v/self.sigma, scale = self.sigma))
         # result, error = scipy.integrate.quad(self.pdf, 0, x)

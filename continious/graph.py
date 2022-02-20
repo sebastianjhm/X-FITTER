@@ -53,6 +53,7 @@ def plot_histogram(data, results):
 
 def fit_data(data):
     from distributions.alpha import ALPHA
+    from distributions.arcsine import ARCSINE
     from distributions.beta import BETA
     from distributions.bradford import BRADFORD
     from distributions.burr import BURR
@@ -96,8 +97,12 @@ def fit_data(data):
     from distributions.loglogistic import LOGLOGISTIC
     from distributions.loglogistic_3p import LOGLOGISTIC_3P
     from distributions.lognormal import LOGNORMAL
+    from distributions.maxwell import MAXWELL
     from distributions.moyal import MOYAL
     from distributions.nakagami import NAKAGAMI
+    from distributions.nc_chi_square import NC_CHI_SQUARE
+    from distributions.nc_f import NC_F
+    from distributions.nc_t_student import NC_T_STUDENT
     from distributions.normal import NORMAL
     from distributions.pareto_first_kind import PARETO_FIRST_KIND
     from distributions.pareto_second_kind import PARETO_SECOND_KIND
@@ -130,7 +135,7 @@ def fit_data(data):
         UNIFORM, WEIBULL
     ]
 
-    _my_distributions = [BRADFORD]
+    _my_distributions = [ARCSINE]
     
     
     ## Calculae Histogram
@@ -180,7 +185,7 @@ def main():
         data = [float(x.replace(",",".")) for x in file.read().splitlines()]
         return data
     
-    path = "./data/data_bradford.txt"
+    path = "./data/data_arcsine.txt"
     data = getData(path)
     
     results = fit_data(data)
